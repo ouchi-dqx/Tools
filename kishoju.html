@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_top">
+        <title>輝晶獣分散狩り支援ページ</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <table border id="setTemp1" align="left" style="margin-right:30px;">
+            <td align="center">
+                <p>サーバー</p>
+                <div class="ServerList" id=""></div>
+            </td>
+            <td align="center">
+                <p>ゲルヘナ幻野</p>
+                <span style="float:left"><button class="left">←</button></span>
+                <span style="float:right"><button class="right">→</button></span>
+            </td>
+            <td align="center">
+                <p>ジャリムバハ砂漠</p>
+                <span style="float:left"><button class="left">←</button></span>
+                <span style="float:right"><button class="right">→</button></span>
+            </td>
+            <td align="center">
+                <p>バルディスタ要塞</p>
+                <span style="float:left"><button class="left">←</button></span>
+                <span style="float:right"><button class="right">→</button></span>
+            </td>
+        </table>
+
+        <table border class="fix_blue">
+            <tr><td>青黄リスト</td></tr>
+        </table><br>
+        <table border class="fix_red">
+            <tr><td>確定リスト</td></tr>
+        </table>
+
+        <br clear="left"><br>調査サーバー設定<br>
+        <button class="setServers" value="1">1-10</button>
+        <button class="setServers" value="11">11-20</button>
+        <button class="setServers" value="21">21-30</button>
+        <button class="setServers" value="31">31-40</button>
+        <br><br>
+
+        WebStorage用(個人保存)<br>
+        <button onclick="getStorage()">データ復旧</button>
+        <button onclick="setStorage()">バックアップ</button><br>
+        <span id="web_status"></span><br>
+
+        入力・青黄・確定の削除<br>
+        <button onclick="clear_all()">入力</button>
+        <button onclick="fix_clear(this)" value="blue">青黄</button>
+        <button onclick="fix_clear(this)" value="red">確定</button>
+
+        <!--
+        スプレッドシート用(共有保存)<br>
+        <button onclick="Getter()">データ取得</button>
+        <button onclick="Sender()">バックアップ</button>
+        <div id="gas_status"></div>
+        -->
+
+        <p>
+            ご本家様 <a href="https://kouseidq10.com/tools/bunsan">https://kouseidq10.com/tools/bunsan</a><br>
+            [使い方]<br>
+            ・ほとんどは↑の本家ツールとほぼ同じです。<br>
+            ・[←][→]ボタンで調査場所の並び替えが可能です。<br>
+            ・「調査サーバー設定」にあるボタンで調査したいサーバーを選択すると対応するサーバーが表示されます。<br>
+            ・[青][黄][赤][虹]ボタンの下のテキストエリアはメモ欄です。メモ等自由に記入してください。<br>
+            ・青黄・確定リストに追加された時間をクリックすると個別に削除できます。<br>
+            ・「webStorage用」の[データ復旧]ボタンは、今までに入力したサーバーの最終時間を入れ直しを行います。<br>
+            　(例)調査中に間違えてこのページを更新(or閉じる)してしまった場合<br>
+                　調査サーバー設定を行ってから[データ取得]ボタンを押すと<br>
+                　前回時間に最後に調査した時間が記入されます。(※自動バックアップ)　
+                <a href="https://twitter.com/ouchi_dqx/status/1268971859480985600">参考動画</a><br>
+            ・「入力・青黄・確定の削除」のボタンはそれぞれ対応するものが全て削除されます。
+        </p>
+        <template id="template1">
+            <tr class="Servers">
+                <td class="Server"></td>
+                <td class="geru">
+                    <div class="setTemp2"></div>
+                </td>
+                <td class="suna">
+                    <div class="setTemp2"></div>
+                </td>
+                <td class="baru">
+                    <div class="setTemp2"></div>
+                </td>
+            </tr>
+        </template>
+
+        <template id="template2">
+            <br>
+            <button class="btn" value="Blue" style="background-color:skyblue;">青</button>
+            <button class="btn" value="Yellow" style="background-color:yellow;">黄</button>
+            <button class="btn" value="Red" style="background-color:red;">赤</button>
+            <button class="btn" value="Rainbow" style="background-color:violet;">虹</button>
+            <p class="befTime" style="background-color:white;margin:5px auto"></p>
+            <p class="nowTime" style="background-color:white;margin:5px auto"></p>
+            <input class="memo" size="13">
+        </template>
+
+        <script src="kisyouju.js"></script>
+    </body>
+</html>
