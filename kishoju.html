@@ -3,7 +3,9 @@
     <head>
         <base target="_top">
         <title>輝晶獣分散狩り支援ページ</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="kisyouju.js"></script>
     </head>
 
     <body>
@@ -43,7 +45,7 @@
         <button class="setServers" value="31">31-40</button>
         <br><br>
 
-        WebStorage用(個人保存)<br>
+        データの復旧・バックアップ<br>
         <button onclick="getStorage()">データ復旧</button>
         <button onclick="setStorage()">バックアップ</button><br>
         <span id="web_status"></span><br>
@@ -53,13 +55,6 @@
         <button onclick="fix_clear(this)" value="blue">青黄</button>
         <button onclick="fix_clear(this)" value="red">確定</button>
 
-        <!--
-        スプレッドシート用(共有保存)<br>
-        <button onclick="Getter()">データ取得</button>
-        <button onclick="Sender()">バックアップ</button>
-        <div id="gas_status"></div>
-        -->
-
         <p>
             ご本家様 <a href="https://kouseidq10.com/tools/bunsan">https://kouseidq10.com/tools/bunsan</a><br>
             [使い方]<br>
@@ -68,13 +63,14 @@
             ・「調査サーバー設定」にあるボタンで調査したいサーバーを選択すると対応するサーバーが表示されます。<br>
             ・[青][黄][赤][虹]ボタンの下のテキストエリアはメモ欄です。メモ等自由に記入してください。<br>
             ・青黄・確定リストに追加された時間をクリックすると個別に削除できます。<br>
-            ・「webStorage用」の[データ復旧]ボタンは、今までに入力したサーバーの最終時間を入れ直しを行います。<br>
+            ・[データ復旧]ボタンは、今までに入力した時間の復元を行います。<br>
             　(例)調査中に間違えてこのページを更新(or閉じる)してしまった場合<br>
-                　調査サーバー設定を行ってから[データ取得]ボタンを押すと<br>
-                　前回時間に最後に調査した時間が記入されます。(※自動バックアップ)　
+                　調査サーバー設定を行ってから[データ復旧]ボタンを押すと<br>
+                　最後に調査した時間が記入されます。(※自動バックアップ)
                 <a href="https://twitter.com/ouchi_dqx/status/1268971859480985600">参考動画</a><br>
             ・「入力・青黄・確定の削除」のボタンはそれぞれ対応するものが全て削除されます。
         </p>
+
         <template id="template1">
             <tr class="Servers">
                 <td class="Server"></td>
@@ -100,7 +96,5 @@
             <p class="nowTime" style="background-color:white;margin:5px auto"></p>
             <input class="memo" size="13">
         </template>
-
-        <script src="kisyouju.js"></script>
     </body>
 </html>
