@@ -13,9 +13,21 @@ function OneBack(){
             .text(TMP[4]).css("background-color", TMP[5]),
             $(this).find("." + TMP[1] + ">.setTemp2>.memo").val(TMP[6])
             $(this).parent().find(".btn[value=Red]").prop("disabled", false)
-
+            
+            nowColor = $(this).find("." + TMP[1] + ">.setTemp2>.nowTime").css("background-color")
+            switch(TMP[1]){
+                case "geru":
+                    TMP[1] = TMP[1].replace("geru","ゲル");
+                    break;
+                case "suna":
+                    TMP[1] = TMP[1].replace("suna","砂漠");
+                    break;
+                case "baru":
+                    TMP[1] = TMP[1].replace("baru","バル")
+                    break;
+            }
             if(nowColor != "rgb(255, 0, 0)"){
-                clearInterval(Timers[Server+Point])
+                clearInterval(Timers[TMP[0].slice(4) + TMP[1]])
             }
         }
     })
@@ -27,6 +39,8 @@ function clear_all(){
 
     if(flg){
         $(".Servers").each(function(){
+            var Server = $(this).find(".Server").text().slice(4)
+            
             $(this).find(".geru>.setTemp2>.nowTime")
                 .text("")
                 .css("background-color", "white"),
@@ -34,7 +48,8 @@ function clear_all(){
                 .text("")
                 .css("background-color", "white"),
             $(this).find(".geru>.setTemp2>.memo").val(""),
-            
+            clearInterval(Timers[Server + "ゲル"])
+
             $(this).find(".suna>.setTemp2>.nowTime")
                 .text("")
                 .css("background-color", "white"),
@@ -42,6 +57,7 @@ function clear_all(){
                 .text("")
                 .css("background-color", "white"),
             $(this).find(".suna>.setTemp2>.memo").val(""),
+            clearInterval(Timers[Server+"砂漠"])
 
             $(this).find(".baru>.setTemp2>.nowTime")
                 .text("")
@@ -52,6 +68,8 @@ function clear_all(){
             $(this).find(".baru>.setTemp2>.memo")
                 .val("")
                 .css("background-color", "white")
+            clearInterval(Timers[Server+"バル"])
+                
             $(this).parent().find(".btn[value=Red]").prop("disabled", false)
         })
     }
@@ -306,6 +324,9 @@ $(document).on("click", ".setServers", function(){
 
 //ボタンクリックイベント
 $(document).on("click", ".btn", function(){
+    //赤ボタンクリック禁止解除
+    $(this).parent().find(".btn[value=Red]").prop("disabled", false)
+
     //変数作成
     var Server = $(this).parent().parent().parent().find(".Server").text()
     var Point = $(this).parent().parent().attr("class")
@@ -316,9 +337,6 @@ $(document).on("click", ".btn", function(){
     var befColor = $(this).nextAll(".befTime").css("background-color")
     var memo = $(this).nextAll(".memo").val()
     TMP = Array(Server,Point,befTime,nowColor,old_befTime,befColor,memo)
-
-    //赤ボタンクリック禁止解除
-    $(this).parent().find(".btn[value=Red]").prop("disabled", false)
     
     //変数の変換
     //「サーバー」置換
