@@ -13,6 +13,10 @@ function OneBack(){
             .text(TMP[4]).css("background-color", TMP[5]),
             $(this).find("." + TMP[1] + ">.setTemp2>.memo").val(TMP[6])
             $(this).parent().find(".btn[value=Red]").prop("disabled", false)
+
+            if(nowColor != "rgb(255, 0, 0)"){
+                clearInterval(Timers[Server+Point])
+            }
         }
     })
 }
