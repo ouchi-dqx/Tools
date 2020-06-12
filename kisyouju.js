@@ -2,6 +2,7 @@ var Timers = {}
 var TMP 
 
 function debug(){
+    //Sort = JSON.parse(localStorage.getItem("Sort"))
 }
 
 //←ボタンイベント
@@ -277,6 +278,7 @@ function OneBack(){
 function load_Storage(){
     boxName = $(".ServerList").attr("id")
     Server = 0;
+    //Sort = JSON.parse(localStorage.getItem("Sort"))
     Data = JSON.parse(localStorage.getItem(boxName))
     fix_blue = JSON.parse(localStorage.getItem("fix_blue"))
     fix_red = JSON.parse(localStorage.getItem("fix_red"))
@@ -361,10 +363,19 @@ function load_Storage(){
 }
 
 function save_Storage(){
+    //var Sort = []
     var Data = []
     var fix_blue = []
     var fix_red = []
     boxName = $(".ServerList").attr("id")
+
+    /*
+    Sort.push([
+        $("#setTemp1 td").eq(1).find("p").text(),
+        $("#setTemp1 td").eq(2).find("p").text(),
+        $("#setTemp1 td").eq(3).find("p").text()
+    ])
+    */
     
     $(".Servers").each(function(){
         Data.push([
@@ -401,6 +412,7 @@ function save_Storage(){
     })
 
     sessionStorage.setItem(boxName,true)
+    //localStorage.setItem("Sort", JSON.stringify(Sort))
     localStorage.setItem(boxName, JSON.stringify(Data))
     localStorage.setItem("fix_blue", JSON.stringify(fix_blue))
     localStorage.setItem("fix_red", JSON.stringify(fix_red))
