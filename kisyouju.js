@@ -110,7 +110,7 @@ $(document).on('click', ".fix", function() {
     localStorage.setItem("fix_red", JSON.stringify(fix_red))
 })
 
-$('.left').on('click', function() {
+$(document).on("click", ".left", function() {
     if($(this).closest("td").prev("td").find("p").text() != "サーバー"){
         Point = $(this).closest("td").find("p").text()
         befPoint = $(this).closest("td").prev("td").find("p").text()
@@ -156,7 +156,7 @@ $('.left').on('click', function() {
     }
 })
 
-$('.right').on('click', function() {
+$(document).on("click", ".right", function() {
     Point = $(this).closest("td").find("p").text()
     afterPoint = $(this).closest("td").next("td").find("p").text()
 
@@ -441,7 +441,7 @@ $(document).on("click", ".btn", function(){
     if(nowColor == "rgb(255, 0, 0)"){
         $(this).nextAll(".memo").val("経過時間:" + "00:00:00")
         Timers[Server + Point] = setInterval(setTimer,1000,$(this))
-        if(old_befTime == "" || old_befTime == "前回:"){
+        if(befColor == "rgb(255, 255, 255)"){
             Text = Server
             + Point + " "
             + TimePlus(nowTime,"00:00:00") + " - "
