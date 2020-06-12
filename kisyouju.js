@@ -1,6 +1,20 @@
 var Timers = {}
+var TMP 
 
 function debug(){
+}
+
+function OneBack(){
+    $(".Servers").each(function(){
+        if(TMP[0] == $(this).find(".Server").text()){
+            $(this).find("." + TMP[1] + ">.setTemp2>.nowTime")
+            .text(TMP[2]).css("background-color", TMP[3]),
+            $(this).find("." + TMP[1] + ">.setTemp2>.befTime")
+            .text(TMP[4]).css("background-color", TMP[5]),
+            $(this).find("." + TMP[1] + ">.setTemp2>.memo").val(TMP[6])
+            $(this).parent().find(".btn[value=Red]").prop("disabled", false)
+        }
+    })
 }
 
 function clear_all(){
@@ -31,7 +45,9 @@ function clear_all(){
             $(this).find(".baru>.setTemp2>.befTime")
                 .text("")
                 .css("background-color", "white"),
-            $(this).find(".baru>.setTemp2>.memo").val("")
+            $(this).find(".baru>.setTemp2>.memo")
+                .val("")
+                .css("background-color", "white")
         })
     }
 }
@@ -250,60 +266,6 @@ function setStorage(flg){
     }
 }
 
-function Getter(){
-    var SheetName = $(".ServerList").attr("id")
-
-    google.script.run.withSuccessHandler(onSuccess).getData(SheetName)
-    $("#status").text("now loading...")
-
-    function onSuccess(Data){
-        var Server = 0;
-
-        $(".Servers").each(function(){
-            $(this).find(".geru>.setTemp2>.befTime")
-            .text("前回:" + Data[Server][1]).css("background-color", Data[Server][2]),
-            $(this).find(".geru>.setTemp2>.memo").val(Data[Server][3]),
-            
-            $(this).find(".suna>.setTemp2>.befTime")
-            .text("前回:" + Data[Server][4]).css("background-color", Data[Server][5]),
-            $(this).find(".suna>.setTemp2>.memo").val(Data[Server][6]),
-
-            $(this).find(".suna>.setTemp2>.befTime")
-            .text("前回:" + Data[Server][7]).css("background-color", Data[Server][8]),
-            $(this).find(".baru>.setTemp2>.memo").val(Data[Server][9])
-            Server++
-        })
-        
-        $("#gas_status").text("done!")
-    }
-}
-
-function Sender(){
-    var Array = []
-    var SheetName = $(".ServerList").attr("id")
-
-    $(".Servers").each(function(){
-            Array.push([
-            $(this).find(".Server").text().substr(4),
-            $(this).find(".geru>.setTemp2>.nowTime").text(),
-            $(this).find(".geru>.setTemp2>.nowTime").css("background-color"),
-            $(this).find(".geru>.setTemp2>.memo").val(),
-            $(this).find(".suna>.setTemp2>.nowTime").text(),
-            $(this).find(".suna>.setTemp2>.nowTime").css("background-color"),
-            $(this).find(".suna>.setTemp2>.memo").val(),
-            $(this).find(".baru>.setTemp2>.nowTime").text(),
-            $(this).find(".baru>.setTemp2>.nowTime").css("background-color"),
-            $(this).find(".baru>.setTemp2>.memo").val()
-        ])
-    })
-    
-    google.script.run.withSuccessHandler(onSuccess).setData(SheetName,Array)
-    
-    function onSuccess(res){
-        $("#gas_status").text("done!")
-    }
-}
-
 //サーバー追加
 $(document).on("click", ".setServers", function(){
     //テーブルの初期化
@@ -339,23 +301,23 @@ $(document).on("click", ".setServers", function(){
 
 //ボタンクリックイベント
 $(document).on("click", ".btn", function(){
-    //赤ボタンクリック禁止解除
-    $(this).parent().find(".btn[value=Red]").prop("disabled", false)
-    
     //変数作成
     var Server = $(this).parent().parent().parent().find(".Server").text()
     var Point = $(this).parent().parent().attr("class")
-    var nowTime = new Date()
+    var nowTime = TimePlus(new Date(),"00:00:00")
     var befTime = $(this).nextAll(".nowTime").text()
     var old_befTime = $(this).nextAll(".befTime").text()
     var nowColor = $(this).nextAll(".nowTime").css("background-color")
     var befColor = $(this).nextAll(".befTime").css("background-color")
+    var memo = $(this).nextAll(".memo").val()
+    TMP = Array(Server,Point,befTime,nowColor,old_befTime,befColor,memo)
+
+    //赤ボタンクリック禁止解除
+    $(this).parent().find(".btn[value=Red]").prop("disabled", false)
     
     //変数の変換
     //「サーバー」置換
     Server = Server.replace("サーバー","")
-    //現在時間の0詰め
-    nowTime = TimePlus(nowTime,"00:00:00")    
     //「場所」置換
     switch(Point){
         case "geru":
@@ -471,7 +433,7 @@ $(document).on("click", ".btn", function(){
         clearInterval(Timers[Server+Point])
         $(this).nextAll(".memo").css("background-color", "white")
     }
-
+    
     setStorage(true)
 })
 
