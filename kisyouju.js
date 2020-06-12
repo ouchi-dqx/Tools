@@ -52,6 +52,7 @@ function clear_all(){
             $(this).find(".baru>.setTemp2>.memo")
                 .val("")
                 .css("background-color", "white")
+            $(this).parent().find(".btn[value=Red]").prop("disabled", false)
         })
     }
 }
