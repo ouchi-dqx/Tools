@@ -33,7 +33,7 @@
 
         <table border class="fix_blue">
             <tr><td>青黄リスト</td></tr>
-        </table><br>
+        </table>
         <table border class="fix_red">
             <tr><td>確定リスト</td></tr>
         </table>
@@ -47,14 +47,14 @@
 
         データの復旧・バックアップ等<br>
         <button onclick="OneBack()">直前に戻す</button>
-        <button onclick="getStorage()">データ復旧</button>
-        <button onclick="setStorage()">バックアップ</button><br>
-        <span id="web_status"></span><br>
+        <button onclick="load_Storage()">データ復旧</button>
+        <button onclick="save_Storage()">バックアップ</button><br><br>
 
         入力・青黄・確定の削除<br>
-        <button onclick="clear_all()">入力</button>
-        <button onclick="fix_clear(this)" value="blue">青黄</button>
-        <button onclick="fix_clear(this)" value="red">確定</button>
+        <button onclick="Cleaner(this)" value="all">全部</button>
+        <button onclick="Cleaner(this)" value="input">入力</button>
+        <button onclick="Cleaner(this)" value="fix_blue">青黄</button>
+        <button onclick="Cleaner(this)" value="fix_red">確定</button>
 
         <p>
             ご本家様 <a href="https://kouseidq10.com/tools/bunsan">https://kouseidq10.com/tools/bunsan</a><br>
@@ -70,32 +70,31 @@
                 　調査サーバー設定を行ってから[データ復旧]ボタンを押すと<br>
                 　最後に調査した時間が記入されます。
                 <a href="https://twitter.com/ouchi_dqx/status/1268971859480985600">参考動画</a><br>
-            ・「入力・青黄・確定の削除」のボタンはそれぞれ対応するものが全て削除されます。
+            ・「全て・入力・青黄・確定の削除」のボタンはそれぞれ対応するものが全て削除されます。
         </p>
         <p>要望・不具合報告等は<a href="https://twitter.com/ouchi_dqx">こちら</a>まで</p>
 
         <template id="template1">
             <tr class="Servers">
-                <td class="Server"></td>
-                <td class="geru">
+                <td class="Server">サーバー</td>
+                <td class="ゲル">
                     <div class="setTemp2"></div>
                 </td>
-                <td class="suna">
+                <td class="砂漠">
                     <div class="setTemp2"></div>
                 </td>
-                <td class="baru">
+                <td class="バル">
                     <div class="setTemp2"></div>
                 </td>
             </tr>
         </template>
 
         <template id="template2">
-            <br>
             <button class="btn" value="Blue" style="background-color:skyblue;">青</button>
             <button class="btn" value="Yellow" style="background-color:yellow;">黄</button>
             <button class="btn" value="Red" style="background-color:red;">赤</button>
             <button class="btn" value="Rainbow" style="background-color:violet;">虹</button>
-            <p class="befTime" style="background-color:white;margin:5px auto"></p>
+            <p class="befTime" style="background-color:white;margin:5px auto">前回:</p>
             <p class="nowTime" style="background-color:white;margin:5px auto"></p>
             <input class="memo" size="13">
         </template>
