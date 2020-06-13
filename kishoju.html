@@ -43,19 +43,22 @@
         <button class="setServers" value="1">1-10</button>
         <button class="setServers" value="11">11-20</button>
         <button class="setServers" value="21">21-30</button>
-        <button class="setServers" value="31">31-40</button>
+        <button class="setServers" value="31">31-40</button>        
         <br><br>
 
-        データの復旧・バックアップ等<br>
+        データ・並びの復旧・保存<br>
         <button onclick="OneBack()">直前に戻す</button>
         <button onclick="load_Storage()">データ復旧</button>
-        <button onclick="save_Storage()">バックアップ</button><br><br>
+        <button onclick="save_Storage()">データ保存</button>
+        <button onclick="save_Sort()">並び保存</button>
+        <br></br>
 
-        入力・青黄・確定の削除<br>
+        入力・青黄・確定の削除、並びのリセット<br>
         <button onclick="Cleaner(this)" value="all">全部</button>
         <button onclick="Cleaner(this)" value="input">入力</button>
         <button onclick="Cleaner(this)" value="fix_blue">青黄</button>
         <button onclick="Cleaner(this)" value="fix_red">確定</button>
+        <button onclick="clear_Sort()">並び</button>
 
         <p>
             ご本家様 <a href="https://kouseidq10.com/tools/bunsan">https://kouseidq10.com/tools/bunsan</a><br>

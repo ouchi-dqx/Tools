@@ -1,101 +1,112 @@
 var Timers = {}
 var TMP 
 
+window.onload = function () {
+    sortPoint()
+}
+
 function debug(){
-    //Sort = JSON.parse(localStorage.getItem("Sort"))
+}
+
+function sortPoint(){
+    Sort = JSON.parse(localStorage.getItem("Sort"))
+    
+    for(i=0; i<2; i++){
+        Point = $("#setTemp1 td").find("p")
+        flg = false
+        
+        for(n=1; n<4; n++){
+            if($(Point).eq(n).text() !== Sort[n-1]){
+                if(flg == false){
+                    befPoint = $(Point).eq(n).closest("td")
+                    flg = true
+                }
+                else if(flg == true){
+                    afterPoint = $(Point).eq(n).closest("td")
+                }
+            }
+        }
+
+        if(flg == true){
+            movePoint(befPoint,afterPoint,"right")
+        }
+    }
 }
 
 //←ボタンイベント
 $(document).on("click", ".left", function() {
     if($(this).closest("td").prev("td").find("p").text() != "サーバー"){
-        Point = $(this).closest("td").find("p").text()
-        befPoint = $(this).closest("td").prev("td").find("p").text()
-
-        switch(Point){
-            case "ゲルヘナ幻野":
-                Point = ".ゲル"
-                break;
-            case "ジャリムバハ砂漠":
-                Point = ".砂漠"
-                break;
-            case "バルディスタ要塞":
-                Point = ".バル"
-                break;
-        }
-        switch(befPoint){
-            case "ゲルヘナ幻野":
-                befPoint = ".ゲル"
-                break;
-            case "ジャリムバハ砂漠":
-                befPoint = ".砂漠"
-                break;
-            case "バルディスタ要塞":
-                befPoint = ".バル"
-                break;
-        }
-
-        if($(".ServerList").attr("id") == ""){
-            $(this).closest("td").insertBefore($(this).closest("td").prev("td"))
-
-            tmp1 = document.getElementById("template1")
-            Servers = tmp1.content.querySelectorAll(".Servers")
-            Point = tmp1.content.querySelectorAll(".Servers > " + Point)
-            befPoint = tmp1.content.querySelectorAll(".Servers > " + befPoint)
-            Servers.item(0).insertBefore(Point.item(0),befPoint.item(0))
-        }else{
-            $(this).closest("td").insertBefore($(this).closest("td").prev("td"))
-
-            for(i=0; i<10; i++){
-                $(".Servers").find(Point).eq(i).insertBefore($(".Servers").find(befPoint).eq(i))
-            }
-        }
+        befPoint = $(this).closest("td")
+        afterPoint = $(this).closest("td").prev("td")
+        movePoint(befPoint,afterPoint,"left")
     }
 })
 
 //→ボタンイベント
 $(document).on("click", ".right", function() {
-    Point = $(this).closest("td").find("p").text()
-    afterPoint = $(this).closest("td").next("td").find("p").text()
+    befPoint = $(this).closest("td")
+    afterPoint = $(this).closest("td").next("td")
+    movePoint(befPoint,afterPoint,"right")
+})
 
-    switch(Point){
+//移動処理
+function movePoint(befPoint,AfterPoint,mode){
+    switch($(befPoint).find("p").text()){
         case "ゲルヘナ幻野":
-            Point = ".ゲル"
+            befClass = ".ゲル"
             break;
         case "ジャリムバハ砂漠":
-            Point = ".砂漠"
+            befClass = ".砂漠"
             break;
         case "バルディスタ要塞":
-            Point = ".バル"
+            befClass = ".バル"
             break;
     }
-    switch(afterPoint){
+    switch($(afterPoint).find("p").text()){
         case "ゲルヘナ幻野":
-            afterPoint = ".ゲル"
+            afterClass = ".ゲル"
             break;
         case "ジャリムバハ砂漠":
-            afterPoint = ".砂漠"
+            afterClass = ".砂漠"
             break;
         case "バルディスタ要塞":
-            afterPoint = ".バル"
+            afterClass = ".バル"
             break;
     }
 
     if($(".ServerList").attr("id") == ""){
-        $(this).closest("td").insertAfter($(this).closest("td").next("td"))
-
         tmp1 = document.getElementById("template1")
         Servers = tmp1.content.querySelectorAll(".Servers")
-        Point = tmp1.content.querySelectorAll(".Servers > " + Point)
-        afterPoint = tmp1.content.querySelectorAll(".Servers > " + afterPoint)
-        Servers.item(0).insertBefore(afterPoint.item(0),Point.item(0))
-    }else{
-        $(this).closest("td").insertAfter($(this).closest("td").next("td"))
+        tmp1_befPoint = tmp1.content.querySelectorAll(".Servers > " + befClass)
+        tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers > " + afterClass)
 
-        for(i=0; i<10; i++){
-            $(".Servers").find(Point).eq(i).insertAfter($(".Servers").find(afterPoint).eq(i))
+        if(mode == "left"){
+            $(befPoint).insertBefore(afterPoint)
+            Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
+        }
+        if(mode == "right"){
+            $(afterPoint).insertBefore(befPoint)
+            Servers.item(0).insertBefore(tmp1_afterPoint.item(0),tmp1_befPoint.item(0))
+        }
+    }else{
+        if(mode == "left"){
+            $(befPoint).insertBefore(afterPoint)
+
+            for(i=0; i<10; i++){
+                $(".Servers").find(befClass).eq(i)
+                    .insertBefore($(".Servers").find(afterClass).eq(i))
+            }
+        }
+        if(mode == "right"){
+            $(afterPoint).insertBefore(befPoint)
+
+            for(i=0; i<10; i++){
+                $(".Servers").find(afterClass).eq(i)
+                    .insertBefore($(".Servers").find(befClass).eq(i))
+            }
         }
     }
-})
+}
 
 //ボタンクリックイベント
 $(document).on("click", ".btn", function(){
@@ -278,7 +289,6 @@ function OneBack(){
 function load_Storage(){
     boxName = $(".ServerList").attr("id")
     Server = 0;
-    //Sort = JSON.parse(localStorage.getItem("Sort"))
     Data = JSON.parse(localStorage.getItem(boxName))
     fix_blue = JSON.parse(localStorage.getItem("fix_blue"))
     fix_red = JSON.parse(localStorage.getItem("fix_red"))
@@ -361,20 +371,11 @@ function load_Storage(){
 }
 
 function save_Storage(){
-    //var Sort = []
     var Data = []
     var fix_blue = []
     var fix_red = []
     boxName = $(".ServerList").attr("id")
 
-    /*
-    Sort.push([
-        $("#setTemp1 td").eq(1).find("p").text(),
-        $("#setTemp1 td").eq(2).find("p").text(),
-        $("#setTemp1 td").eq(3).find("p").text()
-    ])
-    */
-    
     $(".Servers").each(function(){
         Data.push([
             $(this).find(".Server").text().substr(4),
@@ -410,8 +411,32 @@ function save_Storage(){
     })
 
     sessionStorage.setItem(boxName,true)
-    //localStorage.setItem("Sort", JSON.stringify(Sort))
     localStorage.setItem(boxName, JSON.stringify(Data))
+    localStorage.setItem("fix_blue", JSON.stringify(fix_blue))
+    localStorage.setItem("fix_red", JSON.stringify(fix_red))
+}
+
+function save_Sort(){
+    var Sort = []
+    Sort.push(
+        $("#setTemp1 td").eq(1).find("p").text(),
+        $("#setTemp1 td").eq(2).find("p").text(),
+        $("#setTemp1 td").eq(3).find("p").text()
+    )
+    localStorage.setItem("Sort", JSON.stringify(Sort))
+}
+
+function save_Fix(){
+    var fix_blue = []
+    var fix_red = []
+
+    $(".fix_blue").find(".fix").each(function(){
+        fix_blue.push([$(this).text()])
+    })
+    $(".fix_red").find(".fix").each(function(){
+        fix_red.push([$(this).text()])
+    })
+    
     localStorage.setItem("fix_blue", JSON.stringify(fix_blue))
     localStorage.setItem("fix_red", JSON.stringify(fix_red))
 }
@@ -485,19 +510,11 @@ $(document).on('click', ".fix", function() {
     save_Fix()
 })
 
-function save_Fix(){
-    var fix_blue = []
-    var fix_red = []
-
-    $(".fix_blue").find(".fix").each(function(){
-        fix_blue.push([$(this).text()])
-    })
-    $(".fix_red").find(".fix").each(function(){
-        fix_red.push([$(this).text()])
-    })
-    
-    localStorage.setItem("fix_blue", JSON.stringify(fix_blue))
-    localStorage.setItem("fix_red", JSON.stringify(fix_red))
+function clear_Sort(){
+    var Sort = []
+    Sort.push("ゲルヘナ幻野","ジャリムバハ砂漠","バルディスタ要塞")
+    localStorage.setItem("Sort", JSON.stringify(Sort))
+    sortPoint()
 }
 
 
