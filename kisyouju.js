@@ -284,8 +284,6 @@ function load_Storage(){
     fix_red = JSON.parse(localStorage.getItem("fix_red"))
 
     $(".Servers").each(function(){
-        Server = $(this).find(".Server").text().slice(4) - 1
-
         _this = $(this).find(".ゲル>.setTemp2>")
         _this.nextAll(".nowTime")
             .text(Data[Server][1])
@@ -303,7 +301,7 @@ function load_Storage(){
         }
         else if(Data[Server][2] != "rgb(255, 0, 0)"){
             _this.nextAll(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Server + "ゲル"])
+            clearInterval(Timers[Server + 1 + "ゲル"])
         }
 
 
