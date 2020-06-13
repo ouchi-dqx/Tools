@@ -1,7 +1,7 @@
 var Timers = {}
 var TMP 
 
-window.onload = function () {
+window.onload = function(){
     sortPoint()
 }
 
@@ -500,7 +500,7 @@ function clear_fix(fix){
     }
 }
 
-$(document).on('click', ".fix", function() {
+$(document).on("click", ".fix", function() {
     flg = confirm("本当に削除していいですか？")
 
     if(flg){
