@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_top">
+        <title>輝晶獣分散狩り支援ページ(スマホ用)</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>        
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    </head>
+
+    <body>
+        <div class="ServerList" id="" align="center">
+        </div>
+
+        <br clear="left"><br>調査サーバー設定<br>
+        <button class="setServers" value="1">1-10</button>
+        <button class="setServers" value="11">11-20</button>
+        <button class="setServers" value="21">21-30</button>
+        <button class="setServers" value="31">31-40</button>
+        <br><br>
+        
+        <template id="template1">
+            <div align="center">
+                <table border>
+                    <tr align="center">
+                        <td class="Server">
+                            <span>サーバー</span>
+                        </td>
+                    </tr>
+                    <tr align="center">
+                        <td class="ゲル">
+                            <span>ゲルヘナ幻野</span>
+                            <br><hr>
+                            <div class="setTemp"></div>
+                        </td>
+                    </tr>
+                    <tr align="center">
+                        <td class="砂漠">
+                            <span>ジャリムバハ砂漠</span>
+                            <br><hr>
+                            <div class="setTemp"></div>
+                        </td>
+                    </tr>
+                    <tr align="center">
+                        <td class="バル">
+                            <span>バルディスタ要塞</span>
+                            <br><hr>
+                            <div class="setTemp"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+
+        <template id="template2">
+            <button class="btn" value="Blue" style="background-color:skyblue;">青</button>
+            <button class="btn" value="Yellow" style="background-color:yellow;">黄</button>
+            <button class="btn" value="Red" style="background-color:red;">赤</button>
+            <button class="btn" value="Rainbow" style="background-color:violet;">虹</button>
+            <p class="befTime" style="background-color:white;margin:5px auto">前回:</p>
+            <p class="nowTime" style="background-color:white;margin:5px auto"></p>
+            <input class="memo" size="13">
+        </template>
+
+
+        <script src="kisyouju_phone.js"></script>
+    </body>
+</html>
