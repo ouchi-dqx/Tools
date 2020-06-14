@@ -12,6 +12,10 @@ $(document).on("click", ".setServers", function(){
     //サーバリスト名設定
     $(".ServerList").attr("id", $(this).text())
 
+    for(i=0; i<10; i++){
+        $('.ServerList').slick('slickRemove',true)
+    }
+
     //サーバー行追加
     num = Number($(this).val())
     tmp1 = document.getElementById("template1")
@@ -19,7 +23,7 @@ $(document).on("click", ".setServers", function(){
         CopyTemp = tmp1.content.cloneNode(true)
         Servers = CopyTemp.querySelectorAll(".Server")
         Servers.item(0).innerHTML += (i + num)
-        $('.ServerList').slick('slickAdd', CopyTemp);
+        $('.ServerList').slick('slickAdd', CopyTemp)
     }
 
     //ボタン追加
