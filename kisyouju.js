@@ -243,7 +243,7 @@ $(document).on("click", ".setServers", function(){
     tmp2 = document.getElementById("template2")
     for(i=0; i<30; i++){
         CopyTemp = tmp2.content.cloneNode(true)
-        setTmp2 = document.getElementsByClassName("setTemp2")
+        setTmp2 = document.getElementsByClassName("setTemp")
         setTmp2[i].appendChild(CopyTemp)
     }
 
@@ -259,7 +259,7 @@ function OneBack(){
     if(TMP != null){
         $(".Servers").each(function(){
             if("サーバー" + TMP[0] == $(this).find(".Server").text()){
-                _this = $(this).find("." + TMP[1] + ">.setTemp2>")
+                _this = $(this).find("." + TMP[1] + ">.setTemp>")
 
                 _this.nextAll(".nowTime").text(TMP[2]).css("background-color", TMP[3])
                 _this.nextAll(".befTime").text(TMP[4]).css("background-color", TMP[5])
@@ -288,7 +288,7 @@ function load_Storage(){
     fix_red = JSON.parse(localStorage.getItem("fix_red"))
 
     $(".Servers").each(function(){
-        _this = $(this).find(".ゲル>.setTemp2>")
+        _this = $(this).find(".ゲル>.setTemp>")
         _this.nextAll(".nowTime")
             .text(Data[Server][1])
             .css("background-color", Data[Server][2])
@@ -309,7 +309,7 @@ function load_Storage(){
         }
 
 
-        _this = $(this).find(".砂漠>.setTemp2>")
+        _this = $(this).find(".砂漠>.setTemp>")
        _this.nextAll(".nowTime")
             .text(Data[Server][7])
             .css("background-color", Data[Server][8]),
@@ -330,7 +330,7 @@ function load_Storage(){
         }
 
 
-        _this = $(this).find(".バル>.setTemp2>")
+        _this = $(this).find(".バル>.setTemp>")
         _this.nextAll(".nowTime")
             .text(Data[Server][13])
             .css("background-color", Data[Server][14])
@@ -374,26 +374,26 @@ function save_Storage(){
         Data.push([
             $(this).find(".Server").text().substr(4),
             
-            $(this).find(".ゲル>.setTemp2>.nowTime").text(),
-            $(this).find(".ゲル>.setTemp2>.nowTime").css("background-color"),
-            $(this).find(".ゲル>.setTemp2>.befTime").text().substr(3),
-            $(this).find(".ゲル>.setTemp2>.befTime").css("background-color"),
-            $(this).find(".ゲル>.setTemp2>.memo").val(),
-            $(this).find(".ゲル>.setTemp2>.memo").css("background-color"),
+            $(this).find(".ゲル>.setTemp>.nowTime").text(),
+            $(this).find(".ゲル>.setTemp>.nowTime").css("background-color"),
+            $(this).find(".ゲル>.setTemp>.befTime").text().substr(3),
+            $(this).find(".ゲル>.setTemp>.befTime").css("background-color"),
+            $(this).find(".ゲル>.setTemp>.memo").val(),
+            $(this).find(".ゲル>.setTemp>.memo").css("background-color"),
 
-            $(this).find(".砂漠>.setTemp2>.nowTime").text(),
-            $(this).find(".砂漠>.setTemp2>.nowTime").css("background-color"),
-            $(this).find(".砂漠>.setTemp2>.befTime").text().substr(3),
-            $(this).find(".砂漠>.setTemp2>.befTime").css("background-color"),
-            $(this).find(".砂漠>.setTemp2>.memo").val(),
-            $(this).find(".砂漠>.setTemp2>.memo").css("background-color"),
+            $(this).find(".砂漠>.setTemp>.nowTime").text(),
+            $(this).find(".砂漠>.setTemp>.nowTime").css("background-color"),
+            $(this).find(".砂漠>.setTemp>.befTime").text().substr(3),
+            $(this).find(".砂漠>.setTemp>.befTime").css("background-color"),
+            $(this).find(".砂漠>.setTemp>.memo").val(),
+            $(this).find(".砂漠>.setTemp>.memo").css("background-color"),
 
-            $(this).find(".バル>.setTemp2>.nowTime").text(),
-            $(this).find(".バル>.setTemp2>.nowTime").css("background-color"),
-            $(this).find(".バル>.setTemp2>.befTime").text().substr(3),
-            $(this).find(".バル>.setTemp2>.befTime").css("background-color"),
-            $(this).find(".バル>.setTemp2>.memo").val(),
-            $(this).find(".バル>.setTemp2>.memo").css("background-color")
+            $(this).find(".バル>.setTemp>.nowTime").text(),
+            $(this).find(".バル>.setTemp>.nowTime").css("background-color"),
+            $(this).find(".バル>.setTemp>.befTime").text().substr(3),
+            $(this).find(".バル>.setTemp>.befTime").css("background-color"),
+            $(this).find(".バル>.setTemp>.memo").val(),
+            $(this).find(".バル>.setTemp>.memo").css("background-color")
         ])
     })
 
