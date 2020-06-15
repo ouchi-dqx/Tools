@@ -2,7 +2,6 @@ var Timers = {}
 function debug(){
 }
 
-
 $(".ServerList").slick({
     arrows: false
 })
@@ -47,8 +46,8 @@ $(document).on("click", ".btn", function(){
     $(this).parent().find(".btn[value=Red]").prop("disabled", false)
     
     //変数作成
-    var Server = $(this).parent().parent().parent().find(".Server").text()
-    var Point = $(this).parent().parent().attr("class")
+    Server = $(this).closest("tr").find(".Server").text().slice(4)
+    Point = $(this).closest("td").attr("class")
     var nowTime = new Date()
     var befTime = $(this).nextAll(".nowTime").text()
     var old_befTime = $(this).nextAll(".befTime").text()
