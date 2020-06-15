@@ -74,36 +74,25 @@ function movePoint(befPoint,AfterPoint,mode){
             break;
     }
 
-    if($(".ServerList").attr("id") == ""){
-        tmp1 = document.getElementById("template1")
-        Servers = tmp1.content.querySelectorAll(".Servers")
-        tmp1_befPoint = tmp1.content.querySelectorAll(".Servers > " + befClass)
-        tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers > " + afterClass)
+    tmp1 = document.getElementById("template1")
+    Servers = tmp1.content.querySelectorAll(".Servers")
+    tmp1_befPoint = tmp1.content.querySelectorAll(".Servers > " + befClass)
+    tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers > " + afterClass)
 
-        if(mode == "left"){
-            $(befPoint).insertBefore(afterPoint)
-            Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
+    if(mode == "left"){
+        $(befPoint).insertBefore(afterPoint)
+        Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
+        for(i=0; i<10; i++){
+            $(".Servers").find(befClass).eq(i)
+                .insertBefore($(".Servers").find(afterClass).eq(i))
         }
-        if(mode == "right"){
-            $(afterPoint).insertBefore(befPoint)
-            Servers.item(0).insertBefore(tmp1_afterPoint.item(0),tmp1_befPoint.item(0))
-        }
-    }else{
-        if(mode == "left"){
-            $(befPoint).insertBefore(afterPoint)
-
-            for(i=0; i<10; i++){
-                $(".Servers").find(befClass).eq(i)
-                    .insertBefore($(".Servers").find(afterClass).eq(i))
-            }
-        }
-        if(mode == "right"){
-            $(afterPoint).insertBefore(befPoint)
-
-            for(i=0; i<10; i++){
-                $(".Servers").find(afterClass).eq(i)
-                    .insertBefore($(".Servers").find(befClass).eq(i))
-            }
+    }
+    if(mode == "right"){
+        $(afterPoint).insertBefore(befPoint)
+        Servers.item(0).insertBefore(tmp1_afterPoint.item(0),tmp1_befPoint.item(0))
+        for(i=0; i<10; i++){
+            $(".Servers").find(afterClass).eq(i)
+                .insertBefore($(".Servers").find(befClass).eq(i))
         }
     }
 }
