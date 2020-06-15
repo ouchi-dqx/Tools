@@ -12,7 +12,7 @@ function sortPoint(){
     Sort = JSON.parse(localStorage.getItem("Sort"))
     
     for(i=0; i<2; i++){
-        Point = $("#setTemp1 td").find("p")
+        Point = $(".ServerList td").find("p")
         flg = false
         
         for(n=1; n<4; n++){
@@ -103,8 +103,8 @@ $(document).on("click", ".btn", function(){
     $(this).parent().find(".btn[value=Red]").prop("disabled", false)
 
     //変数作成
-    Server = $(this).parent().parent().parent().find(".Server").text().slice(4)
-    Point = $(this).parent().parent().attr("class")
+    Server = $(this).closest("tr").find(".Server").text().slice(4)
+    Point = $(this).closest("td").attr("class")
     nowTime = TimePlus(new Date(),"00:00:00")
     befTime = $(this).nextAll(".nowTime").text()
     old_befTime = $(this).nextAll(".befTime").text()
@@ -223,7 +223,7 @@ $(document).on("click", ".btn", function(){
 //サーバー追加
 $(document).on("click", ".setServers", function(){
     //テーブルの初期化
-    $("#setTemp1 tr").slice(1).remove()
+    $(".ServerList tr").slice(1).remove()
 
     //サーバリスト名設定
     $(".ServerList").attr("id", $(this).text())
@@ -233,7 +233,8 @@ $(document).on("click", ".setServers", function(){
     tmp1 = document.getElementById("template1")
     for(i=0; i<10; i++){
         CopyTemp = tmp1.content.cloneNode(true)
-        document.getElementById("setTemp1").appendChild(CopyTemp)
+        ServerList = document.getElementsByClassName("ServerList")
+        ServerList[0].appendChild(CopyTemp)
         Servers = document.getElementsByClassName("Server")
         Servers[i].innerHTML += (i + num)
     }
@@ -255,24 +256,28 @@ $(document).on("click", ".setServers", function(){
 
 //データの復旧・バックアップ等
 function OneBack(){
-    $(".Servers").each(function(){
-        if("サーバー" + TMP[0] == $(this).find(".Server").text()){
-            _this = $(this).find("." + TMP[1] + ">.setTemp2>")
+    if(TMP != null){
+        $(".Servers").each(function(){
+            if("サーバー" + TMP[0] == $(this).find(".Server").text()){
+                _this = $(this).find("." + TMP[1] + ">.setTemp2>")
 
-            _this.nextAll(".nowTime").text(TMP[2]).css("background-color", TMP[3])
-            _this.nextAll(".befTime").text(TMP[4]).css("background-color", TMP[5])
-            _this.nextAll(".memo").val(TMP[6])
-                        
-            if(TMP[3] == "rgb(255, 0, 0)"){
-                _this.nextAll(".btn[value=Red]").prop("disabled", true)
-                Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this)
+                _this.nextAll(".nowTime").text(TMP[2]).css("background-color", TMP[3])
+                _this.nextAll(".befTime").text(TMP[4]).css("background-color", TMP[5])
+                _this.nextAll(".memo").val(TMP[6])
+                            
+                if(TMP[3] == "rgb(255, 0, 0)"){
+                    _this.nextAll(".btn[value=Red]").prop("disabled", true)
+                    Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this)
+                }
+                else if(TMP[3] != "rgb(255, 0, 0)"){
+                    _this.nextAll(".btn[value=Red]").prop("disabled", false)
+                    clearInterval(Timers[TMP[0] + TMP[1]])
+                }
             }
-            else if(TMP[3] != "rgb(255, 0, 0)"){
-                _this.nextAll(".btn[value=Red]").prop("disabled", false)
-                clearInterval(Timers[TMP[0] + TMP[1]])
-            }
-        }
-    })
+        })
+
+        TMP = null
+    }
 }
 
 function load_Storage(){
@@ -408,9 +413,9 @@ function save_Storage(){
 function save_Sort(){
     var Sort = []
     Sort.push(
-        $("#setTemp1 td").eq(1).find("p").text(),
-        $("#setTemp1 td").eq(2).find("p").text(),
-        $("#setTemp1 td").eq(3).find("p").text()
+        $(".ServerList td").eq(1).find("p").text(),
+        $(".ServerList td").eq(2).find("p").text(),
+        $(".ServerList td").eq(3).find("p").text()
     )
     localStorage.setItem("Sort", JSON.stringify(Sort))
 }
@@ -473,6 +478,7 @@ function clear_input(){
         clearInterval(Timers[Server + "ゲル"])
         clearInterval(Timers[Server+"砂漠"])
         clearInterval(Timers[Server+"バル"])
+        TMP = null
     })
 }
 
