@@ -42,140 +42,133 @@ $(document).on("click", ".setServers", function(){
 
 //ボタンクリックイベント
 $(document).on("click", ".btn", function(){
-    //赤ボタンクリック禁止解除
-    $(this).parent().find(".btn[value=Red]").prop("disabled", false)
-    
     //変数作成
     Server = $(this).closest("tr").find(".Server").text().slice(4)
     Point = $(this).closest("td").attr("class")
-    var nowTime = new Date()
-    var befTime = $(this).nextAll(".nowTime").text()
-    var old_befTime = $(this).nextAll(".befTime").text()
-    var nowColor = $(this).nextAll(".nowTime").css("background-color")
-    var befColor = $(this).nextAll(".befTime").css("background-color")
+    btnColor = $(this).text()
+    nowTime = TimePlus(new Date(),"00:00:00")
+    befTime = $(this).nextAll(".nowTime").text()
+    old_befTime = $(this).nextAll(".befTime").text()
+    nowColor = $(this).nextAll(".nowTime").css("background-color")
+    befColor = $(this).nextAll(".befTime").css("background-color")
+    memo = $(this).nextAll(".memo").val()
+    TMP = Array(Server,Point,befTime,nowColor,old_befTime,befColor,memo)
     
-    //変数の変換
-    //「サーバー」置換
-    Server = Server.replace("サーバー","")
-    //現在時間の0詰め
-    nowTime = TimePlus(nowTime,"00:00:00")    
-    //「場所」置換
-    switch(Point){
-        case "geru":
-            Point = Point.replace("geru","ゲル");
-            break;
-        case "suna":
-        Point = Point.replace("suna","砂漠");
-            break;
-        case "baru":
-            Point = Point.replace("baru","バル")
-            break;
-    }
-    
-    //前回時間書き込み・背景色変更
-    if(old_befTime == ""){
-        //前回時間がない場合、前回:を記入する
-        $(this).nextAll(".befTime").text("前回:" + befTime)
-    }
-    else if($(this).text() == "青"  && 
-            nowColor == "rgb(135, 206, 235)" &&
-            befColor == "rgb(135, 206, 235)"){
-        //青継続の場合、前回時間を更新しない
-    }
-    else if($(this).text() == "虹"  && 
-            nowColor == "rgb(238, 130, 238)" &&
-            befColor == "rgb(238, 130, 238)"){
-        //虹継続の場合、前回時間を更新しない
-    }
-    else if(old_befTime != ""){
-        //前回時間がある場合、時間と背景を変更する
-        $(this).nextAll(".befTime")
-            .text("前回:" + befTime)
-            .css("background-color", nowColor)
+    //赤離脱判定
+    if(nowColor == "rgb(255, 0, 0)" && btnColor != "赤"){
+        //ボタン禁止解除・タイマ削除　メモ背景白・リスト削除        
+        $(this).parent().find(".btn[value=Red]").prop("disabled", false)
+        clearInterval(Timers[Server+Point])
+        $(this).nextAll(".memo").css("background-color", "white")
+
+        $(".fix_red").find(".fix").each(function(){
+            fix = $(this).text().split(" ")
+            if(old_befTime == "前回:"){
+                if(fix[0] == Server + Point &&
+                fix[1] == TimePlus(befTime,"00:00:00") &&
+                fix[3] == TimePlus(befTime,"01:00:00")){
+                    $(this).parent().remove()
+                }
+            }else if(old_befTime != "前回"){
+                if(fix[0] == Server + Point &&
+                (fix[1] == TimePlus(old_befTime.slice(3),"01:00:00") ||
+                 fix[1] == TimePlus(befTime,"00:00:00")) &&
+                fix[3] == TimePlus(befTime,"01:00:00")){
+                    $(this).parent().remove()
+                }
+            }
+        })
     }
 
     //現在時間書き込み・背景色変更
-    switch($(this).text()){
+    switch(btnColor){
         case "青":
-            $(this).nextAll(".nowTime").text(nowTime).css(
-                "background-color", "skyblue"
-            )
-            break
+            //虹青判定
+            if(nowColor == "rgb(238, 130, 238)" && btnColor == "青"){
+                Time = TimePlus(nowTime,"01:30:00").slice(0,-3)
+                $(this).nextAll(".memo").val(Time + "までに黄変化")
+            }
+
+            //青継続以外時、前回時間更新
+            if(nowColor != "rgb(135, 206, 235)"){
+                $(this).nextAll(".befTime")
+                    .text("前回:" + befTime)
+                    .css("background-color", nowColor)
+            }
+
+            $(this).nextAll(".nowTime")
+                .text(nowTime)
+                .css("background-color", "skyblue")
+        break
         case "黄":
-            $(this).nextAll(".nowTime").text(nowTime).css(
-                "background-color", "yellow"
-            )
-            break
+            //虹黄判定
+            if(nowColor == "rgb(238, 130, 238)" && btnColor == "黄"){
+                Time = TimePlus(nowTime,"01:30:00").slice(0,-3)
+                $(this).nextAll(".memo").val(Time + "まで調査不要")
+            }
+
+            //青黄判定
+            if(nowColor == "rgb(135, 206, 235)" && btnColor == "黄"){
+                Text = Server + Point + " "
+                    + TimePlus(befTime,"04:00:00") + " - "
+                    + TimePlus(nowTime,"04:00:00")
+                $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
+            }
+            
+            $(this).nextAll(".befTime")
+                .text("前回:" + befTime)
+                .css("background-color", nowColor)
+            $(this).nextAll(".nowTime")
+                .text(nowTime)
+                .css("background-color", "yellow")
+        break
         case "赤":
-            $(this).nextAll(".nowTime").text(nowTime).css(
-                "background-color", "red"
-            )
-            $(this).prop("disabled", true);//赤ボタンクリック禁止
-            break
+            
+            //赤ボタンクリック禁止
+            $(this).prop("disabled", true) 
+
+            //タイマーセット
+            $(this).nextAll(".memo").val("経過時間:" + "00:00:00")
+            Timers[Server + Point] = setInterval(setTimer,1000,$(this))
+
+            //黄赤判定
+            if(nowColor == "rgb(255, 255, 0)" && btnColor =="赤"){
+                Text = Server + Point + " "
+                    + TimePlus(befTime,"01:00:00") + " - "
+                    + TimePlus(nowTime,"01:00:00")
+                $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+            }
+
+            //黄赤以外で赤判定
+            if(nowColor != "rgb(255, 255, 0)" && btnColor == "赤"){
+                Text = Server + Point + " "
+                    + TimePlus(nowTime,"00:00:00") + " - "
+                    + TimePlus(nowTime,"01:00:00")
+                $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+            }
+
+            $(this).nextAll(".befTime")
+                .text("前回:" + befTime)
+                .css("background-color", nowColor)
+            $(this).nextAll(".nowTime")
+                .text(nowTime)
+                .css("background-color", "red")
+        break
         case "虹":
-            $(this).nextAll(".nowTime").text(nowTime).css(
-                "background-color", "violet"
-            )
-            break
+            //虹継続時以外、前回時間更新
+            if(nowColor != "rgb(238, 130, 238)"){
+                $(this).nextAll(".befTime")
+                    .text("前回:" + befTime)
+                    .css("background-color", nowColor)
+            }
+
+            $(this).nextAll(".nowTime")
+                .text(nowTime)
+                .css("background-color", "violet")
+        break
     }
 
-    //背景色の再取得
-    var nowColor = $(this).nextAll(".nowTime").css("background-color")
-    var befColor = $(this).nextAll(".befTime").css("background-color")
-
-    //虹青判定
-    if(befColor == "rgb(238, 130, 238)" && nowColor == "rgb(135, 206, 235)"){
-        Time = TimePlus(nowTime,"01:30:00").slice(0,-3)
-        $(this).nextAll(".memo").val(Time + "までに黄変化")
-    }
-
-    //虹黄判定
-    if(befColor == "rgb(238, 130, 238)" && nowColor == "rgb(255, 255, 0)"){
-        Time = TimePlus(nowTime,"01:30:00").slice(0,-3)
-        $(this).nextAll(".memo").val(Time + "まで調査不要")
-    }
-
-    //青黄判定
-    if(befColor == "rgb(135, 206, 235)" && nowColor == "rgb(255, 255, 0)"){
-        Text = Server
-                + Point + " "
-                + TimePlus(befTime,"04:00:00") + " - "
-                + TimePlus(nowTime,"04:00:00")
-
-        $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
-    }  
-
-    //黄赤判定
-    if(befColor == "rgb(255, 255, 0)" && nowColor == "rgb(255, 0, 0)"){
-        Text = Server
-                + Point + " "
-                + TimePlus(befTime,"01:00:00") + " - "
-                + TimePlus(nowTime,"01:00:00")
-
-        $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
-    }
-
-    //赤判定+カウントタイマ設置
-    if(nowColor == "rgb(255, 0, 0)"){
-        $(this).nextAll(".memo").val("経過時間:" + "00:00:00")
-        Timers[Server + Point] = setInterval(setTimer,1000,$(this))
-        if(old_befTime == "" || old_befTime == "前回:"){
-            Text = Server
-            + Point + " "
-            + TimePlus(nowTime,"00:00:00") + " - "
-            + TimePlus(nowTime,"01:00:00")
-
-            $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
-        }
-    }
-
-    //赤離脱判定+カウントタイマリセット
-    if(nowColor != "rgb(255, 0, 0)" && befColor == "rgb(255, 0, 0)"){
-        clearInterval(Timers[Server+Point])
-        $(this).nextAll(".memo").css("background-color", "white")
-    }
-
-    setStorage(true)
+    save_Storage(true)
 })
 
 //時間処理
