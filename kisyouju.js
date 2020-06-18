@@ -9,8 +9,10 @@ function debug(){
 }
 
 function sortPoint(){
-    Sort = JSON.parse(localStorage.getItem("Sort"))
-    
+    var i,n,flg
+    var Point,befPoint,afterPoint
+    var Sort = JSON.parse(localStorage.getItem("Sort"))
+
     for(i=0; i<2; i++){
         Point = $(".ServerList td").find("p")
         flg = false
@@ -22,13 +24,13 @@ function sortPoint(){
                     flg = true
                 }
                 else if(flg == true){
-                    afterPoint = $(Point).eq(n).closest("td")
+                    afterPoint = befPoint.closest("td").next("td")
                 }
             }
         }
 
         if(flg == true){
-            movePoint(befPoint,afterPoint,"right")
+            movePoint(afterPoint,befPoint)
         }
     }
 }
@@ -36,79 +38,53 @@ function sortPoint(){
 //←ボタンイベント
 $(document).on("click", ".left", function() {
     if($(this).closest("td").prev("td").find("p").text() != "サーバー"){
-        befPoint = $(this).closest("td")
-        afterPoint = $(this).closest("td").prev("td")
-        movePoint(befPoint,afterPoint,"left")
+        var befPoint = $(this).closest("td")
+        var afterPoint = $(this).closest("td").prev("td")
+        movePoint(befPoint,afterPoint)
     }
 })
 
 //→ボタンイベント
 $(document).on("click", ".right", function() {
-    befPoint = $(this).closest("td")
-    afterPoint = $(this).closest("td").next("td")
-    movePoint(befPoint,afterPoint,"right")
+    var befPoint = $(this).closest("td")
+    var afterPoint = $(this).closest("td").next("td")
+    movePoint(afterPoint,befPoint)
 })
 
 //移動処理
-function movePoint(befPoint,AfterPoint,mode){
-    switch($(befPoint).find("p").text()){
-        case "ゲルヘナ幻野":
-            befClass = ".ゲル"
-            break;
-        case "ジャリムバハ砂漠":
-            befClass = ".砂漠"
-            break;
-        case "バルディスタ要塞":
-            befClass = ".バル"
-            break;
-    }
-    switch($(afterPoint).find("p").text()){
-        case "ゲルヘナ幻野":
-            afterClass = ".ゲル"
-            break;
-        case "ジャリムバハ砂漠":
-            afterClass = ".砂漠"
-            break;
-        case "バルディスタ要塞":
-            afterClass = ".バル"
-            break;
-    }
+function movePoint(befPoint,afterPoint){
+    var i
 
-    tmp1 = document.getElementById("template1")
-    Servers = tmp1.content.querySelectorAll(".Servers")
-    tmp1_befPoint = tmp1.content.querySelectorAll(".Servers > " + befClass)
-    tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers > " + afterClass)
+    var befClass = "." + $(befPoint).attr("class")
+    var afterClass = "." + $(afterPoint).attr("class")
+    
+    var tmp1 = document.getElementById("template1")
+    var Servers = tmp1.content.querySelectorAll(".Servers")
+    var tmp1_befPoint = tmp1.content.querySelectorAll(".Servers >" + befClass)
+    var tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers >" + afterClass)
 
-    if(mode == "left"){
-        $(befPoint).insertBefore(afterPoint)
-        Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
-        for(i=0; i<10; i++){
-            $(".Servers").find(befClass).eq(i)
-                .insertBefore($(".Servers").find(afterClass).eq(i))
-        }
-    }
-    if(mode == "right"){
-        $(afterPoint).insertBefore(befPoint)
-        Servers.item(0).insertBefore(tmp1_afterPoint.item(0),tmp1_befPoint.item(0))
-        for(i=0; i<10; i++){
-            $(".Servers").find(afterClass).eq(i)
-                .insertBefore($(".Servers").find(befClass).eq(i))
-        }
+    befPoint.insertBefore(afterPoint)
+    Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
+    for(i=0; i<10; i++){
+        $(".Servers").find(befClass).eq(i)
+            .insertBefore($(".Servers").find(afterClass).eq(i))
     }
 }
 
 //ボタンクリックイベント
 $(document).on("click", ".btn", function(){
     //変数作成
-    Server = $(this).closest("tr").find(".Server").text().slice(4)
-    Point = $(this).closest("td").attr("class")
-    btnColor = $(this).text()
-    nowTime = TimePlus(new Date(),"00:00:00")
-    befTime = $(this).nextAll(".nowTime").text()
-    old_befTime = $(this).nextAll(".befTime").text()
-    nowColor = $(this).nextAll(".nowTime").css("background-color")
-    befColor = $(this).nextAll(".befTime").css("background-color")
-    memo = $(this).nextAll(".memo").val()
+    var fix,Time,Text
+
+    var Server = $(this).closest("tr").find(".Server").text().slice(4)
+    var Point = $(this).closest("td").attr("class")
+    var btnColor = $(this).text()
+    var nowTime = TimePlus(new Date(),"00:00:00")
+    var befTime = $(this).nextAll(".nowTime").text()
+    var old_befTime = $(this).nextAll(".befTime").text()
+    var nowColor = $(this).nextAll(".nowTime").css("background-color")
+    var befColor = $(this).nextAll(".befTime").css("background-color")
+    var memo = $(this).nextAll(".memo").val()
     TMP = Array(Server,Point,befTime,nowColor,old_befTime,befColor,memo)
     
     //赤離脱判定
@@ -120,17 +96,14 @@ $(document).on("click", ".btn", function(){
 
         $(".fix_red").find(".fix").each(function(){
             fix = $(this).text().split(" ")
-            if(old_befTime == "前回:"){
-                if(fix[0] == Server + Point &&
-                fix[1] == TimePlus(befTime,"00:00:00") &&
-                fix[3] == TimePlus(befTime,"01:00:00")){
+            if(fix[0] == Server + Point &&
+            fix[3] == TimePlus(befTime,"01:00:00")){
+                if(old_befTime == "前回:" &&
+                fix[1] == TimePlus(befTime,"00:00:00")){
                     $(this).parent().remove()
-                }
-            }else if(old_befTime != "前回"){
-                if(fix[0] == Server + Point &&
+                }else if(old_befTime != "前回:" &&
                 (fix[1] == TimePlus(old_befTime.slice(3),"01:00:00") ||
-                 fix[1] == TimePlus(befTime,"00:00:00")) &&
-                fix[3] == TimePlus(befTime,"01:00:00")){
+                fix[1] == TimePlus(befTime,"00:00:00"))){
                     $(this).parent().remove()
                 }
             }
@@ -140,8 +113,9 @@ $(document).on("click", ".btn", function(){
     //現在時間書き込み・背景色変更
     switch(btnColor){
         case "青":
-            //虹青判定
-            if(nowColor == "rgb(238, 130, 238)" && btnColor == "青"){
+            //赤青・虹青判定
+            if((nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)")
+            && btnColor == "青"){
                 Time = TimePlus(nowTime,"01:30:00").slice(0,-3)
                 $(this).nextAll(".memo").val(Time + "までに黄変化")
             }
@@ -158,9 +132,10 @@ $(document).on("click", ".btn", function(){
                 .css("background-color", "skyblue")
         break
         case "黄":
-            //虹黄判定
-            if(nowColor == "rgb(238, 130, 238)" && btnColor == "黄"){
-                Time = TimePlus(nowTime,"01:30:00").slice(0,-3)
+            //赤黄・虹黄判定
+            if((nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)")
+            && btnColor == "黄"){
+                Time = TimePlus(befTime,"01:30:00").slice(0,-3)
                 $(this).nextAll(".memo").val(Time + "まで調査不要")
             }
 
@@ -180,7 +155,6 @@ $(document).on("click", ".btn", function(){
                 .css("background-color", "yellow")
         break
         case "赤":
-            
             //赤ボタンクリック禁止
             $(this).prop("disabled", true) 
 
@@ -264,11 +238,13 @@ $(document).on("click", ".setServers", function(){
 
 //データの復旧・バックアップ等
 function OneBack(){
+    var Text
+    var _this
+
     if(TMP != null){
         $(".Servers").each(function(){
             if("サーバー" + TMP[0] == $(this).find(".Server").text()){
                 _this = $(this).find("." + TMP[1] + ">.setTemp>")
-
                 _this.nextAll(".nowTime").text(TMP[2]).css("background-color", TMP[3])
                 _this.nextAll(".befTime").text(TMP[4]).css("background-color", TMP[5])
                 _this.nextAll(".memo").val(TMP[6])
@@ -276,20 +252,23 @@ function OneBack(){
                 if(TMP[3] == "rgb(255, 0, 0)"){
                     _this.nextAll(".btn[value=Red]").prop("disabled", true)
                     Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this)
+
                     if(TMP[4] == "前回:"){
-                        Text = Server + Point + " "
-                            + TimePlus(nowTime,"00:00:00") + " - "
-                            + TimePlus(nowTime,"01:00:00")
-                        $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                        Text = TMP[0] + TMP[1] + " "
+                            + TimePlus(TMP[2],"00:00:00") + " - "
+                            + TimePlus(TMP[2],"01:00:00")
+                    }else if(TMP[5] == "rgb(255, 255, 0)"){
+                        Text = TMP[0] + TMP[1] + " "
+                            + TimePlus(TMP[4].slice(3),"01:00:00") + " - "
+                            + TimePlus(TMP[2],"01:00:00")
                     }else{
-                        Text = Server + Point + " "
-                            + TimePlus(befTime,"01:00:00") + " - "
-                            + TimePlus(nowTime,"01:00:00")
-                        $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                        Text = TMP[0] + TMP[1] + " "
+                            + TimePlus(TMP[4].slice(3),"00:00:00") + " - "
+                            + TimePlus(TMP[2],"01:00:00")
                     }
 
-                }
-                else if(TMP[3] != "rgb(255, 0, 0)"){
+                    $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                }else if(TMP[3] != "rgb(255, 0, 0)"){
                     _this.nextAll(".btn[value=Red]").prop("disabled", false)
                     clearInterval(Timers[TMP[0] + TMP[1]])
                 }
@@ -301,11 +280,12 @@ function OneBack(){
 }
 
 function load_Storage(){
-    boxName = $(".ServerList").attr("id")
-    Server = 0;
-    Data = JSON.parse(localStorage.getItem(boxName))
-    fix_blue = JSON.parse(localStorage.getItem("fix_blue"))
-    fix_red = JSON.parse(localStorage.getItem("fix_red"))
+    var boxName = $(".ServerList").attr("id")
+    var Server = 0;
+    var Data = JSON.parse(localStorage.getItem(boxName))
+    var fix_blue = JSON.parse(localStorage.getItem("fix_blue"))
+    var fix_red = JSON.parse(localStorage.getItem("fix_red"))
+    var _this
 
     $(".Servers").each(function(){
         _this = $(this).find(".ゲル>.setTemp>")
@@ -388,7 +368,7 @@ function save_Storage(){
     var Data = []
     var fix_blue = []
     var fix_red = []
-    boxName = $(".ServerList").attr("id")
+    var boxName = $(".ServerList").attr("id")
 
     $(".Servers").each(function(){
         Data.push([
@@ -458,7 +438,7 @@ function save_Fix(){
 
 //削除関連
 function Cleaner(target){
-    flg = confirm("本当に削除していいですか？")
+    var flg = confirm("本当に削除していいですか？")
 
     if(flg){
         if(target.value == "all"){
@@ -481,6 +461,7 @@ function Cleaner(target){
 }
 
 function clear_input(){
+    var Server
     $(".Servers").each(function(){
         $(this).parent().find(".btn[value=Red]").prop("disabled", false)
 
@@ -516,7 +497,7 @@ function clear_fix(fix){
 }
 
 $(document).on("click", ".fix", function() {
-    flg = confirm("本当に削除していいですか？")
+    var flg = confirm("本当に削除していいですか？")
 
     if(flg){
         $(this).closest("tr").remove()
@@ -553,7 +534,8 @@ function TimePlus(Time,Dates){
 
 //タイマ設置
 function setTimer(_this){
-    Time = _this.nextAll(".memo").val().slice(5)
+    var Time = _this.nextAll(".memo").val().slice(5)
+
     if(Time == "00:50:00"){    
         Time = TimePlus(Time,"00:00:01")
         _this.nextAll(".memo").val("経過時間:" + Time)
