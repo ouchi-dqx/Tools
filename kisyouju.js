@@ -5,7 +5,8 @@ window.onload = function(){
     sortPoint()
 }
 
-function debug(){}
+function debug(){
+}
 
 function sortPoint(){
     var i,n,flg //カウンタ・フラグ変数
@@ -23,7 +24,7 @@ function sortPoint(){
                     flg = true
                 }
                 else if(flg == true){
-                    afterPoint = befPoint.closest("td").next("td")
+                    afterPoint = $(Point).eq(n).closest("td")
                 }
             }
         }
