@@ -5,17 +5,16 @@ window.onload = function(){
     sortPoint()
 }
 
-function debug(){    
-}
+function debug(){}
 
 function sortPoint(){
-    var i,n,flg
-    var Point,befPoint,afterPoint
+    var i,n,flg //カウンタ・フラグ変数
+    var Point,befPoint,afterPoint //jQuery変数
     var Sort = JSON.parse(localStorage.getItem("Sort"))
 
     for(i=0; i<2; i++){
         Point = $(".ServerList td").find("p")
-        flg = false
+        flg = false //フラグ初期化
         
         for(n=1; n<4; n++){
             if($(Point).eq(n).text() !== Sort[n-1]){
@@ -30,7 +29,7 @@ function sortPoint(){
         }
 
         if(flg == true){
-            movePoint(afterPoint,befPoint)
+            movePoint(afterPoint,befPoint) //右移動
         }
     }
 }
@@ -40,7 +39,7 @@ $(document).on("click", ".left", function() {
     if($(this).closest("td").prev("td").find("p").text() != "サーバー"){
         var befPoint = $(this).closest("td")
         var afterPoint = $(this).closest("td").prev("td")
-        movePoint(befPoint,afterPoint)
+        movePoint(befPoint,afterPoint) //左移動
     }
 })
 
@@ -48,24 +47,24 @@ $(document).on("click", ".left", function() {
 $(document).on("click", ".right", function() {
     var befPoint = $(this).closest("td")
     var afterPoint = $(this).closest("td").next("td")
-    movePoint(afterPoint,befPoint)
+    movePoint(afterPoint,befPoint) //右移動
 })
 
 //移動処理
 function movePoint(befPoint,afterPoint){
-    var i
-
+    //jQuery用クラス変数
     var befClass = "." + $(befPoint).attr("class")
     var afterClass = "." + $(afterPoint).attr("class")
     
+    //template内移動処理用変数
     var tmp1 = document.getElementById("template1")
     var Servers = tmp1.content.querySelectorAll(".Servers")
     var tmp1_befPoint = tmp1.content.querySelectorAll(".Servers >" + befClass)
     var tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers >" + afterClass)
+    Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
 
     befPoint.insertBefore(afterPoint)
-    Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
-    for(i=0; i<10; i++){
+    for(var i=0; i<10; i++){
         $(".Servers").find(befClass).eq(i)
             .insertBefore($(".Servers").find(afterClass).eq(i))
     }
@@ -75,7 +74,6 @@ function movePoint(befPoint,afterPoint){
 $(document).on("click", ".btn", function(){
     //変数作成
     var fix,Time,Text
-
     var Server = $(this).closest("tr").find(".Server").text().slice(4)
     var Point = $(this).closest("td").attr("class")
     var btnColor = $(this).text()
@@ -89,15 +87,19 @@ $(document).on("click", ".btn", function(){
     
     //赤離脱判定
     if(nowColor == "rgb(255, 0, 0)" && btnColor != "赤"){
-        //ボタン禁止解除・タイマ削除　メモ背景白・リスト削除        
+        //ボタン禁止解除・タイマ削除　メモ背景色初期化
         $(this).parent().find(".btn[value=Red]").prop("disabled", false)
         clearInterval(Timers[Server+Point])
         $(this).nextAll(".memo").css("background-color", "white")
 
+        //リスト削除処理
         $(".fix_red").find(".fix").each(function(){
             fix = $(this).text().split(" ")
+
+            //鯖場所・今回時間比較
             if(fix[0] == Server + Point &&
             fix[3] == TimePlus(befTime,"01:00:00")){
+                //初回判定・前回・今回時間比較
                 if(old_befTime == "前回:" &&
                 fix[1] == TimePlus(befTime,"00:00:00")){
                     $(this).parent().remove()
@@ -204,15 +206,15 @@ $(document).on("click", ".btn", function(){
 
 //サーバー追加
 $(document).on("click", ".setServers", function(){
-    //テーブルの初期化
-    $(".ServerList tr").slice(1).remove()
+    var i
+    var CopyTemp,setTmp2,ServerList,Servers
 
-    //サーバリスト名設定
-    $(".ServerList").attr("id", $(this).text())
+    $(".ServerList tr").slice(1).remove() //テーブルの初期化
+    $(".ServerList").attr("id", $(this).text()) //サーバリストID設定　
 
     //サーバー行追加
-    num = Number($(this).val())
-    tmp1 = document.getElementById("template1")
+    var tmp1 = document.getElementById("template1")
+    var num = Number($(this).val())
     for(i=0; i<10; i++){
         CopyTemp = tmp1.content.cloneNode(true)
         ServerList = document.getElementsByClassName("ServerList")
@@ -222,7 +224,7 @@ $(document).on("click", ".setServers", function(){
     }
 
     //ボタン追加
-    tmp2 = document.getElementById("template2")
+    var tmp2 = document.getElementById("template2")
     for(i=0; i<30; i++){
         CopyTemp = tmp2.content.cloneNode(true)
         setTmp2 = document.getElementsByClassName("setTemp")
@@ -230,140 +232,13 @@ $(document).on("click", ".setServers", function(){
     }
 
     //サーバ切り替え時のデータ保持
-    boxName = $(".ServerList").attr("id")
+    var boxName = $(".ServerList").attr("id")
     if(sessionStorage.getItem(boxName) == "true"){
         load_Storage()
     }
 })
 
 //データの復旧・バックアップ等
-function OneBack(){
-    var Text
-    var _this
-
-    if(TMP != null){
-        $(".Servers").each(function(){
-            if("サーバー" + TMP[0] == $(this).find(".Server").text()){
-                _this = $(this).find("." + TMP[1] + ">.setTemp>")
-                _this.nextAll(".nowTime").text(TMP[2]).css("background-color", TMP[3])
-                _this.nextAll(".befTime").text(TMP[4]).css("background-color", TMP[5])
-                _this.nextAll(".memo").val(TMP[6])
-                            
-                if(TMP[3] == "rgb(255, 0, 0)"){
-                    _this.nextAll(".btn[value=Red]").prop("disabled", true)
-                    Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this)
-
-                    if(TMP[4] == "前回:"){
-                        Text = TMP[0] + TMP[1] + " "
-                            + TimePlus(TMP[2],"00:00:00") + " - "
-                            + TimePlus(TMP[2],"01:00:00")
-                    }else if(TMP[5] == "rgb(255, 255, 0)"){
-                        Text = TMP[0] + TMP[1] + " "
-                            + TimePlus(TMP[4].slice(3),"01:00:00") + " - "
-                            + TimePlus(TMP[2],"01:00:00")
-                    }else{
-                        Text = TMP[0] + TMP[1] + " "
-                            + TimePlus(TMP[4].slice(3),"00:00:00") + " - "
-                            + TimePlus(TMP[2],"01:00:00")
-                    }
-
-                    $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
-                }else if(TMP[3] != "rgb(255, 0, 0)"){
-                    _this.nextAll(".btn[value=Red]").prop("disabled", false)
-                    clearInterval(Timers[TMP[0] + TMP[1]])
-                }
-            }
-        })
-
-        TMP = null
-    }
-}
-
-function load_Storage(){
-    var boxName = $(".ServerList").attr("id")
-    var Server = 0;
-    var Data = JSON.parse(localStorage.getItem(boxName))
-    var fix_blue = JSON.parse(localStorage.getItem("fix_blue"))
-    var fix_red = JSON.parse(localStorage.getItem("fix_red"))
-    var _this
-
-    $(".Servers").each(function(){
-        _this = $(this).find(".ゲル>.setTemp>")
-        _this.nextAll(".nowTime")
-            .text(Data[Server][1])
-            .css("background-color", Data[Server][2])
-        _this.nextAll(".befTime")
-            .text("前回:" + Data[Server][3])
-            .css("background-color", Data[Server][4])
-        _this.nextAll(".memo")
-            .val(Data[Server][5])
-            .css("background-color", Data[Server][6])
-
-        if(Data[Server][2] == "rgb(255, 0, 0)"){
-            _this.nextAll(".btn[value=Red]").prop("disabled", true)
-            Timers[Server + "ゲル"] = setInterval(setTimer,1000,_this)
-        }
-        else if(Data[Server][2] != "rgb(255, 0, 0)"){
-            _this.nextAll(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Server + 1 + "ゲル"])
-        }
-
-
-        _this = $(this).find(".砂漠>.setTemp>")
-       _this.nextAll(".nowTime")
-            .text(Data[Server][7])
-            .css("background-color", Data[Server][8]),
-        _this.nextAll(".befTime")
-            .text("前回:" + Data[Server][9])
-            .css("background-color", Data[Server][10]),
-        _this.nextAll(".memo")
-            .val(Data[Server][11])
-            .css("background-color", Data[Server][12])
-            
-        if(Data[Server][8] == "rgb(255, 0, 0)"){
-            _this.nextAll(".btn[value=Red]").prop("disabled", true)
-            Timers[Server + "砂漠"] = setInterval(setTimer,1000,_this)
-        }
-        else if(Data[Server][8] != "rgb(255, 0, 0)"){
-            _this.nextAll(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Server + "砂漠"])
-        }
-
-
-        _this = $(this).find(".バル>.setTemp>")
-        _this.nextAll(".nowTime")
-            .text(Data[Server][13])
-            .css("background-color", Data[Server][14])
-            _this.nextAll(".befTime")
-            .text("前回:" + Data[Server][15])
-            .css("background-color", Data[Server][16]),
-            _this.nextAll(".memo")
-            .val(Data[Server][17])
-            .css("background-color", Data[Server][18])
-
-        if(Data[Server][14] == "rgb(255, 0, 0)"){
-            _this.nextAll(".btn[value=Red]").prop("disabled", true)
-            Timers[Server + "バル"] = setInterval(setTimer,1000,_this)
-        }
-        else if(Data[Server][14] != "rgb(255, 0, 0)"){
-            _this.nextAll(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Server + "バル"])
-        }
-
-        Server++
-    })
-    
-    $(".fix_blue tr").slice(1).remove()
-    $(".fix_red tr").slice(1).remove()
-
-    fix_blue.forEach(function(Text){
-        $(".fix_blue").append('<tr><td class="fix">' + Text + '</td></tr>')
-    })
-    fix_red.forEach(function(Text){
-        $(".fix_red").append('<tr><td class="fix">' + Text + '</td></tr>')
-    })
-}
-
 function save_Storage(){
     var Data = []
     var fix_blue = []
@@ -410,6 +285,88 @@ function save_Storage(){
     localStorage.setItem("fix_red", JSON.stringify(fix_red))
 }
 
+function load_Storage(){
+    var boxName = $(".ServerList").attr("id")
+    var Server = 0;
+    var Data = JSON.parse(localStorage.getItem(boxName))
+    var fix_blue = JSON.parse(localStorage.getItem("fix_blue"))
+    var fix_red = JSON.parse(localStorage.getItem("fix_red"))
+    var _this
+
+    $(".Servers").each(function(){
+        //1,7,13=今回時間 2,8,14=今回色 3,9,15=前回時間 4,10,16=前回色
+        //5,11,17=メモ,6,12,18=メモ背景色
+        _this = $(this).find(".ゲル>.setTemp>")
+        _this.nextAll(".nowTime")
+            .text(Data[Server][1])
+            .css("background-color", Data[Server][2])
+        _this.nextAll(".befTime")
+            .text("前回:" + Data[Server][3])
+            .css("background-color", Data[Server][4])
+        _this.nextAll(".memo")
+            .val(Data[Server][5])
+            .css("background-color", Data[Server][6])
+        if(Data[Server][2] == "rgb(255, 0, 0)"){
+            _this.nextAll(".btn[value=Red]").prop("disabled", true)
+            Timers[Server + "ゲル"] = setInterval(setTimer,1000,_this)
+        }
+        else if(Data[Server][2] != "rgb(255, 0, 0)"){
+            _this.nextAll(".btn[value=Red]").prop("disabled", false)
+            clearInterval(Timers[Server + 1 + "ゲル"])
+        }
+
+        _this = $(this).find(".砂漠>.setTemp>")
+       _this.nextAll(".nowTime")
+            .text(Data[Server][7])
+            .css("background-color", Data[Server][8]),
+        _this.nextAll(".befTime")
+            .text("前回:" + Data[Server][9])
+            .css("background-color", Data[Server][10]),
+        _this.nextAll(".memo")
+            .val(Data[Server][11])
+            .css("background-color", Data[Server][12])
+        if(Data[Server][8] == "rgb(255, 0, 0)"){
+            _this.nextAll(".btn[value=Red]").prop("disabled", true)
+            Timers[Server + "砂漠"] = setInterval(setTimer,1000,_this)
+        }
+        else if(Data[Server][8] != "rgb(255, 0, 0)"){
+            _this.nextAll(".btn[value=Red]").prop("disabled", false)
+            clearInterval(Timers[Server + "砂漠"])
+        }
+
+        _this = $(this).find(".バル>.setTemp>")
+        _this.nextAll(".nowTime")
+            .text(Data[Server][13])
+            .css("background-color", Data[Server][14])
+            _this.nextAll(".befTime")
+            .text("前回:" + Data[Server][15])
+            .css("background-color", Data[Server][16]),
+            _this.nextAll(".memo")
+            .val(Data[Server][17])
+            .css("background-color", Data[Server][18])
+        if(Data[Server][14] == "rgb(255, 0, 0)"){
+            _this.nextAll(".btn[value=Red]").prop("disabled", true)
+            Timers[Server + "バル"] = setInterval(setTimer,1000,_this)
+        }
+        else if(Data[Server][14] != "rgb(255, 0, 0)"){
+            _this.nextAll(".btn[value=Red]").prop("disabled", false)
+            clearInterval(Timers[Server + "バル"])
+        }
+
+        Server++
+    })
+    
+    $(".fix_blue tr").slice(1).remove()
+    $(".fix_red tr").slice(1).remove()
+
+    fix_blue.forEach(function(Text){
+        $(".fix_blue").append('<tr><td class="fix">' + Text + '</td></tr>')
+    })
+    fix_red.forEach(function(Text){
+        $(".fix_red").append('<tr><td class="fix">' + Text + '</td></tr>')
+    })
+}
+
 function save_Sort(){
     var Sort = []
     Sort.push(
@@ -433,6 +390,49 @@ function save_Fix(){
     
     localStorage.setItem("fix_blue", JSON.stringify(fix_blue))
     localStorage.setItem("fix_red", JSON.stringify(fix_red))
+}
+
+function OneBack(){
+    var Text,_this
+
+    if(TMP != null){
+        $(".Servers").each(function(){
+            if("サーバー" + TMP[0] == $(this).find(".Server").text()){
+                _this = $(this).find("." + TMP[1] + ">.setTemp>")
+                _this.nextAll(".nowTime").text(TMP[2]).css("background-color", TMP[3])
+                _this.nextAll(".befTime").text(TMP[4]).css("background-color", TMP[5])
+                _this.nextAll(".memo").val(TMP[6])
+                
+                //赤判定
+                if(TMP[3] == "rgb(255, 0, 0)"){
+                    _this.nextAll(".btn[value=Red]").prop("disabled", true)
+                    Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this)
+
+                    //タイマー復元
+                    if(TMP[4] == "前回:"){ //初回判定
+                        Text = TMP[0] + TMP[1] + " "
+                            + TimePlus(TMP[2],"00:00:00") + " - "
+                            + TimePlus(TMP[2],"01:00:00")
+                    }else if(TMP[5] == "rgb(255, 255, 0)"){ //赤判定
+                        Text = TMP[0] + TMP[1] + " "
+                            + TimePlus(TMP[4].slice(3),"01:00:00") + " - "
+                            + TimePlus(TMP[2],"01:00:00")
+                    }else{ //赤以外
+                        Text = TMP[0] + TMP[1] + " "
+                            + TimePlus(TMP[4].slice(3),"00:00:00") + " - "
+                            + TimePlus(TMP[2],"01:00:00")
+                    }
+
+                    $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                }else if(TMP[3] != "rgb(255, 0, 0)"){
+                    _this.nextAll(".btn[value=Red]").prop("disabled", false)
+                    clearInterval(Timers[TMP[0] + TMP[1]])
+                }
+            }
+        })
+
+        TMP = null //初期化
+    }
 }
 
 
@@ -461,7 +461,6 @@ function Cleaner(target){
 }
 
 function clear_input(){
-    var Server
     $(".Servers").each(function(){
         $(this).parent().find(".btn[value=Red]").prop("disabled", false)
 
@@ -474,8 +473,9 @@ function clear_input(){
         $(this).find(".memo").each(function(){
             $(this).val("").css("background-color", "white")
         })
-
-        Server = $(this).find(".Server").text().slice(4)
+        
+        //タイマー等初期化
+        var Server = $(this).find(".Server").text().slice(4)
         clearInterval(Timers[Server + "ゲル"])
         clearInterval(Timers[Server+"砂漠"])
         clearInterval(Timers[Server+"バル"])
@@ -498,11 +498,9 @@ function clear_fix(fix){
 
 $(document).on("click", ".fix", function() {
     var flg = confirm("本当に削除していいですか？")
-
     if(flg){
         $(this).closest("tr").remove()
     }
-
     save_Fix()
 })
 
