@@ -1,6 +1,5 @@
 var Timers = {}
-var TMP 
-
+var TMP
 window.onload = function(){
     sortPoint()
 }
@@ -88,7 +87,7 @@ $(document).on("click", ".btn", function(){
     
     //赤離脱判定
     if(nowColor == "rgb(255, 0, 0)" && btnColor != "赤"){
-        //ボタン禁止解除・タイマ削除　メモ背景色初期化
+        //ボタン禁止解除・タイマ削除 メモ背景色初期化
         $(this).parent().find(".btn[value=Red]").prop("disabled", false)
         clearInterval(Timers[Server+Point])
         $(this).nextAll(".memo").css("background-color", "white")
@@ -211,7 +210,8 @@ $(document).on("click", ".setServers", function(){
     var CopyTemp,setTmp2,ServerList,Servers
 
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
-    $(".ServerList").attr("id", $(this).text()) //サーバリストID設定　
+    $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
+  
 
     //サーバー行追加
     var tmp1 = document.getElementById("template1")
