@@ -92,25 +92,7 @@ $(document).on("click", ".btn", function(){
         $(this).parent().find(".btn[value=Red]").prop("disabled", false)
         clearInterval(Timers[Server+Point])
         $(this).nextAll(".memo").css("background-color", "white")
-
-        //リスト削除処理
-        $(".fix_red").find(".fix").each(function(){
-            fix = $(this).text().split(" ")
-
-            //鯖場所・今回時間比較
-            if(fix[0] == Server + Point &&
-            fix[3] == TimePlus(befTime,"01:00:00")){
-                //初回判定・前回・今回時間比較
-                if(old_befTime == "前回:" &&
-                fix[1] == TimePlus(befTime,"00:00:00")){
-                    $(this).parent().remove()
-                }else if(old_befTime != "前回:" &&
-                (fix[1] == TimePlus(old_befTime.slice(3),"01:00:00") ||
-                fix[1] == TimePlus(befTime,"00:00:00"))){
-                    $(this).parent().remove()
-                }
-            }
-        })
+        clear_one_fix("fix_red",Server + Point)
     }
 
     //現在時間書き込み・背景色変更
@@ -146,7 +128,7 @@ $(document).on("click", ".btn", function(){
                     + TimePlus(befTime,"03:00:00") + " - "
                     + TimePlus(nowTime,"03:00:00")
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
-                
+                                                
                 Time = TimePlus(befTime,"03:00:00").slice(0,-3)
                 $(this).nextAll(".memo").val(Time + "まで色変化無し")
             }
@@ -171,16 +153,15 @@ $(document).on("click", ".btn", function(){
                 Text = Server + Point + " "
                     + TimePlus(befTime,"01:00:00") + " - "
                     + TimePlus(nowTime,"01:00:00")
-                $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
-            }
-
-            //黄赤以外で赤判定
+            }else //黄赤以外で赤判定
             if(nowColor != "rgb(255, 255, 0)"){
                 Text = Server + Point + " "
                     + TimePlus(nowTime,"00:00:00") + " - "
                     + TimePlus(nowTime,"01:00:00")
-                $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
             }
+            $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+
+            clear_one_fix("fix_blue",Server + Point)
 
             $(this).nextAll(".befTime")
                 .text("前回:" + befTime)
@@ -397,17 +378,19 @@ function save_Fix(){
 }
 
 function OneBack(){
-    var Text,_this
+    var Text,_this,nowColor,fix
 
     if(TMP != null){
         $(".Servers").each(function(){
             if("サーバー" + TMP[0] == $(this).find(".Server").text()){
                 _this = $(this).find("." + TMP[1] + ">.setTemp>")
+                nowColor = _this.nextAll(".nowTime").css("background-color")
                 _this.nextAll(".nowTime").text(TMP[2]).css("background-color", TMP[3])
                 _this.nextAll(".befTime").text(TMP[4]).css("background-color", TMP[5])
                 _this.nextAll(".memo").val(TMP[6])
                 
                 //赤判定
+                //TMP = Array(Server,Point,befTime,nowColor,old_befTime,befColor,memo)
                 if(TMP[3] == "rgb(255, 0, 0)"){
                     _this.nextAll(".btn[value=Red]").prop("disabled", true)
                     Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this)
@@ -426,11 +409,16 @@ function OneBack(){
                             + TimePlus(TMP[4].slice(3),"00:00:00") + " - "
                             + TimePlus(TMP[2],"01:00:00")
                     }
-
                     $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
                 }else if(TMP[3] != "rgb(255, 0, 0)"){
                     _this.nextAll(".btn[value=Red]").prop("disabled", false)
                     clearInterval(Timers[TMP[0] + TMP[1]])
+                    if(nowColor == "rgb(255, 0, 0)"){
+                        clear_one_fix("fix_red",TMP[0] + TMP[1]) //確定リスト削除処理
+                    }else
+                    if(nowColor == "rgb(255, 255, 0)" && TMP[3] == "rgb(135, 206, 235)"){
+                        clear_one_fix("fix_blue",TMP[0] + TMP[1]) //青黄リスト削除処理
+                    }
                 }
             }
         })
@@ -508,6 +496,25 @@ $(document).on("click", ".fix", function() {
     save_Fix()
 })
 
+function clear_one_fix(fix,Text){
+    if(fix == "fix_blue"){
+        $(".fix_blue").find(".fix").each(function(){
+            fix = $(this).text().split(" ")
+            if(fix[0] == Text){ 
+                    $(this).parent().remove()
+            }
+        })
+    }
+    else if(fix == "fix_red"){
+        $(".fix_red").find(".fix").each(function(){
+            fix = $(this).text().split(" ")
+            if(fix[0] == Text){ 
+                    $(this).parent().remove()
+            }
+        })
+    }
+}
+
 function clear_Sort(){
     var Sort = []
     Sort.push("ゲルヘナ幻野","ジャリムバハ砂漠","バルディスタ要塞")
@@ -537,13 +544,26 @@ function TimePlus(Time,Dates){
 //タイマ設置
 function setTimer(_this){
     var Time = _this.nextAll(".memo").val().slice(5)
+    var nowTime = _this.nextAll(".nowTime").text()
+    var Server = _this.closest("tr").find(".Server").text().slice(4)
+    var Point = _this.closest("td").attr("class")
 
     if(Time == "00:50:00"){    
         Time = TimePlus(Time,"00:00:01")
         _this.nextAll(".memo").val("経過時間:" + Time)
         _this.nextAll(".memo").css("background-color", "violet")
     }else if(Time == "01:00:00"){
-        _this.nextAll(".memo").css("background-color", "red")  
+        _this.nextAll(".befTime")
+            .text("前回:" + nowTime)
+            .css("background-color", "red")
+        _this.nextAll(".nowTime")
+            .text(TimePlus(nowTime,"01:00:00"))
+            .css("background-color", "red")
+        _this.nextAll(".memo")
+            .val("！！！！虹！！！！")
+            .css("background-color", "red")
+        clearInterval(Timers[Server+Point])
+        save_Storage()
     }else{
         Time = TimePlus(Time,"00:00:01")
         _this.nextAll(".memo").val("経過時間:" + Time)
