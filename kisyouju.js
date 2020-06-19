@@ -1,5 +1,6 @@
 var Timers = {}
 var TMP
+
 window.onload = function(){
     sortPoint()
 }
@@ -116,14 +117,13 @@ $(document).on("click", ".btn", function(){
     switch(btnColor){
         case "青":
             //赤青・虹青判定
-            if((nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)")
-            && btnColor == "青"){
+            if(nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)"){
                 Time = TimePlus(nowTime,"01:30:00").slice(0,-3)
                 $(this).nextAll(".memo").val(Time + "までに黄変化")
             }
 
             //青継続以外時、前回時間更新
-            if(nowColor != "rgb(135, 206, 235)"){
+            if(nowColor != "rgb(135, 206, 235)" || befColor != "rgb(135, 206, 235)"){
                 $(this).nextAll(".befTime")
                     .text("前回:" + befTime)
                     .css("background-color", nowColor)
@@ -135,18 +135,20 @@ $(document).on("click", ".btn", function(){
         break
         case "黄":
             //赤黄・虹黄判定
-            if((nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)")
-            && btnColor == "黄"){
+            if(nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)"){
                 Time = TimePlus(befTime,"01:30:00").slice(0,-3)
-                $(this).nextAll(".memo").val(Time + "まで調査不要")
+                $(this).nextAll(".memo").val(Time + "まで色変化無し")
             }
 
             //青黄判定
-            if(nowColor == "rgb(135, 206, 235)" && btnColor == "黄"){
+            if(nowColor == "rgb(135, 206, 235)"){
                 Text = Server + Point + " "
-                    + TimePlus(befTime,"04:00:00") + " - "
-                    + TimePlus(nowTime,"04:00:00")
+                    + TimePlus(befTime,"03:00:00") + " - "
+                    + TimePlus(nowTime,"03:00:00")
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
+                
+                Time = TimePlus(befTime,"03:00:00").slice(0,-3)
+                $(this).nextAll(".memo").val(Time + "まで色変化無し")
             }
             
             $(this).nextAll(".befTime")
@@ -165,7 +167,7 @@ $(document).on("click", ".btn", function(){
             Timers[Server + Point] = setInterval(setTimer,1000,$(this))
 
             //黄赤判定
-            if(nowColor == "rgb(255, 255, 0)" && btnColor =="赤"){
+            if(nowColor == "rgb(255, 255, 0)"){
                 Text = Server + Point + " "
                     + TimePlus(befTime,"01:00:00") + " - "
                     + TimePlus(nowTime,"01:00:00")
@@ -173,7 +175,7 @@ $(document).on("click", ".btn", function(){
             }
 
             //黄赤以外で赤判定
-            if(nowColor != "rgb(255, 255, 0)" && btnColor == "赤"){
+            if(nowColor != "rgb(255, 255, 0)"){
                 Text = Server + Point + " "
                     + TimePlus(nowTime,"00:00:00") + " - "
                     + TimePlus(nowTime,"01:00:00")
@@ -189,7 +191,7 @@ $(document).on("click", ".btn", function(){
         break
         case "虹":
             //虹継続時以外、前回時間更新
-            if(nowColor != "rgb(238, 130, 238)"){
+            if(nowColor != "rgb(238, 130, 238)" || befColor != "rgb(238, 130, 238)"){
                 $(this).nextAll(".befTime")
                     .text("前回:" + befTime)
                     .css("background-color", nowColor)
