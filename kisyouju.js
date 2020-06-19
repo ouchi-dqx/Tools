@@ -297,6 +297,7 @@ function load_Storage(){
     var _this
 
     $(".Servers").each(function(){
+        //0=サーバー
         //1,7,13=今回時間 2,8,14=今回色 3,9,15=前回時間 4,10,16=前回色
         //5,11,17=メモ,6,12,18=メモ背景色
         _this = $(this).find(".ゲル>.setTemp>")
@@ -311,11 +312,11 @@ function load_Storage(){
             .css("background-color", Data[Server][6])
         if(Data[Server][2] == "rgb(255, 0, 0)"){
             _this.nextAll(".btn[value=Red]").prop("disabled", true)
-            Timers[Server + "ゲル"] = setInterval(setTimer,1000,_this)
+            Timers[Data[Server][0] + "ゲル"] = setInterval(setTimer,1000,_this)
         }
         else if(Data[Server][2] != "rgb(255, 0, 0)"){
             _this.nextAll(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Server + 1 + "ゲル"])
+            clearInterval(Timers[Data[Server][0] + "ゲル"])
         }
 
         _this = $(this).find(".砂漠>.setTemp>")
@@ -330,11 +331,11 @@ function load_Storage(){
             .css("background-color", Data[Server][12])
         if(Data[Server][8] == "rgb(255, 0, 0)"){
             _this.nextAll(".btn[value=Red]").prop("disabled", true)
-            Timers[Server + "砂漠"] = setInterval(setTimer,1000,_this)
+            Timers[Data[Server][0] + "砂漠"] = setInterval(setTimer,1000,_this)
         }
         else if(Data[Server][8] != "rgb(255, 0, 0)"){
             _this.nextAll(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Server + "砂漠"])
+            clearInterval(Timers[Data[Server][0] + "砂漠"])
         }
 
         _this = $(this).find(".バル>.setTemp>")
@@ -349,11 +350,11 @@ function load_Storage(){
             .css("background-color", Data[Server][18])
         if(Data[Server][14] == "rgb(255, 0, 0)"){
             _this.nextAll(".btn[value=Red]").prop("disabled", true)
-            Timers[Server + "バル"] = setInterval(setTimer,1000,_this)
+            Timers[Data[Server][0] + "バル"] = setInterval(setTimer,1000,_this)
         }
         else if(Data[Server][14] != "rgb(255, 0, 0)"){
             _this.nextAll(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Server + "バル"])
+            clearInterval(Timers[Data[Server][0] + "バル"])
         }
 
         Server++
