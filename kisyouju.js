@@ -226,7 +226,7 @@ $(document).on("click", ".setServers", function(){
 
 //確定時間追加
 function push_fix(){
-    var fix,Text
+    var fix,Text,delTime
     var Data = []
     var Server = $("#Server")
     var Point = $("#Point")
@@ -266,9 +266,11 @@ function push_fix(){
         $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
     })
 
+    /+
     Timers[Server.val() + Point.val() + "fix"] = setTimeout(function(){
         clear_one_fix("fix_red",Server.val() + Point.val())
-    },1000*60*60*2)
+    },delTime)
+    */
 
     //初期化
     Server.val("1")
