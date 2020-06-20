@@ -266,7 +266,7 @@ function push_fix(){
         $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
     })
 
-    /+
+    /*
     Timers[Server.val() + Point.val() + "fix"] = setTimeout(function(){
         clear_one_fix("fix_red",Server.val() + Point.val())
     },delTime)
