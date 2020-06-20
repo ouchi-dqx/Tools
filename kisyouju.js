@@ -35,20 +35,21 @@ function sortPoint(){
     }
 }
 
-//←ボタンイベント
-$(document).on("click", ".left", function() {
-    if($(this).closest("td").prev("td").find("p").text() != "サーバー"){
-        var befPoint = $(this).closest("td")
-        var afterPoint = $(this).closest("td").prev("td")
-        movePoint(befPoint,afterPoint) //左移動
+//←→ボタンイベント
+$(document).on("click", ".left, .right", function() {
+    var befPoint,afterPoint
+    if($(this).attr("class") == "left"){
+        if($(this).closest("td").prev("td").find("p").text() != "サーバー"){
+            befPoint = $(this).closest("td")
+            afterPoint = $(this).closest("td").prev("td")
+            movePoint(befPoint,afterPoint) //左移動
+        }
+    }else
+    if($(this).attr("class") == "right"){
+        befPoint = $(this).closest("td")
+        afterPoint = $(this).closest("td").next("td")
+        movePoint(afterPoint,befPoint) //右移動
     }
-})
-
-//→ボタンイベント
-$(document).on("click", ".right", function() {
-    var befPoint = $(this).closest("td")
-    var afterPoint = $(this).closest("td").next("td")
-    movePoint(afterPoint,befPoint) //右移動
 })
 
 //移動処理
@@ -221,6 +222,75 @@ $(document).on("click", ".setServers", function(){
         load_Storage()
     }
 })
+
+
+//確定時間追加
+function push_fix(){
+    var fix,Text
+    var Data = []
+    var Server = $("#Server")
+    var Point = $("#Point")
+    var befTime = $("#befTime")
+    var nowTime = $("#nowTime")
+
+    //入力チェック
+    if(Server.val() == "" || befTime.val() == "" || befTime.val() == ""){
+        return //空要素あれば終了
+    }
+    if(Server.val() < 1 || Server.val() > 40){
+        return //サーバーが1未満もしくは40を超えるなら終了
+    }
+    if(!checkTime(befTime.val()) || !checkTime(nowTime.val())){
+        return //入力規則に合わなければ終了
+    }
+
+    Text = Server.val() + Point.val() + " "
+        + TimePlus(befTime.val(),"00:00:00") + " - "
+        + TimePlus(nowTime.val(),"00:00:00")
+
+    $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+    
+    $(".fix_red").find(".fix").each(function(){
+        fix = $(this).text().split(" ")
+        Data.push(fix)
+    })
+    
+    $(".fix_red tr").slice(1).remove()
+
+    Data.sort(function(a,b){
+        return (a[3] > b[3] ? 1 : -1)
+    })
+
+    Data.forEach(function(fix){
+        Text = fix.join(" ")
+        $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+    })
+
+    //初期化
+    Server.val("1")
+    Point.val("ゲル")
+    befTime.val("")
+    nowTime.val("")
+}
+
+function checkTime(Time) {
+    return Time.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/) !== null;
+}
+
+$(document).on("click", "#befTime, #nowTime", function() {
+    if($(this).attr("id") == "befTime"){
+        if($("#befTime").val() == ""){
+            $("#befTime").val(TimePlus(new Date(),"01:00:00"))
+        }
+    }else 
+    if($(this).attr("id") == "nowTime"){
+        if($("#nowTime").val() == ""){
+            $("#nowTime").val(TimePlus(new Date(),"01:00:00"))
+        }
+    }
+})
+
+
 
 //データの復旧・バックアップ等
 function save_Storage(){

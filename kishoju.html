@@ -37,6 +37,14 @@
         <table border class="fix_red">
             <tr><td>確定リスト</td></tr>
         </table>
+        <input type="number" id="Server" min="1" max="40" value="1" style="width:2.5em;">
+        <select id="Point">
+            <option>ゲル</option>
+            <option>砂漠</option>
+            <option>バル</option>
+        </select><br>
+        <input id="befTime" size=4>-<input id="nowTime" size=4>
+        <button onclick="push_fix()">追加</button>
 
         <br clear="left"><br>調査サーバー設定<br>
         <button class="setServers" value="1">1-10</button>
