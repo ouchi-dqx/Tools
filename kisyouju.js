@@ -226,28 +226,26 @@ $(document).on("click", ".setServers", function(){
 
 //確定時間追加
 function push_fix(){
-    var fix,Text,delTime
+    var fix,Text,nowTime,afterTime
     var Data = []
     var Server = $("#Server")
     var Point = $("#Point")
-    var befTime = $("#befTime")
-    var nowTime = $("#nowTime")
+    var sTime = $("#sTime")
+    var eTime = $("#eTime")
 
     //入力チェック
-    if(Server.val() == "" || befTime.val() == "" || befTime.val() == ""){
+    if(Server.val() == "" || sTime.val() == "" || eTime.val() == ""){
         return //空要素あれば終了
     }
     if(Server.val() < 1 || Server.val() > 40){
         return //サーバーが1未満もしくは40を超えるなら終了
     }
-    if(!checkTime(befTime.val()) || !checkTime(nowTime.val())){
+    if(!checkTime(sTime.val()) || !checkTime(eTime.val())){
         return //入力規則に合わなければ終了
     }
 
     Text = Server.val() + Point.val() + " "
-        + TimePlus(befTime.val(),"00:00:00") + " - "
-        + TimePlus(nowTime.val(),"00:00:00")
-
+        + sTime.val() + " - " + eTime.val()
     $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
     
     $(".fix_red").find(".fix").each(function(){
@@ -266,32 +264,40 @@ function push_fix(){
         $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
     })
 
-    /*
+    afterTime = eTime.val().split(":")
+    afterTime = Number(afterTime[0]) * 60 * 60 + 
+        Number(afterTime[1]) * 60 +
+        Number(afterTime[2]) + 60 * 60 //終了時間から1時間後
+
+    nowTime = new Date()
+    nowTime =  nowTime.getHours() * 60 * 60 +
+        nowTime.getMinutes() * 60 +
+        nowTime.getSeconds()
+
     Timers[Server.val() + Point.val() + "fix"] = setTimeout(function(){
         clear_one_fix("fix_red",Server.val() + Point.val())
-    },delTime)
-    */
-
+    },(afterTime - nowTime) * 1000)
+    
     //初期化
     Server.val("1")
     Point.val("ゲル")
-    befTime.val("")
-    nowTime.val("")
+    sTime.val("")
+    eTime.val("")
 }
 
 function checkTime(Time) {
     return Time.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/) !== null;
 }
 
-$(document).on("click", "#befTime, #nowTime", function() {
-    if($(this).attr("id") == "befTime"){
-        if($("#befTime").val() == ""){
-            $("#befTime").val(TimePlus(new Date(),"01:00:00"))
+$(document).on("click", "#sTime, #eTime", function() {
+    if($(this).attr("id") == "sTime"){
+        if($("#sTime").val() == ""){
+            $("#sTime").val(TimePlus(new Date(),"01:00:00"))
         }
     }else 
-    if($(this).attr("id") == "nowTime"){
-        if($("#nowTime").val() == ""){
-            $("#nowTime").val(TimePlus(new Date(),"01:00:00"))
+    if($(this).attr("id") == "eTime"){
+        if($("#eTime").val() == ""){
+            $("#eTime").val(TimePlus(new Date(),"01:00:00"))
         }
     }
 })
