@@ -8,6 +8,19 @@ window.onload = function(){
 function debug(){    
 }
 
+function Sender(Server,Point,Time){
+    var tmpTime = new Date()
+    tmpTime = ("0" + (tmpTime.getMonth() + 1)).slice(-2) + "/" +  ("0" + tmpTime.getDate()).slice(-2) + " " 
+    Time = tmpTime + Time.slice(0,-3)
+
+    $.ajax({
+        url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
+        type: "GET",
+        dataType: "jsonp",
+        data: {Server: Server, Point: Point, Time: Time}
+    })
+}
+
 function sortPoint(){
     var i,n,flg //カウンタ・フラグ変数
     var Point,befPoint,afterPoint //jQuery変数
@@ -120,6 +133,7 @@ $(document).on("click", ".btn", function(){
             //赤黄・虹黄判定
             if(nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)"){
                 Time = TimePlus(befTime,"01:30:00")
+                Sender(Server,Point,Time)
                 $(this).nextAll(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
 

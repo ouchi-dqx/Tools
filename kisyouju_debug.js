@@ -8,11 +8,10 @@ window.onload = function(){
 function debug(){    
 }
 
-
 function Sender(Server,Point,Time){
     var tmpTime = new Date()
     tmpTime = ("0" + (tmpTime.getMonth() + 1)).slice(-2) + "/" +  ("0" + tmpTime.getDate()).slice(-2) + " " 
-    Time = tmpTime + Time
+    Time = tmpTime + Time.slice(0,-3)
 
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
