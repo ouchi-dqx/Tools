@@ -630,12 +630,25 @@ function setTimer(_this){
     var nowTime = _this.nextAll(".nowTime").text()
     var Server = _this.closest("tr").find(".Server").text().slice(4)
     var Point = _this.closest("td").attr("class")
+    
+    if(Time == "00:10:00" || Time == "00:20:00" || Time == "00:30:00" || Time == "00:40:00"){
+        _this.nextAll(".befTime")
+            .text("前回:" + nowTime)
+            .css("background-color", "red")
+        _this.nextAll(".nowTime")
+            .text(TimePlus(nowTime,"00:10:00"))
+            .css("background-color", "red")
 
+        Time = TimePlus(Time,"00:00:01")
+        _this.nextAll(".memo").val("経過時間:" + Time)
+        save_Storage()
+    }else
     if(Time == "00:50:00"){    
         Time = TimePlus(Time,"00:00:01")
         _this.nextAll(".memo").val("経過時間:" + Time)
         _this.nextAll(".memo").css("background-color", "violet")
-    }else if(Time == "01:00:00"){
+    }else 
+    if(Time == "01:00:00"){
         _this.nextAll(".befTime")
             .text("前回:" + nowTime)
             .css("background-color", "red")
@@ -645,6 +658,7 @@ function setTimer(_this){
         _this.nextAll(".memo")
             .val("！！！！虹！！！！")
             .css("background-color", "red")
+            
         clearInterval(Timers[Server+Point])
         save_Storage()
     }else{
