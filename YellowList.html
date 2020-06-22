@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_top">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="YellowList.js"></script>
+    </head>
+
+    <body>
+        <button onclick="Getter()">データ取得</button>
+        <table border class="ServerList">
+            <td align="center">
+                <p>サーバー</p>
+            </td>
+            <td align="center" class="ゲル">
+                <p>ゲルヘナ幻野</p>
+            </td>
+            <td align="center" class="砂漠">
+                <p>ジャリムバハ砂漠</p>
+            </td>
+            <td align="center" class="バル">
+                <p>バルディスタ要塞</p>
+            </td>
+        </table>
+
+        <template id="template1">
+            <tr class="Servers">
+                <td class="Server">サーバー</td>
+                <td class="ゲル">
+                    <p><span class="setTemp"></span>まで</p>
+                </td>
+                <td class="砂漠">
+                    <p><span class="setTemp"></span>まで</p>
+                </td>
+                <td class="バル">
+                    <p><span class="setTemp"></span>まで</p>
+                </td>
+            </tr>
+        </template>
+    </body>
+</html>

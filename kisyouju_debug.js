@@ -5,7 +5,7 @@ window.onload = function(){
     sortPoint()
 }
 
-function debug(){    
+function debug(){
 }
 
 function Sender(Server,Point,Time){

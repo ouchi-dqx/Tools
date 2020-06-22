@@ -88,7 +88,7 @@ function movePoint(befPoint,afterPoint){
 //ボタンクリックイベント
 $(document).on("click", ".btn", function(){
     //変数作成
-    var fix,Time,Text
+    var Time,Text
     var Server = $(this).closest("tr").find(".Server").text().slice(4)
     var Point = $(this).closest("td").attr("class")
     var btnColor = $(this).text()
@@ -204,7 +204,6 @@ $(document).on("click", ".btn", function(){
 
 //サーバー追加
 $(document).on("click", ".setServers", function(){
-    var i
     var CopyTemp,setTmp2,ServerList,Servers
 
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
@@ -214,7 +213,7 @@ $(document).on("click", ".setServers", function(){
     //サーバー行追加
     var tmp1 = document.getElementById("template1")
     var num = Number($(this).val())
-    for(i=0; i<10; i++){
+    for(var i=0; i<10; i++){
         CopyTemp = tmp1.content.cloneNode(true)
         ServerList = document.getElementsByClassName("ServerList")
         ServerList[0].appendChild(CopyTemp)
@@ -240,7 +239,7 @@ $(document).on("click", ".setServers", function(){
 
 //確定時間追加
 function push_fix(){
-    var fix,Text,nowTime,afterTime
+    var fix
     var Data = []
     var Server = $("#Server")
     var Point = $("#Point")
@@ -258,7 +257,7 @@ function push_fix(){
         return //入力規則に合わなければ終了
     }
 
-    Text = Server.val() + Point.val() + " "
+    var Text = Server.val() + Point.val() + " "
         + sTime.val() + " - " + eTime.val()
     $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
     
@@ -278,12 +277,12 @@ function push_fix(){
         $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
     })
 
-    afterTime = eTime.val().split(":")
+    var afterTime = eTime.val().split(":")
     afterTime = Number(afterTime[0]) * 60 * 60 + 
         Number(afterTime[1]) * 60 +
         Number(afterTime[2]) + 60 * 60 //終了時間から1時間後
 
-    nowTime = new Date()
+    var nowTime = new Date()
     nowTime =  nowTime.getHours() * 60 * 60 +
         nowTime.getMinutes() * 60 +
         nowTime.getSeconds()
@@ -473,7 +472,7 @@ function save_Fix(){
 }
 
 function OneBack(){
-    var Text,_this,nowColor,fix
+    var Text,_this,nowColor
 
     if(TMP != null){
         $(".Servers").each(function(){
