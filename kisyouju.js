@@ -9,9 +9,15 @@ function debug(){
 }
 
 function Sender(Server,Point,Time){
-    var tmpTime = new Date()
-    tmpTime = ("0" + (tmpTime.getMonth() + 1)).slice(-2) + "/" +  ("0" + tmpTime.getDate()).slice(-2) + " " 
-    Time = tmpTime + Time.slice(0,-3)
+    var t = new Date()
+    Time = Time.split(":")
+    t = new Date(t.getFullYear(),t.getMonth(),t.getDate(),Time[0],Time[1],Time[2])
+    t.setHours(t.getHours() + 1)
+    t.setMinutes(t.getMinutes() + 30)
+    Time = ("0" + (t.getMonth() + 1)).slice(-2) + "/"
+            + ("0" + t.getDate()).slice(-2) + " "
+            + ("0" + t.getHours()).slice(-2) + ":"
+            + ("0" + t.getMinutes()).slice(-2)
 
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
@@ -132,8 +138,8 @@ $(document).on("click", ".btn", function(){
         case "黄":
             //赤黄・虹黄判定
             if(nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)"){
+                Sender(Server,Point,befTime)
                 Time = TimePlus(befTime,"01:30:00")
-                Sender(Server,Point,Time)
                 $(this).nextAll(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
 
@@ -278,14 +284,14 @@ function push_fix(){
     })
 
     var afterTime = eTime.val().split(":")
-    afterTime = Number(afterTime[0]) * 60 * 60 + 
-        Number(afterTime[1]) * 60 +
-        Number(afterTime[2]) + 60 * 60 //終了時間から1時間後
+    afterTime = Number(afterTime[0]) * 60 * 60 
+        + Number(afterTime[1]) * 60
+        + Number(afterTime[2]) + 60 * 60 //終了時間から1時間後
 
     var nowTime = new Date()
-    nowTime =  nowTime.getHours() * 60 * 60 +
-        nowTime.getMinutes() * 60 +
-        nowTime.getSeconds()
+    nowTime =  nowTime.getHours() * 60 * 60
+        + nowTime.getMinutes() * 60
+        + nowTime.getSeconds()
 
     Timers[Server.val() + Point.val() + "fix"] = setTimeout(function(){
         clear_one_fix("fix_red",Server.val() + Point.val())
@@ -628,9 +634,9 @@ function TimePlus(Time,Dates){
     Time.setSeconds(Time.getSeconds() + Number(Dates[2]))
 
     //時間の0詰め
-    Time = ("0"+(Time.getHours())).slice(-2) + ":"
-            + ("0"+(Time.getMinutes())).slice(-2) + ":"
-            + ("0"+(Time.getSeconds())).slice(-2)
+    Time = ("0" + Time.getHours()).slice(-2) + ":"
+            + ("0" + Time.getMinutes()).slice(-2) + ":"
+            + ("0" + Time.getSeconds()).slice(-2)
 
     return Time
 }

@@ -6,12 +6,27 @@ window.onload = function(){
 }
 
 function debug(){
+/*
+    $.ajax({
+        url: "https://script.google.com/macros/s/AKfycby0mRAp5wucNNkiM72RdMowNc-JRDQyE5ip46pC7uw/dev",
+        //url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
+        type: "GET",
+        dataType: "jsonp",
+        data: {mode: "debug",Time: "06/22 22:58"}
+    })
+*/
 }
 
 function Sender(Server,Point,Time){
-    var tmpTime = new Date()
-    tmpTime = ("0" + (tmpTime.getMonth() + 1)).slice(-2) + "/" +  ("0" + tmpTime.getDate()).slice(-2) + " " 
-    Time = tmpTime + Time.slice(0,-3)
+    var t = new Date()
+    Time = Time.split(":")
+    t = new Date(t.getFullYear(),t.getMonth(),t.getDate(),Time[0],Time[1],Time[2])
+    t.setHours(t.getHours() + 1)
+    t.setMinutes(t.getMinutes() + 30)
+    Time = ("0" + (t.getMonth() + 1)).slice(-2) + "/"
+            + ("0" + t.getDate()).slice(-2) + " "
+            + ("0" + t.getHours()).slice(-2) + ":"
+            + ("0" + t.getMinutes()).slice(-2)
 
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
@@ -132,8 +147,8 @@ $(document).on("click", ".btn", function(){
         case "黄":
             //赤黄・虹黄判定
             if(nowColor == "rgb(255, 0, 0)" || nowColor == "rgb(238, 130, 238)"){
+                Sender(Server,Point,befTime)
                 Time = TimePlus(befTime,"01:30:00")
-                Sender(Server,Point,Time)
                 $(this).nextAll(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
 
