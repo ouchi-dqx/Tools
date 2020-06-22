@@ -92,6 +92,13 @@ function movePoint(befPoint,afterPoint){
     var tmp1_befPoint = tmp1.content.querySelectorAll(".Servers >" + befClass)
     var tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers >" + afterClass)
     Servers.item(0).insertBefore(tmp1_befPoint.item(0),tmp1_afterPoint.item(0))
+    
+    /*
+    var Servers = $($("#template1").html())
+    var tmp1_befPoint = Servers.find(befClass)
+    var tmp1_afterPoint = Servers.find(afterClass)
+    tmp1_befPoint.insertBefore(tmp1_afterPoint)
+    */
 
     befPoint.insertBefore(afterPoint)
     for(var i=0; i<10; i++){
@@ -219,30 +226,20 @@ $(document).on("click", ".btn", function(){
 
 //サーバー追加
 $(document).on("click", ".setServers", function(){
-    var i
-    var CopyTemp,setTmp2,ServerList,Servers
-
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
     $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
   
-
     //サーバー行追加
-    var tmp1 = document.getElementById("template1")
+    var CopyTemp1,CopyTemp2
     var num = Number($(this).val())
-    for(i=0; i<10; i++){
-        CopyTemp = tmp1.content.cloneNode(true)
-        ServerList = document.getElementsByClassName("ServerList")
-        ServerList[0].appendChild(CopyTemp)
-        Servers = document.getElementsByClassName("Server")
-        Servers[i].innerHTML += (i + num)
-    }
-
-    //ボタン追加
-    var tmp2 = document.getElementById("template2")
-    for(i=0; i<30; i++){
-        CopyTemp = tmp2.content.cloneNode(true)
-        setTmp2 = document.getElementsByClassName("setTemp")
-        setTmp2[i].appendChild(CopyTemp)
+    for(var i=0; i<10; i++){
+        CopyTemp1 = $($("#template1").html()).clone()
+        CopyTemp1.find(".Server").text("サーバー" + (i + num))
+        CopyTemp1.find(".setTemp").each(function(){
+            CopyTemp2 = $($("#template2").html()).clone()
+            $(this).append(CopyTemp2)
+        })
+        $(".ServerList").append(CopyTemp1)
     }
 
     //サーバ切り替え時のデータ保持
