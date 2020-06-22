@@ -6,6 +6,7 @@ window.onload = function(){
 }
 
 function debug(){    
+    //test
 }
 
 function Sender(Server,Point,Time){
