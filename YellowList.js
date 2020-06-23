@@ -5,7 +5,7 @@ function Getter(){
         dataType: "jsonp",
         data: {mode: "read"},
         success: res => {
-            Loader(res.message)
+            Loader(res.Array)
         }
     })
 }
