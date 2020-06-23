@@ -5,6 +5,8 @@ function Getter(){
         dataType: "jsonp",
         data: {mode: "read"},
         success: res => {
+            alert(res.Array)
+            alert(JSON.parse(res.Array))
             Loader(res.Array)
         }
     })
