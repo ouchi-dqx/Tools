@@ -518,6 +518,21 @@ function OneBack(){
     }
 }
 
+function setClip(fix){
+    var CopyText = ""
+    if(fix.value == "fix_blue"){
+        $(".fix_blue").find(".fix").each(function(){
+            CopyText += $(this).text() + "\n"
+        })
+    }
+    else if(fix.value == "fix_red"){
+        $(".fix_red").find(".fix").each(function(){
+            CopyText += $(this).text() + "\n"
+        })
+    }
+    navigator.clipboard.writeText(CopyText)
+}
+
 
 //削除関連
 function Cleaner(target){
