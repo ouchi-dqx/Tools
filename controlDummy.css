@@ -1,0 +1,36 @@
+
+/*1カラム目 鯖No*/
+.Server{
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+/* タイム表示 タイトル */
+.time-title{
+    display: table-cell; 
+    padding: 0px 8px 0px 5px;
+}
+/* タイム表示 hh:nn:ss */
+.befTime, .nowTime{
+    display: table-cell; 
+    padding: 0px 8px; 
+    background-color: none;
+}
+
+/* 4色ボタン */
+.template2-box .btn {
+    text-align: center;
+    font-size: 13px;       
+}
+/* 4色ボタン　デフォルトカラー　*/
+.template2-box .btn[value="Blue"]   { background-color: skyblue; }
+.template2-box .btn[value="Yellow"] { background-color: yellow; }
+.template2-box .btn[value="Red"]    { background-color: red; }
+.template2-box .btn[value="Rainbow"]{ background-color: violet; }
+
+.template2-box input[type="text"]{
+    font-size: 14px;
+    width: 120px; 
+    padding-left: 2px;
+    border: #999 solid 1px;
+}
