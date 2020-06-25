@@ -1,26 +1,31 @@
-<table border>
-    <tr>
-        <td align="center">場所(時間)</td>
-        <td colspan="10" align="center">10</td>
-        <td colspan="10" align="center">20</td>
-        <td colspan="10" align="center">30</td>
-        <td colspan="10" align="center">40</td>
-        <td colspan="10" align="center">50</td>
-    </tr>
-    <tdody class="fix">
-        <tr id="1ゲル">
-            <td>1ゲル(21:30-20:33)</td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-            <td bgcolor="#EE0000" style="border-style:none;"></td>
-        </tr>
-    </tdody>
-</table>
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_top">
+        <title>輝晶獣確定時間ガントチャート</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="fixGantt.js"></script>
+    </head>
+
+    <body>
+        <button class="setFix">debug</button>
+        <table border class="fix_List">
+            <tr>
+                <td align="center">場所(時間)</td>
+                <td colspan="10" align="center">10</td>
+                <td colspan="10" align="center">20</td>
+                <td colspan="10" align="center">30</td>
+                <td colspan="10" align="center">40</td>
+                <td colspan="10" align="center">50</td>
+            </tr>
+        </table>
+
+        <template id="template1">
+            <tr class="fix" id="">
+                <td class="fixData">
+                </td>
+            </tr>
+        </template>
+    </body>
+</html>
