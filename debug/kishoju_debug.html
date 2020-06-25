@@ -4,31 +4,36 @@
         <base target="_top">
         <title>輝晶獣分散支援ツール</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="controlDummy.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="kisyouju_debug.js"></script>
+        <script src="kishoju_debug.js"></script>
     </head>
 
     <body>
-        !--<button onclick="debug()">debug</button>-->
+        <p>Info:虹黄情報共有ページ作りました　→　<a href="https://ouchi-dqx.github.io/Tools/YellowList.html">サーバー情報(虹黄)</a><br>
+        　　→虹黄データが取得できない不具合を修正しました</p>
+        <!--<button onclick="debug()">debug</button>-->
         <table border class="ServerList" id="" align="left" style="margin-right:30px;">
-            <td align="center">
-                <p>サーバー</p>
-            </td>
-            <td align="center" class="ゲル">
-                <p>ゲルヘナ幻野</p>
-                <span style="float:left"><button class="left">←</button></span>
-                <span style="float:right"><button class="right">→</button></span>
-            </td>
-            <td align="center" class="砂漠">
-                <p>ジャリムバハ砂漠</p>
-                <span style="float:left"><button class="left">←</button></span>
-                <span style="float:right"><button class="right">→</button></span>
-            </td>
-            <td align="center" class="バル">
-                <p>バルディスタ要塞</p>
-                <span style="float:left"><button class="left">←</button></span>
-                <span style="float:right"><button class="right">→</button></span>
-            </td>
+            <tr id="server-list-hd">
+                <td align="center" id="server-no-hd">
+                    <div class="server-list-hd-text" style="width: 50px;">鯖</div>
+                </td>
+                <td align="center" class="ゲル">
+                    <div class="server-list-hd-text">ゲルヘナ幻野</div>
+                    <span style="float:left"><button class="left">←</button></span>
+                    <span style="float:right"><button class="right">→</button></span>
+                </td>
+                <td align="center" class="砂漠">
+                    <div class="server-list-hd-text">ジャリムバハ砂漠</div>
+                    <span style="float:left"><button class="left">←</button></span>
+                    <span style="float:right"><button class="right">→</button></span>
+                </td>
+                <td align="center" class="バル">
+                    <div class="server-list-hd-text">バルディスタ要塞</div>
+                    <span style="float:left"><button class="left">←</button></span>
+                    <span style="float:right"><button class="right">→</button></span>
+                </td>
+            </tr>
         </table>
 
         <table border class="fix_blue">
@@ -43,7 +48,7 @@
             <option>砂漠</option>
             <option>バル</option>
         </select><br>
-        <input id="sTime" size=4>-<input id="eTime" size=4>
+        <input id="sTime" size="4">-<input id="eTime" size="4">
         <button onclick="push_fix()">追加</button>
 
         <br clear="left"><br>調査サーバー設定<br>
@@ -58,7 +63,7 @@
         <button onclick="load_Storage()">データ復旧</button>
         <button onclick="save_Storage()">データ保存</button>
         <button onclick="save_Sort()">並び保存</button>
-        <br></br>
+        <br />
 
         入力・青黄・確定の削除、並びのリセット<br>
         <button onclick="Cleaner(this)" value="all">全部</button>
@@ -87,7 +92,9 @@
             ・「全て・入力・青黄・確定」のボタンはそれぞれ対応するものが全て削除されます。
         </p>
         <p>
-            要望・不具合報告等は<a href="https://twitter.com/ouchi_dqx">こちら</a>まで<br><br>
+            要望・不具合報告等は<a href="https://twitter.com/ouchi_dqx">こちら</a>まで<br>
+            <a href="https://ouchi-dqx.github.io/Tools/YellowList.html">サーバー情報(虹黄)</a>　
+            <a href="https://twitter.com/ouchi_dqx">更新履歴</a>　
             <a href="https://ouchi-dqx.github.io/Tools/kishoju_phone.html">スマホ版(β)</a>
         </p>
 
@@ -107,13 +114,23 @@
         </template>
 
         <template id="template2">
-            <button class="btn" value="Blue" style="background-color:skyblue;">青</button>
-            <button class="btn" value="Yellow" style="background-color:yellow;">黄</button>
-            <button class="btn" value="Red" style="background-color:red;">赤</button>
-            <button class="btn" value="Rainbow" style="background-color:violet;">虹</button>
-            <p class="befTime" style="background-color:white;margin:5px auto">前回:</p>
-            <p class="nowTime" style="background-color:white;margin:5px auto"></p>
-            <input class="memo" size="13">
+            <div class="template2-box">
+                <div class="btn-box">
+                    <button class="btn" value="Blue">青</button>
+                    <button class="btn" value="Yellow">黄</button>
+                    <button class="btn" value="Red">赤</button>
+                    <button class="btn" value="Rainbow">虹</button>
+                </div>
+                <div class="bef-box" style=" margin:3px auto;">
+                    <p class="time-title">前</p>
+                    <p class="befTime" style="background-color: transparent;">-</p>
+                </div>
+                <div class="now-box" style=" margin:3px auto;">
+                    <p class="time-title">今</p>
+                    <p class="nowTime" style="background-color: transparent;">-</p>
+                </div>
+                <input type="text" class="memo">
+            </div>
         </template>
     </body>
 </html>

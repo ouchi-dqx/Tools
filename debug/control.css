@@ -1,0 +1,117 @@
+/* 整形用DIV */
+.flex-div{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+body{
+    font-size: 15px;
+    width: 800px;
+    margin-right: auto;
+    margin-left : auto;
+}
+
+/************************************************　鯖テーブル　************************************************/
+/* 罫線 */
+.ServerList{
+    border-collapse: collapse;
+}
+.ServerList td{
+    border: solid 1px #999;
+}
+/* ヘッダ行 */
+#server-list-hd{
+    color: #fff;
+    font-weight: bold;
+    background-color: dimgray;
+}
+/* ヘッダ行　テキストエリア */
+.server-list-hd-text{
+    width: 140px; 
+    padding: 5px 0px;
+}
+
+/* しましま　奇数trのtd */
+.ServerList tr:nth-child(even) {
+    background-color: #fff;
+}
+/* しましま 偶数trのtd */
+.ServerList tr:nth-child(odd) {
+    background-color: #ddd;
+}
+/*1カラム目 鯖No*/
+.Server{
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/************************************************　template2　************************************************/
+.template2-box{
+    padding: 2px 5px;
+}
+/* 4色ボタン */
+.template2-box .btn {
+    border-width: 2px;
+    border-radius: 3px;
+    border-color: #999;
+    text-align: center;
+    cursor: pointer;
+    color: #333;
+    margin-right: -3px;
+    /*
+    width: 28px;
+    height: 25px;
+    */
+    font-size: 13px;       
+}
+/* 4色ボタン　フォーカス時の外枠を消す　*/
+.template2-box .btn:focus { outline: 0; }
+/* 4色ボタン　デフォルトカラー　*/
+.template2-box .btn[value="Blue"]   { background-color: #cff; }
+.template2-box .btn[value="Yellow"] { background-color: #fec; }
+.template2-box .btn[value="Red"]    { background-color: #fcc; }
+.template2-box .btn[value="Rainbow"]{ background-color: #fcf; }
+/* 4色ボタン　オンマウスで強調　*/
+.template2-box .btn:hover{ font-weight: bold; }
+.template2-box .btn[value="Blue"]:hover   { background-color: deepskyblue; }
+.template2-box .btn[value="Yellow"]:hover { background-color: yellow; }
+.template2-box .btn[value="Red"]:hover    { background-color: red; }
+.template2-box .btn[value="Rainbow"]:hover{ background-color: violet; }
+/*　4色ボタン　赤が非活性のときは灰色にしてオンマウス動作を無効化　*/
+.template2-box .btn[value="Red"]:disabled{ 
+    color: #666 ; 
+    background-color: #ccc; 
+    font-weight: normal;
+    cursor: default;
+}
+/* タイム表示 タイトル */
+.time-title{
+    display: table-cell; 
+    padding: 0px 8px 0px 5px;
+}
+/* タイム表示 hh:nn:ss */
+.befTime, .nowTime{
+    display: table-cell; 
+    padding: 0px 8px; 
+    background-color: none;
+    font-weight: bold;
+}
+.nowTime{ color: #000; }
+.befTime{ color: #666; }
+
+/* メモ欄 */
+.template2-box input[type="text"]{
+    font-size: 13px;
+    width: 120px;
+    height: 18px; 
+    padding-left: 2px;
+    border: #999 solid 1px;
+}
+/* メモ欄　フォーカス時 */
+.template2-box input[type="text"]:focus{
+    outline: 0;
+    box-shadow: none;
+    border: 1px solid #69aabf;
+    background-color: #cdf2fe;
+}
