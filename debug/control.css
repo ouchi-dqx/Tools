@@ -1,16 +1,18 @@
 body{
-    font-size: 15px;
-    max-width: 670px;
+    background-color: #fff;
+    font-size: 14px;
+    max-width: 700px;
+    min-width: 470px;
     margin-right: auto;
     margin-left : auto;
     padding: 0px 5px;
 }
 div{ box-sizing: border-box; }
+.material-icons{ position: relative; }
 
 /************************************************　鯖選択　************************************************/
 /* ボタンBox */
 .set-server-btn-box{
-    width: auto;
     padding: 5px 10px;
     margin-bottom: 20px;
   
@@ -21,7 +23,7 @@ div{ box-sizing: border-box; }
 .set-server-btn-box .setServers{
     font-size: 15px;
     height: 30px;
-    width: 70px;
+    width: auto;
     font-weight: bold;
 }
 
@@ -40,25 +42,24 @@ div{ box-sizing: border-box; }
     font-weight: bold;
     background-color: dimgray;
 }
-/* ヘッダ行　テキストエリア */
+/* ヘッダ行 テキストエリア */
 #server-list-hd .server-list-hd-text{
-    width: 130px; 
+    width: 140px; 
     padding: 5px 0px;
 }
-/* ヘッダ行　矢印ボタン */
+/* ヘッダ行 矢印ボタン */
 #server-list-hd button{
-    width: 25px;
+    width: 30px;
     height: 25px;
 }
 #server-list-hd .arrow{
-    position: relative;
     font-size: 20px;
     top: 5px;
-    left:-5px;
+    left:-4px;
     line-height: 1px;
 }
 
-/* しましま　奇数trのtd */
+/* しましま 奇数trのtd */
 .ServerList tr:nth-child(even) {
     background-color: #fff;
 }
@@ -92,20 +93,20 @@ div{ box-sizing: border-box; }
     */
     font-size: 13px;       
 }
-/* 4色ボタン　フォーカス時の外枠を消す　*/
+/* 4色ボタン フォーカス時の外枠を消す */
 .template2-box .btn:focus { outline: 0; }
-/* 4色ボタン　デフォルトカラー　*/
+/* 4色ボタン デフォルトカラー */
 .template2-box .btn[value="Blue"]   { background-color: #cff; }
 .template2-box .btn[value="Yellow"] { background-color: #fec; }
 .template2-box .btn[value="Red"]    { background-color: #fcc; }
 .template2-box .btn[value="Rainbow"]{ background-color: #fcf; }
-/* 4色ボタン　オンマウスで強調　*/
+/* 4色ボタン オンマウスで強調 */
 .template2-box .btn:hover{ font-weight: bold; }
-.template2-box .btn[value="Blue"]:hover   { background-color: deepskyblue; }
-.template2-box .btn[value="Yellow"]:hover { background-color: yellow; }
-.template2-box .btn[value="Red"]:hover    { background-color: red; }
-.template2-box .btn[value="Rainbow"]:hover{ background-color: violet; }
-/*　4色ボタン　赤が非活性のときは灰色にしてオンマウス動作を無効化　*/
+.template2-box .btn[value="Blue"]:hover   { color: #000; background-color: deepskyblue; }
+.template2-box .btn[value="Yellow"]:hover { color: #000; background-color: yellow; }
+.template2-box .btn[value="Red"]:hover    { color: #000; background-color: red; }
+.template2-box .btn[value="Rainbow"]:hover{ color: #000; background-color: violet; }
+/* 4色ボタン 赤が非活性のときは灰色にしてオンマウス動作を無効化 */
 .template2-box .btn[value="Red"]:disabled{ 
     color: #666 ; 
     background-color: #ccc; 
@@ -115,7 +116,9 @@ div{ box-sizing: border-box; }
 /* タイム表示 タイトル */
 .time-title{
     display: table-cell; 
-    padding: 0px 8px 0px 5px;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 0px 5px 0px 3px;
 }
 /* タイム表示 hh:nn:ss */
 .befTime, .nowTime{
@@ -125,7 +128,7 @@ div{ box-sizing: border-box; }
     font-weight: bold;
 }
 .nowTime{ color: #000; }
-.befTime{ color: #666; }
+.befTime{ color: #333; }
 
 /* メモ欄 */
 .template2-box input[type="text"]{
@@ -139,8 +142,8 @@ div{ box-sizing: border-box; }
 .template2-box input[type="text"]:focus{
     outline: 0;
     box-shadow: none;
-    border: 1px solid #69aabf;
-    background-color: #cdf2fe;
+    border: 1px solid red;
+    /*background-color: #cdf2fe;*/
 }
 
 /************************************************　サイドリスト　************************************************/
@@ -149,9 +152,9 @@ div{ box-sizing: border-box; }
     border-collapse: collapse;
     margin-bottom: 10px;
 }
-/*　ヘッダ行　*/
+/* ヘッダ行 */
 .fix_blue th, .fix_red th{
-    width: 200px;
+    width: 220px;
     color: #333;
     font-weight: bold;
     background-color: dimgray;
@@ -159,57 +162,76 @@ div{ box-sizing: border-box; }
 }
 .fix_blue th{ background-color: #fec; }
 .fix_red th{ background-color: #fcc; }
-/*　セルの設定　*/
+/* セルの設定 */
 .fix_blue td, .fix_red td{
+    text-align: center;
     border: solid 1px #999;
 }
 .fix_blue td:hover{ background-color: yellow; cursor: pointer; }
 .fix_red td:hover{ background-color: red; cursor: pointer; }
 
-/*　追加確定フォーム　*/
+/* 追加確定フォーム */
 .side-list-add-box{
+    font-size: 12px;
+    line-height: 30px;
     background-color: #fcc;
-    padding: 3px;
+    padding: 3px 5px;
     margin-bottom: 20px;
+}
+.side-list-add-box input{    
+    height: 18px;
+    text-align: center;
+    ime-mode: disabled;
+}
+.side-list-add-box select{
+    height: 24px;
+}
+/* 機能ボタンBOX */
+.function-btn-box{
+    font-size: 14px;
+    display: table; 
+    margin-bottom: 10px;
 }
 
 /************************************************　使い方　************************************************/
-#howto-box ul{
+/* リスト部分 */
+.list-box ul{
     border: solid 1px #ccc;
     padding: 0.5em;
     position: relative;
     font-size: 13px;
-  }
-#howto-box li {
+}
+.list-box li {
     line-height: 1.4;
     padding: 0.5em 0 0.5em 1.4em;
     border-bottom: dashed 1px silver;
     list-style-type: none!important;
-  }
-#howto-box li:last-of-type {
+}
+.list-box li:last-of-type {
     border-bottom: none;
-  }
-
-/*　リスト内のアイコン　*/
-#howto-box li:before {
-    content: "◆";       /*アイコン種類*/
+}
+/* リスト内のアイコン */
+.list-box li:before {
+    content: "◆";
     position: absolute;
     left : 0.5em;        /*左端からのアイコンまで*/
     color: dimgray;    /*アイコン色*/
   }
 
-/*　開閉スライダー　*/
+/* 開閉スライダー */
 .slider-btn{ cursor: pointer; }
-.slider-icon{
-    position: relative;
-    top: 6px;
-}
+.slider-icon{ top: 7px; left: 5px; }
 .slider-icon.rev{ transform: rotate(180deg); }
-.slider-title{ 
+.slider-title{
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    height: 35px;
     width: 100%;
-    text-align: center;
+    text-align: left;
+    padding-left: 20px;
     background-color: #ccc;
-    padding-bottom: 2px;
-    margin-bottom: -5px;
+    margin-bottom: -10px;
 }
 .slider-title:hover { background-color: #999; }

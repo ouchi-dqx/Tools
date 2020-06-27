@@ -6,22 +6,18 @@ window.onload = function(){
     setInitMoveBtn();
 }
 
-function debug(_this){
-    alert(typeof _this)
-    alert(_this)
-    return 0
+function debug(){
 }
 
 function sortPoint(){
-    var i,n,flg //カウンタ・フラグ変数
-    var Point,befPoint,afterPoint //jQuery変数
+    var flg,Point,befPoint,afterPoint
     var Sort = JSON.parse(localStorage.getItem("Sort"))
 
-    for(i=0; i<2; i++){
+    for(var i=0; i<2; i++){
         Point = $(".ServerList td").find(".server-list-hd-text")
         flg = false //フラグ初期化
         
-        for(n=1; n<4; n++){
+        for(let n=1; n<4; n++){
             if($(Point).eq(n).text() !== Sort[n-1]){
                 if(flg == false){
                     befPoint = $(Point).eq(n).closest("td")
@@ -164,8 +160,8 @@ $(document).on("click", ".btn", function(){
             //青黄判定
             if(nowColor == "skyblue"){
                 Text = Server + Point + " "
-                    + TimePlus(befTime,"03:00:00","Time").slice(0,-3) + " - "
-                    + TimePlus(nowTime,"03:00:00","Time").slice(0,-3)
+                    + TimePlus(befTime,"03:00:00","Time") + " - "
+                    + TimePlus(nowTime,"03:00:00","Time")
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
                                                 
                 Time = TimePlus(befTime,"03:00:00","Time")
@@ -194,13 +190,13 @@ $(document).on("click", ".btn", function(){
             //黄赤判定
             if(nowColor == "yellow"){
                 Text = Server + Point + " "
-                    + TimePlus(befTime,"01:00:00","Time").slice(0,-3) + " - "
-                    + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
+                    + TimePlus(befTime,"01:00:00","Time") + " - "
+                    + TimePlus(nowTime,"01:00:00","Time")
             }else //黄赤以外で赤判定
             if(nowColor != "yellow"){
                 Text = Server + Point + " "
-                    + TimePlus(nowTime,"00:00:00","Time").slice(0,-3) + " - "
-                    + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
+                    + TimePlus(nowTime,"00:00:00","Time") + " - "
+                    + TimePlus(nowTime,"01:00:00","Time")
             }
             $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
 
@@ -244,31 +240,26 @@ $(document).on("click", ".setServers", function(){
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
     $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
   
-    debug(Number($(this).val()))
-
     //サーバー行追加
-    var CopyTemp1,CopyTemp2
-    var num = Number($(this).val())
-    if(!num){
-        for(let i=0; i<10; i++){
-            CopyTemp1 = $($("#template1").html()).clone()
-            CopyTemp1.find(".Server").text(i + num)
-            CopyTemp1.find(".setTemp").each(function(){
-                CopyTemp2 = $($("#template2").html()).clone()
-                $(this).append(CopyTemp2)
-            })
-            $(".ServerList").append(CopyTemp1)
-        }
+    var i,max,CopyTemp1,CopyTemp2
+    var num = $(this).val()
+    
+    if(num == "9-10"){
+        i = 9
+        max = 11
+        num = 0
     }else{
-        for(let i=0; i<2; i++){
-            CopyTemp1 = $($("#template1").html()).clone()
-            CopyTemp1.find(".Server").text(i + num)
-            CopyTemp1.find(".setTemp").each(function(){
-                CopyTemp2 = $($("#template2").html()).clone()
-                $(this).append(CopyTemp2)
-            })
-            $(".ServerList").append(CopyTemp1)
-        }
+        i = 0
+        max = 10
+    }
+    for(i; i<max; i++){
+        CopyTemp1 = $($("#template1").html()).clone()
+        CopyTemp1.find(".Server").text(i + Number(num))
+        CopyTemp1.find(".setTemp").each(function(){
+            CopyTemp2 = $($("#template2").html()).clone()
+            $(this).append(CopyTemp2)
+        })
+        $(".ServerList").append(CopyTemp1)
     }
 
     //サーバ切り替え時のデータ保持
@@ -299,7 +290,7 @@ function push_fix(){
     }
 
     var Text = Server.val() + Point.val() + " "
-        + sTime.val().slice(0,-3) + " - " + eTime.val().slice(0,-3)
+        + sTime.val() + " - " + eTime.val()
     $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
     
     $(".fix_red").find(".fix").each(function(){
@@ -537,7 +528,6 @@ function OneBack(){
 
     if(TMP != null){
         $(".Servers").each(function(){
-            //              0      1       2            3         4      5
             //TMP = Array(Server,Point,old_befDate,old_befTime,befColor,memo)
             if(TMP[0] == $(this).find(".Server").text()){
                 //変数セット
@@ -568,8 +558,8 @@ function OneBack(){
                     case "yellow" :
                         if(TMP[4] == "skyblue"){ //青黄リスト追加
                             Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(TMP[3],"03:00:00","Time").slice(0,-3) + " - "
-                                + TimePlus(befTime,"03:00:00","Time").slice(0,-3)
+                                + TimePlus(TMP[3],"03:00:00","Time") + " - "
+                                + TimePlus(befTime,"03:00:00","Time")
                             $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
                         }
                     break
