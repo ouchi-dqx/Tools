@@ -153,7 +153,7 @@ $(document).on("click", ".btn", function(){
         case "黄":
             //赤黄・虹黄判定
             if(nowColor == "red" || nowColor == "violet"){
-                Sender(Server,Point,befDate + befTime)
+                //Sender(Server,Point,befDate + befTime)
                 Time = TimePlus(befTime,"01:30:00","Time")
                 objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
@@ -191,13 +191,13 @@ $(document).on("click", ".btn", function(){
             //黄赤判定
             if(nowColor == "yellow"){
                 Text = Server + Point + " "
-                    + TimePlus(befTime,"01:00:00","Time") + " - "
-                    + TimePlus(nowTime,"01:00:00","Time")
+                    + TimePlus(befTime,"01:00:00","Time").slice(0,-3) + " - "
+                    + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
             }else //黄赤以外で赤判定
             if(nowColor != "yellow"){
                 Text = Server + Point + " "
-                    + TimePlus(nowTime,"00:00:00","Time") + " - "
-                    + TimePlus(nowTime,"01:00:00","Time")
+                    + TimePlus(nowTime,"00:00:00","Time").slice(0,-3) + " - "
+                    + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
             }
             $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
 
