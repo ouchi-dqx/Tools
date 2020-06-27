@@ -2,8 +2,8 @@ var Timers = {}
 var TMP
 
 window.onload = function(){
-    sortPoint()
     setInitMoveBtn();
+    sortPoint()
 }
 
 function debug(){
