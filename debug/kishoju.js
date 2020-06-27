@@ -43,7 +43,7 @@ function Sender(Server,Point,Time){
         type: "GET",
         dataType: "jsonp",
         data: {Server: Server, Point: Point, Time: Time}
-    })    
+    })
 }
 
 //←→ボタンイベント
@@ -734,7 +734,9 @@ function TimePlus(Time,sumTime,mode){
     
     var Text
     if(mode == "Date"){
-        Text = Time.getFullYear() + "/" + Number(Time.getMonth() + 1) + "/" + Time.getDate() + " "
+        Text = Time.getFullYear() + "/" 
+            + ("0" + Number(Time.getMonth() + 1)).slice(-2) + "/" 
+            + ("0" + Time.getDate()).slice(-2) + " "
             + ("0" + Time.getHours()).slice(-2) + ":"
             + ("0" + Time.getMinutes()).slice(-2) + ":"
             + ("0" + Time.getSeconds()).slice(-2)
