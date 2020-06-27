@@ -12,6 +12,7 @@ function debug(){
 function sortPoint(){
     var flg,Point,befPoint,afterPoint
     var Sort = JSON.parse(localStorage.getItem("Sort"))
+    if(!Sort){ return 0 }
 
     for(var i=0; i<2; i++){
         Point = $(".ServerList td").find(".server-list-hd-text")
