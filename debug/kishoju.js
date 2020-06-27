@@ -6,7 +6,10 @@ window.onload = function(){
     setInitMoveBtn();
 }
 
-function debug(){
+function debug(_this){
+    alert(typeof _this)
+    alert(_this)
+    return 0
 }
 
 function sortPoint(){
@@ -241,17 +244,31 @@ $(document).on("click", ".setServers", function(){
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
     $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
   
+    debug(Number($(this).val()))
+
     //サーバー行追加
     var CopyTemp1,CopyTemp2
     var num = Number($(this).val())
-    for(var i=0; i<10; i++){
-        CopyTemp1 = $($("#template1").html()).clone()
-        CopyTemp1.find(".Server").text(i + num)
-        CopyTemp1.find(".setTemp").each(function(){
-            CopyTemp2 = $($("#template2").html()).clone()
-            $(this).append(CopyTemp2)
-        })
-        $(".ServerList").append(CopyTemp1)
+    if(!num){
+        for(let i=0; i<10; i++){
+            CopyTemp1 = $($("#template1").html()).clone()
+            CopyTemp1.find(".Server").text(i + num)
+            CopyTemp1.find(".setTemp").each(function(){
+                CopyTemp2 = $($("#template2").html()).clone()
+                $(this).append(CopyTemp2)
+            })
+            $(".ServerList").append(CopyTemp1)
+        }
+    }else{
+        for(let i=0; i<2; i++){
+            CopyTemp1 = $($("#template1").html()).clone()
+            CopyTemp1.find(".Server").text(i + num)
+            CopyTemp1.find(".setTemp").each(function(){
+                CopyTemp2 = $($("#template2").html()).clone()
+                $(this).append(CopyTemp2)
+            })
+            $(".ServerList").append(CopyTemp1)
+        }
     }
 
     //サーバ切り替え時のデータ保持
