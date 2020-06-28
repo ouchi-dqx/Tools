@@ -38,13 +38,15 @@ function sortPoint(){
 
 function Sender(Server,Point,Time){
     Time = TimePlus(Time,"01:30:00","Date").substr(5).slice(0,-3) //yearとseconds削除
-
+    alert(Time)
+/*
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
         type: "GET",
         dataType: "jsonp",
         data: {Server: Server, Point: Point, Time: Time}
     })
+*/
 }
 
 //←→ボタンイベント
@@ -153,7 +155,7 @@ $(document).on("click", ".btn", function(){
         case "黄":
             //赤黄・虹黄判定
             if(nowColor == "red" || nowColor == "violet"){
-                //Sender(Server,Point,befDate + befTime)
+                Sender(Server,Point,befDate + befTime)
                 Time = TimePlus(befTime,"01:30:00","Time")
                 objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
@@ -415,12 +417,12 @@ function load_Storage(){
         //7,15,23=メモ,8,16,24=メモ背景色
         _this = $(this).find(".ゲル")
         _this.find(".nowTime")
-            .attr("date",Data[Server[1]])
+            .attr("date",Data[Server][1])
             .text(Data[Server][2])
             .css("background-color", Data[Server][3])
             .attr("color", Data[Server][3])
         _this.find(".befTime")
-            .attr("date",Data[Server[4]])
+            .attr("date",Data[Server][4])
             .text(Data[Server][5])
             .css("background-color", Data[Server][6])
             .attr("color", Data[Server][6])
@@ -439,12 +441,12 @@ function load_Storage(){
 
         _this = $(this).find(".砂漠")
         _this.find(".nowTime")
-            .attr("date",Data[Server[9]])
+            .attr("date",Data[Server][9])
             .text(Data[Server][10])
             .css("background-color", Data[Server][11])
             .attr("color", Data[Server][11])
         _this.find(".befTime")
-            .attr("date",Data[Server[12]])
+            .attr("date",Data[Server][12])
             .text(Data[Server][13])
             .css("background-color", Data[Server][14])
             .attr("color", Data[Server][14])
@@ -463,12 +465,12 @@ function load_Storage(){
 
         _this = $(this).find(".バル")
         _this.find(".nowTime")
-            .attr("date",Data[Server[17]])
+            .attr("date",Data[Server][17])
             .text(Data[Server][18])
             .css("background-color", Data[Server][19])
             .attr("color", Data[Server][19])
         _this.find(".befTime")
-            .attr("date",Data[Server[20]])
+            .attr("date",Data[Server][20])
             .text(Data[Server][21])
             .css("background-color", Data[Server][22])
             .attr("color", Data[Server][22])
