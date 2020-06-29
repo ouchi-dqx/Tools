@@ -1,2 +1,3 @@
-# Tools
-輝晶獣分散支援ツール
+---
+redirect_from: "https://ouchi-dqx.github.io/Tools/kishoju.html"
+---
