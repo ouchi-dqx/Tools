@@ -387,6 +387,22 @@ function save_Storage(){
         ])
     })
 
+    if(boxName == "9 - 10"){
+        boxName = "1 - 10"
+        var tmp = JSON.parse(localStorage.getItem(boxName))
+        if(!tmp){
+            tmp = []
+            for(let i=1; i<9; i++){
+                tmp.push([""])
+            }
+            Data = tmp.concat(Data)
+        }else{
+            tmp.splice(8,2)
+            Data = tmp.concat(Data)
+        }
+        sessionStorage.setItem("9 - 10",true)
+    }
+
     $(".fix_blue").find(".fix").each(function(){
         fix_blue.push([$(this).text()])
     })
@@ -408,85 +424,92 @@ function load_Storage(){
     var fix_red = JSON.parse(localStorage.getItem("fix_red"))
     var _this
 
-    $(".Servers").each(function(){
-        //0=サーバー
-        //1,9,17=今回日付 2,10,18=今回時間 3,11,19=今回色
-        //4,12,20=前回日付 5,13,21=前回時間 6,14,22=前回色
-        //7,15,23=メモ,8,16,24=メモ背景色
-        _this = $(this).find(".ゲル")
-        _this.find(".nowTime")
-            .attr("date",Data[Server][1])
-            .text(Data[Server][2])
-            .css("background-color", Data[Server][3])
-            .attr("color", Data[Server][3])
-        _this.find(".befTime")
-            .attr("date",Data[Server][4])
-            .text(Data[Server][5])
-            .css("background-color", Data[Server][6])
-            .attr("color", Data[Server][6])
-        _this.find(".memo")
-            .val(Data[Server][7])
-            .css("background-color", Data[Server][8])
-            .attr("color", Data[Server][8])
-        if(Data[Server][3] == "red"){
-            _this.find(".btn[value=Red]").prop("disabled", true)
-            Timers[Data[Server][0] + "ゲル"] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
-        }
-        else if(Data[Server][3] != "red"){
-            _this.find(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Data[Server][0] + "ゲル"])
-        }
+    if(boxName == "9 - 10"){
+        Data = JSON.parse(localStorage.getItem("1 - 10"))
+        Server = 8
+    }    
 
-        _this = $(this).find(".砂漠")
-        _this.find(".nowTime")
-            .attr("date",Data[Server][9])
-            .text(Data[Server][10])
-            .css("background-color", Data[Server][11])
-            .attr("color", Data[Server][11])
-        _this.find(".befTime")
-            .attr("date",Data[Server][12])
-            .text(Data[Server][13])
-            .css("background-color", Data[Server][14])
-            .attr("color", Data[Server][14])
-        _this.find(".memo")
-            .val(Data[Server][15])
-            .css("background-color", Data[Server][16])
-            .attr("color", Data[Server][16])
-        if(Data[Server][11] == "red"){
-            _this.find(".btn[value=Red]").prop("disabled", true)
-            Timers[Data[Server][0] + "砂漠"] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
-        }
-        else if(Data[Server][11] != "red"){
-            _this.find(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Data[Server][0] + "砂漠"])
-        }
+    if(Data != null){
+        $(".Servers").each(function(){
+            //0=サーバー
+            //1,9,17=今回日付 2,10,18=今回時間 3,11,19=今回色
+            //4,12,20=前回日付 5,13,21=前回時間 6,14,22=前回色
+            //7,15,23=メモ,8,16,24=メモ背景色
+            _this = $(this).find(".ゲル")
+            _this.find(".nowTime")
+                .attr("date",Data[Server][1])
+                .text(Data[Server][2])
+                .css("background-color", Data[Server][3])
+                .attr("color", Data[Server][3])
+            _this.find(".befTime")
+                .attr("date",Data[Server][4])
+                .text(Data[Server][5])
+                .css("background-color", Data[Server][6])
+                .attr("color", Data[Server][6])
+            _this.find(".memo")
+                .val(Data[Server][7])
+                .css("background-color", Data[Server][8])
+                .attr("color", Data[Server][8])
+            if(Data[Server][3] == "red"){
+                _this.find(".btn[value=Red]").prop("disabled", true)
+                Timers[Data[Server][0] + "ゲル"] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
+            }
+            else if(Data[Server][3] != "red"){
+                _this.find(".btn[value=Red]").prop("disabled", false)
+                clearInterval(Timers[Data[Server][0] + "ゲル"])
+            }
 
-        _this = $(this).find(".バル")
-        _this.find(".nowTime")
-            .attr("date",Data[Server][17])
-            .text(Data[Server][18])
-            .css("background-color", Data[Server][19])
-            .attr("color", Data[Server][19])
-        _this.find(".befTime")
-            .attr("date",Data[Server][20])
-            .text(Data[Server][21])
-            .css("background-color", Data[Server][22])
-            .attr("color", Data[Server][22])
-        _this.find(".memo")
-            .val(Data[Server][23])
-            .css("background-color", Data[Server][24])
-            .attr("color", Data[Server][24])
-        if(Data[Server][19] == "red"){
-            _this.find(".btn[value=Red]").prop("disabled", true)
-            Timers[Data[Server][0] + "バル"] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
-        }
-        else if(Data[Server][19] != "red"){
-            _this.find(".btn[value=Red]").prop("disabled", false)
-            clearInterval(Timers[Data[Server][0] + "バル"])
-        }
+            _this = $(this).find(".砂漠")
+            _this.find(".nowTime")
+                .attr("date",Data[Server][9])
+                .text(Data[Server][10])
+                .css("background-color", Data[Server][11])
+                .attr("color", Data[Server][11])
+            _this.find(".befTime")
+                .attr("date",Data[Server][12])
+                .text(Data[Server][13])
+                .css("background-color", Data[Server][14])
+                .attr("color", Data[Server][14])
+            _this.find(".memo")
+                .val(Data[Server][15])
+                .css("background-color", Data[Server][16])
+                .attr("color", Data[Server][16])
+            if(Data[Server][11] == "red"){
+                _this.find(".btn[value=Red]").prop("disabled", true)
+                Timers[Data[Server][0] + "砂漠"] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
+            }
+            else if(Data[Server][11] != "red"){
+                _this.find(".btn[value=Red]").prop("disabled", false)
+                clearInterval(Timers[Data[Server][0] + "砂漠"])
+            }
 
-        Server++
-    })
+            _this = $(this).find(".バル")
+            _this.find(".nowTime")
+                .attr("date",Data[Server][17])
+                .text(Data[Server][18])
+                .css("background-color", Data[Server][19])
+                .attr("color", Data[Server][19])
+            _this.find(".befTime")
+                .attr("date",Data[Server][20])
+                .text(Data[Server][21])
+                .css("background-color", Data[Server][22])
+                .attr("color", Data[Server][22])
+            _this.find(".memo")
+                .val(Data[Server][23])
+                .css("background-color", Data[Server][24])
+                .attr("color", Data[Server][24])
+            if(Data[Server][19] == "red"){
+                _this.find(".btn[value=Red]").prop("disabled", true)
+                Timers[Data[Server][0] + "バル"] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
+            }
+            else if(Data[Server][19] != "red"){
+                _this.find(".btn[value=Red]").prop("disabled", false)
+                clearInterval(Timers[Data[Server][0] + "バル"])
+            }
+
+            Server++
+        })
+    }  
     
     $(".fix_blue tr").slice(1).remove()
     $(".fix_red tr").slice(1).remove()
