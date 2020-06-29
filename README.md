@@ -1,3 +1,2 @@
----
-redirect_from: "/kishoju.html"
----
+# Tools
+輝晶獣分散支援ツール
