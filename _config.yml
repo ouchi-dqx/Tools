@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
 google_analytics: UA-171127523-1
-redirect_from: "https://ouchi-dqx.github.io/Tools/kishoju.html"
+gems:
+  - jekyll-redirect-from
