@@ -121,7 +121,8 @@
         <div class="function-btn-box">
             <div style="line-height: 30px;">
                 <div>▼ 入力の保存と復旧</div>
-                <button onclick="save_Storage()">入力の保存</button>      
+                <button onclick="save_Storage()">入力の保存</button>
+                <button onclick="load_Storage()">データ復旧</button>     
                 <button onclick="OneBack()">直前の状態に戻す</button>            
                 <button onclick="save_Sort()">調査場所の並びを保存</button>
             </div>
@@ -147,6 +148,7 @@
                     リストの行クリックで個別削除、<b>[クリア]</b>ボタンで全削除されます。<br>
                     <b>[コピー]</b>ボタンでクリップボードにリストの内容がコピーされます。</li>
                 <li><b>[直前の状態に戻す]</b>ボタンで、チェックリストを1操作前の状態に戻します。</li>
+                <li><b>[データ復旧]</b>ボタンは、今までに入力した時間の復元を行います。(自動バックアップ)</li>
                 <li><b>[調査場所の並びを保存]</b>ボタンで、並び替えた場所の保存ができます。<br>
                     次回からツールを開いた時に、自動で並び替えが行われるようになります。</li>
                 <li>「入力情報のクリア」はボタンに書かれているものがクリア(リセット)されます。<br>
