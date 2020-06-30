@@ -792,7 +792,7 @@ function setTimer(_this){
     var nowTime = TimePlus(new Date(),"00:00:00","Time")
     var befTime = objBox.find(".nowTime").text()
     var Time = objBox.find(".memo").val().slice(5) //「経過時間 」削除
-
+/*
     if(Time == "00:10:00" || Time == "00:20:00" || Time == "00:30:00" || Time == "00:40:00"){
         objBox.find(".befTime")
             .attr("Date", befDate)
@@ -808,6 +808,7 @@ function setTimer(_this){
         objBox.find(".memo").val("経過時間:" + Time)
         save_Storage()
     }else
+*/
     if(Time == "00:50:00"){    
         Time = TimePlus(Time,"00:00:01","Time")
         objBox.find(".memo")
@@ -816,6 +817,7 @@ function setTimer(_this){
             .attr("color", "violet")
     }else 
     if(Time == "01:00:00"){
+    /*
         objBox.find(".befTime")
             .attr("Date", befDate)
             .text(befTime)
@@ -826,6 +828,7 @@ function setTimer(_this){
             .text(nowTime)
             .css("background-color", "red")
             .attr("color", "red")
+    */
         objBox.find(".memo")
             .val("！！！！虹！！！！")
             .css("background-color", "red")
