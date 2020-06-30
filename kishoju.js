@@ -403,6 +403,10 @@ function save_Storage(){
         sessionStorage.setItem("9 - 10",true)
     }
 
+    if(boxName == "1 - 10"){
+        sessionStorage.setItem("9 - 10",true)
+    }
+
     $(".fix_blue").find(".fix").each(function(){
         fix_blue.push([$(this).text()])
     })
