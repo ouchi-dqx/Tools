@@ -1,9 +1,9 @@
 function Getter(num){
     $.ajax({
-        url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
+        url: "https://script.google.com/macros/s/AKfycby0mRAp5wucNNkiM72RdMowNc-JRDQyE5ip46pC7uw/dev",
         type: "GET",
         dataType: "jsonp",
-        data: {mode: "read"},
+        data: {mode: "read", Server: num.value},
         success: res => {
             Loader(res.Array,num)
         }
@@ -11,7 +11,7 @@ function Getter(num){
 }
 
 function Loader(Data,num){
-    $(".ServerList tr").slice(1).remove() //テーブルの初期化
+    $(".ServerList ctr").slice(1).remove() //テーブルの初期化
 
     //サーバー行追加
     var CopyTemp,Point,check2,cnt
