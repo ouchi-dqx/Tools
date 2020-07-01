@@ -53,10 +53,10 @@ $(document).on("click", ".btn", function(){
     befColor = $(this).nextAll(".befTime").css("background-color")
     memo = $(this).nextAll(".memo").val()
     TMP = Array(Server,Point,befTime,nowColor,old_befTime,befColor,memo)
-    
+
     //赤離脱判定
     if(nowColor == "rgb(255, 0, 0)" && btnColor != "赤"){
-        //ボタン禁止解除・タイマ削除　メモ背景白・リスト削除        
+        //ボタン禁止解除・タイマ削除　メモ背景白・リスト削除
         $(this).parent().find(".btn[value=Red]").prop("disabled", false)
         clearInterval(Timers[Server+Point])
         $(this).nextAll(".memo").css("background-color", "white")
@@ -114,7 +114,7 @@ $(document).on("click", ".btn", function(){
                     + TimePlus(nowTime,"04:00:00")
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
             }
-            
+
             $(this).nextAll(".befTime")
                 .text("前回:" + befTime)
                 .css("background-color", nowColor)
@@ -123,9 +123,9 @@ $(document).on("click", ".btn", function(){
                 .css("background-color", "yellow")
         break
         case "赤":
-            
+
             //赤ボタンクリック禁止
-            $(this).prop("disabled", true) 
+            $(this).prop("disabled", true)
 
             //タイマーセット
             $(this).nextAll(".memo").val("経過時間:" + "00:00:00")
@@ -192,12 +192,12 @@ function TimePlus(Time,Dates){
 
 function setTimer(_this){
     Time = _this.nextAll(".memo").val().slice(5)
-    if(Time == "00:50:00"){    
+    if(Time == "00:50:00"){
         Time = TimePlus(Time,"00:00:01")
         _this.nextAll(".memo").val("経過時間:" + Time)
         _this.nextAll(".memo").css("background-color", "violet")
     }else if(Time == "01:00:00"){
-        _this.nextAll(".memo").css("background-color", "red")  
+        _this.nextAll(".memo").css("background-color", "red")
     }else{
         Time = TimePlus(Time,"00:00:01")
         _this.nextAll(".memo").val("経過時間:" + Time)

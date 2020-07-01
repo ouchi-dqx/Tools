@@ -15,7 +15,7 @@ div{ box-sizing: border-box; }
 .set-server-btn-box{
     padding: 5px 10px;
     margin-bottom: 20px;
-  
+
     font-weight: bold;
     border: dotted 2px #333;
 }
@@ -44,7 +44,7 @@ div{ box-sizing: border-box; }
 }
 /* ヘッダ行 テキストエリア */
 #server-list-hd .server-list-hd-text{
-    width: 140px; 
+    width: 140px;
     padding: 5px 0px;
 }
 /* ヘッダ行 矢印ボタン */
@@ -91,7 +91,7 @@ div{ box-sizing: border-box; }
     width: 28px;
     height: 25px;
     */
-    font-size: 13px;       
+    font-size: 13px;
 }
 /* 4色ボタン フォーカス時の外枠を消す */
 .template2-box .btn:focus { outline: 0; }
@@ -107,23 +107,23 @@ div{ box-sizing: border-box; }
 .template2-box .btn[value="Red"]:hover    { color: #000; background-color: red; }
 .template2-box .btn[value="Rainbow"]:hover{ color: #000; background-color: violet; }
 /* 4色ボタン 赤が非活性のときは灰色にしてオンマウス動作を無効化 */
-.template2-box .btn[value="Red"]:disabled{ 
-    color: #666 ; 
-    background-color: #ccc; 
+.template2-box .btn[value="Red"]:disabled{
+    color: #666 ;
+    background-color: #ccc;
     font-weight: normal;
     cursor: default;
 }
 /* タイム表示 タイトル */
 .time-title{
-    display: table-cell; 
+    display: table-cell;
     font-size: 12px;
     line-height: 24px;
     padding: 0px 5px 0px 3px;
 }
 /* タイム表示 hh:nn:ss */
 .befTime, .nowTime{
-    display: table-cell; 
-    padding: 0px 8px; 
+    display: table-cell;
+    padding: 0px 8px;
     background-color: none;
     font-weight: bold;
 }
@@ -134,7 +134,7 @@ div{ box-sizing: border-box; }
 .template2-box input[type="text"]{
     font-size: 13px;
     width: 120px;
-    height: 18px; 
+    height: 18px;
     padding-left: 2px;
     border: #999 solid 1px;
 }
@@ -178,7 +178,7 @@ div{ box-sizing: border-box; }
     padding: 3px 5px;
     margin-bottom: 20px;
 }
-.side-list-add-box input{    
+.side-list-add-box input{
     height: 18px;
     text-align: center;
     ime-mode: disabled;
@@ -189,7 +189,7 @@ div{ box-sizing: border-box; }
 /* 機能ボタンBOX */
 .function-btn-box{
     font-size: 14px;
-    display: table; 
+    display: table;
     margin-bottom: 10px;
 }
 

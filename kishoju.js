@@ -17,7 +17,7 @@ function sortPoint(){
     for(var i=0; i<2; i++){
         Point = $(".ServerList td").find(".server-list-hd-text")
         flg = false //フラグ初期化
-        
+
         for(let n=1; n<4; n++){
             if($(Point).eq(n).text() !== Sort[n-1]){
                 if(flg == false){
@@ -67,7 +67,7 @@ function movePoint(befPoint,afterPoint){
     //jQuery用クラス変数
     var befClass = "." + $(befPoint).attr("class")
     var afterClass = "." + $(afterPoint).attr("class")
-    
+
     //template内移動処理用変数
     var tmp1 = document.getElementById("template1")
     var Servers = tmp1.content.querySelectorAll(".Servers")
@@ -80,7 +80,7 @@ function movePoint(befPoint,afterPoint){
         $(".Servers").find(befClass).eq(i)
             .insertBefore($(".Servers").find(afterClass).eq(i))
     }
-    
+
     setInitMoveBtn();
 }
 
@@ -92,23 +92,23 @@ function setInitMoveBtn(){
 }
 
 //ボタンクリックイベント
-$(document).on("click", ".btn", function(){   
+$(document).on("click", ".btn", function(){
     //変数作成
     var Time,Text
     var objBox = $(this).parents(".template2-box");
     var Server = $(this).closest("tr").find(".Server").text()
     var Point = $(this).closest("td").attr("class")
     var btnColor = $(this).text()
-    
+
     var nowDate = new Date()
     nowDate = nowDate.getFullYear() + "/" + Number(nowDate.getMonth() + 1) + "/" + nowDate.getDate() + " "
     var befDate = objBox.find(".nowTime").attr("Date")
     var old_befDate = objBox.find(".befTime").attr("Date")
 
-    var nowTime = TimePlus(new Date(),"00:00:00","Time")    
+    var nowTime = TimePlus(new Date(),"00:00:00","Time")
     var befTime = objBox.find(".nowTime").text();
     var old_befTime = objBox.find(".befTime").text();
-    
+
     var nowColor = objBox.find(".nowTime").attr("color")
     var befColor = objBox.find(".befTime").attr("color")
     var memo = objBox.find(".memo").val();
@@ -155,11 +155,11 @@ $(document).on("click", ".btn", function(){
             if(nowColor == "red" || nowColor == "violet"){
                 Time = objBox.find(".memo").val().slice(5)
                 if(nowColor == "violet"){
-                    Time = "00:00:00" 
+                    Time = "00:00:00"
                 }
                 Time = TimePlus(befDate + befTime,Time,"Date")
                 Sender(Server,Point,Time)
-                
+
                 Time = TimePlus(befTime,"01:30:00","Time")
                 objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
@@ -170,11 +170,11 @@ $(document).on("click", ".btn", function(){
                     + TimePlus(befTime,"03:00:00","Time") + " - "
                     + TimePlus(nowTime,"03:00:00","Time")
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
-                                                
+
                 Time = TimePlus(befTime,"03:00:00","Time")
                 objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
-            
+
             objBox.find(".befTime")
                 .attr("Date", befDate)
                 .text(befTime)
@@ -188,7 +188,7 @@ $(document).on("click", ".btn", function(){
         break
         case "赤":
             //赤ボタンクリック禁止
-            $(this).prop("disabled", true) 
+            $(this).prop("disabled", true)
 
             //タイマーセット
             objBox.find(".memo").val("経過時間:" + "00:00:00")
@@ -246,11 +246,11 @@ $(document).on("click", ".btn", function(){
 $(document).on("click", ".setServers", function(){
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
     $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
-  
+
     //サーバー行追加
     var i,max,CopyTemp1,CopyTemp2
     var num = $(this).val()
-    
+
     if(num == "9-10"){
         i = 9
         max = 11
@@ -299,12 +299,12 @@ function push_fix(){
     var Text = Server.val() + Point.val() + " "
         + sTime.val() + " - " + eTime.val()
     $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
-    
+
     $(".fix_red").find(".fix").each(function(){
         fix = $(this).text().split(" ")
         Data.push(fix)
     })
-    
+
     $(".fix_red tr").slice(1).remove()
 
     Data.sort(function(a,b){
@@ -317,8 +317,8 @@ function push_fix(){
     })
 
     var afterTime = eTime.val().split(":")
-    afterTime = Number(afterTime[0]) * 60 * 60 
-        + Number(afterTime[1]) * 60 
+    afterTime = Number(afterTime[0]) * 60 * 60
+        + Number(afterTime[1]) * 60
         + 60 * 60 //終了時間から1時間後
 
     var nowTime = new Date()
@@ -328,7 +328,7 @@ function push_fix(){
     Timers[Server.val() + Point.val() + "fix"] = setTimeout(function(){
         clear_one_fix("fix_red",Server.val() + Point.val())
     },(afterTime - nowTime) * 1000)
-    
+
     //初期化
     Server.val("1")
     Point.val("ゲル")
@@ -345,7 +345,7 @@ $(document).on("click", "#sTime, #eTime", function() {
         if($("#sTime").val() == ""){
             $("#sTime").val(TimePlus(new Date(),"01:00:00","Time"))
         }
-    }else 
+    }else
     if($(this).attr("id") == "eTime"){
         if($("#eTime").val() == ""){
             $("#eTime").val(TimePlus(new Date(),"01:00:00","Time"))
@@ -363,7 +363,7 @@ function save_Storage(){
     $(".Servers").each(function(){
         Data.push([
             $(this).find(".Server").text(),
-            
+
             $(this).find(".ゲル").find(".nowTime").attr("Date"),
             $(this).find(".ゲル").find(".nowTime").text(),
             $(this).find(".ゲル").find(".nowTime").attr("color"),
@@ -437,7 +437,7 @@ function load_Storage(){
     if(boxName == "9 - 10"){
         Data = JSON.parse(localStorage.getItem("1 - 10"))
         Server = 8
-    }    
+    }
 
     if(Data != null){
         $(".Servers").each(function(){
@@ -519,8 +519,8 @@ function load_Storage(){
 
             Server++
         })
-    }  
-    
+    }
+
     $(".fix_blue tr").slice(1).remove()
     $(".fix_red tr").slice(1).remove()
 
@@ -552,7 +552,7 @@ function save_Fix(){
     $(".fix_red").find(".fix").each(function(){
         fix_red.push([$(this).text()])
     })
-    
+
     localStorage.setItem("fix_blue", JSON.stringify(fix_blue))
     localStorage.setItem("fix_red", JSON.stringify(fix_red))
 }
@@ -570,7 +570,7 @@ function OneBack(){
                 befDate = _this.find(".befTime").attr("Date")
                 befTime = _this.find(".befTime").text()
                 befColor = _this.find(".befTime").attr("color")
-                
+
                 //赤離脱判定
                 if(nowColor == "red" && befColor != "red"){
                     //ボタン禁止解除・タイマ削除 メモ背景色初期化
@@ -600,7 +600,7 @@ function OneBack(){
                     case "red" :
                         _this.find(".btn[value=Red]").prop("disabled", true)
                         Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
-                        
+
                         if(TMP[3] == ""){ //前回時間空判定
                             Text = TMP[0] + TMP[1] + " "
                                 + TimePlus(befTime,"00:00:00","Time") + " - "
@@ -693,7 +693,7 @@ function clear_input(){
         $(this).find(".memo").each(function(){
             $(this).val("").css("background-color", "white").attr("color", "white")
         })
-        
+
         //タイマー等初期化
         var Server = $(this).find(".Server").text()
         clearInterval(Timers[Server + "ゲル"])
@@ -728,7 +728,7 @@ function clear_one_fix(fix,Text){
     if(fix == "fix_blue"){
         $(".fix_blue").find(".fix").each(function(){
             fix = $(this).text().split(" ")
-            if(fix[0] == Text){ 
+            if(fix[0] == Text){
                     $(this).parent().remove()
             }
         })
@@ -736,7 +736,7 @@ function clear_one_fix(fix,Text){
     else if(fix == "fix_red"){
         $(".fix_red").find(".fix").each(function(){
             fix = $(this).text().split(" ")
-            if(fix[0] == Text){ 
+            if(fix[0] == Text){
                     $(this).parent().remove()
             }
         })
@@ -765,11 +765,11 @@ function TimePlus(Time,sumTime,mode){
     Time.setHours(Time.getHours() + Number(sumTime[0]))
     Time.setMinutes(Time.getMinutes() + Number(sumTime[1]))
     Time.setSeconds(Time.getSeconds() + Number(sumTime[2]))
-    
+
     var Text
     if(mode == "Date"){
-        Text = Time.getFullYear() + "/" 
-            + ("0" + Number(Time.getMonth() + 1)).slice(-2) + "/" 
+        Text = Time.getFullYear() + "/"
+            + ("0" + Number(Time.getMonth() + 1)).slice(-2) + "/"
             + ("0" + Time.getDate()).slice(-2) + " "
             + ("0" + Time.getHours()).slice(-2) + ":"
             + ("0" + Time.getMinutes()).slice(-2) + ":"
@@ -794,7 +794,7 @@ function setTimer(_this){
     var nowDate = new Date()
     nowDate = nowDate.getFullYear() + "/" + Number(nowDate.getMonth() + 1) + "/" + nowDate.getDate() + " "
     var befDate = objBox.find(".nowTime").attr("Date")
-    
+
     var nowTime = TimePlus(new Date(),"00:00:00","Time")
     var befTime = objBox.find(".nowTime").text()
     var Time = objBox.find(".memo").val().slice(5) //「経過時間 」削除
@@ -815,13 +815,13 @@ function setTimer(_this){
         save_Storage()
     }else
 */
-    if(Time == "00:50:00"){    
+    if(Time == "00:50:00"){
         Time = TimePlus(Time,"00:00:01","Time")
         objBox.find(".memo")
             .val("経過時間:" + Time)
             .css("background-color", "violet")
             .attr("color", "violet")
-    }else 
+    }else
     if(Time == "01:00:00"){
     /*
         objBox.find(".befTime")
