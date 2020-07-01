@@ -11,7 +11,7 @@ function Getter(num){
 }
 
 function Loader(Data,num){
-    $(".ServerList ctr").slice(1).remove() //テーブルの初期化
+    $(".ServerList tr").slice(1).remove() //テーブルの初期化
 
     //サーバー行追加
     var CopyTemp,Point,check2,cnt
