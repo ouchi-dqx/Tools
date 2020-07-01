@@ -154,6 +154,9 @@ $(document).on("click", ".btn", function(){
             //赤黄・虹黄判定
             if(nowColor == "red" || nowColor == "violet"){
                 Time = objBox.find(".memo").val().slice(5)
+                if(nowColor == "violet"){
+                    Time = "00:00:00" 
+                }
                 Time = TimePlus(befDate + befTime,Time,"Date")
                 Sender(Server,Point,Time)
                 
