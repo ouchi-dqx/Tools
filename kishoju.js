@@ -153,7 +153,10 @@ $(document).on("click", ".btn", function(){
         case "黄":
             //赤黄・虹黄判定
             if(nowColor == "red" || nowColor == "violet"){
-                Sender(Server,Point,befDate + befTime)
+                Time = objBox.find(".memo").val().slice(5)
+                Time = TimePlus(befDate + befTime,Time,"Date")
+                Sender(Server,Point,Time)
+                
                 Time = TimePlus(befTime,"01:30:00","Time")
                 objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
             }
@@ -830,7 +833,7 @@ function setTimer(_this){
             .attr("color", "red")
     */
         objBox.find(".memo")
-            .val("！！！！虹！！！！")
+            .val("経過時間:" + Time)
             .css("background-color", "red")
             .attr("color", "red")
         clearInterval(Timers[Server + Point])
