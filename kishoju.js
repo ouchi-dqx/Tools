@@ -167,8 +167,8 @@ $(document).on("click", ".btn", function(){
             //青黄判定
             if(nowColor == "skyblue"){
                 Text = Server + Point + " "
-                    + TimePlus(befTime,"03:00:00","Time") + " - "
-                    + TimePlus(nowTime,"03:00:00","Time")
+                    + TimePlus(befTime,"03:00:00","Time").slice(0,-3) + " - "
+                    + TimePlus(nowTime,"03:00:00","Time").slice(0,-3)
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
 
                 Time = TimePlus(befTime,"03:00:00","Time")
@@ -197,13 +197,13 @@ $(document).on("click", ".btn", function(){
             //黄赤判定
             if(nowColor == "yellow"){
                 Text = Server + Point + " "
-                    + TimePlus(befTime,"01:00:00","Time") + " - "
-                    + TimePlus(nowTime,"01:00:00","Time")
+                    + TimePlus(befTime,"01:00:00","Time").slice(0,-3) + " - "
+                    + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
             }else //黄赤以外で赤判定
             if(nowColor != "yellow"){
                 Text = Server + Point + " "
-                    + TimePlus(nowTime,"00:00:00","Time") + " - "
-                    + TimePlus(nowTime,"01:00:00","Time")
+                    + TimePlus(nowTime,"00:00:00","Time").slice(0,-3) + " - "
+                    + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
             }
             $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
 
@@ -297,7 +297,7 @@ function push_fix(){
     }
 
     var Text = Server.val() + Point.val() + " "
-        + sTime.val() + " - " + eTime.val()
+        + sTime.val().slice(0,-3) + " - " + eTime.val().slice(0,-3)
     $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
 
     $(".fix_red").find(".fix").each(function(){
@@ -592,8 +592,8 @@ function OneBack(){
                     case "yellow" :
                         if(TMP[4] == "skyblue"){ //青黄リスト追加
                             Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(TMP[3],"03:00:00","Time") + " - "
-                                + TimePlus(befTime,"03:00:00","Time")
+                                + TimePlus(TMP[3],"03:00:00","Time").slice(0,-3) + " - "
+                                + TimePlus(befTime,"03:00:00","Time").slice(0,-3)
                             $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
                         }
                     break
@@ -603,18 +603,18 @@ function OneBack(){
 
                         if(TMP[3] == ""){ //前回時間空判定
                             Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(befTime,"00:00:00","Time") + " - "
-                                + TimePlus(befTime,"01:00:00","Time")
+                                + TimePlus(befTime,"00:00:00","Time").slice(0,-3) + " - "
+                                + TimePlus(befTime,"01:00:00","Time").slice(0,-3)
                         }else
                         if(TMP[4] == "yellow"){ //黄赤判定
                             Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(TMP[3],"01:00:00","Time") + " - "
-                                + TimePlus(befTime,"01:00:00","Time")
+                                + TimePlus(TMP[3],"01:00:00","Time").slice(0,-3) + " - "
+                                + TimePlus(befTime,"01:00:00","Time").slice(0,-3)
                         }else
                         if(TMP[4] != "yellow"){ //黄赤以外で赤判定
                             Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(TMP[3],"00:00:00","Time") + " - "
-                                + TimePlus(befTime,"01:00:00","Time")
+                                + TimePlus(TMP[3],"00:00:00","Time").slice(0,-3) + " - "
+                                + TimePlus(befTime,"01:00:00","Time").slice(0,-3)
                         }
                         $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
                     break
