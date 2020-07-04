@@ -36,14 +36,19 @@ function sortPoint(){
     }
 }
 
-function Sender(Server,Point,Time){
-    Time = TimePlus(Time,"01:30:00","Date").substr(5).slice(0,-3) //yearとseconds削除
+function Sender(Server,Point,Time,Color){
+    //yearとseconds削除
+    if(Color == ""){
+        Time = TimePlus(Time,"01:30:00","Date").substr(5).slice(0,-3)
+    }else{
+        Time = TimePlus(Time,"00:00:00","Date").substr(5).slice(0,-3)
+    }
 
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
         type: "GET",
         dataType: "jsonp",
-        data: {Server: Server, Point: Point, Time: Time}
+        data: {Server: Server, Point: Point, Time: Time, Color: Color, mode: "write"}
     })
 }
 
@@ -158,7 +163,7 @@ $(document).on("click", ".btn", function(){
                     Time = "00:00:00"
                 }
                 Time = TimePlus(befDate + befTime,Time,"Date")
-                Sender(Server,Point,Time)
+                Sender(Server,Point,Time,"yellow")
 
                 Time = TimePlus(befTime,"01:30:00","Time")
                 objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
@@ -222,6 +227,8 @@ $(document).on("click", ".btn", function(){
                 .attr("color", "red")
         break
         case "虹":
+            Sender(Server,Point,nowDate + nowTime,"violet")
+
             //虹継続時以外、前回時間更新
             if(nowColor != "violet" || befColor != "violet"){
                 objBox.find(".befTime")

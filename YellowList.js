@@ -14,7 +14,7 @@ function Loader(Data,num){
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
 
     //サーバー行追加
-    var CopyTemp,Point,check3,cnt
+    var CopyTemp,Point,Color,check3,cnt
     var check1 = new Date().getTime()
     var check2 = new Date()
     check2.setHours(check2.getHours() -1)
@@ -29,19 +29,28 @@ function Loader(Data,num){
         Point = 0 //初期化
         CopyTemp.find("p").each(function(){
             check3 = new Date("2020/" + Data[Server - 1][Point]).getTime()
+            Color = Data[Server - 1][Point + 1]
 
-            if(check1 < check3){ //現在時間より先なら表示
-                $(this).text(Data[Server - 1][Point] + "まで")
-                $(this).parents("td").css("background-color", "yellow")
-            }else{
-                if(check2 < check3){ //現在時間-1時間半より先なら表示
-                    //$(this).text(Data[Server - 1][Point] + "")
-                    //$(this).parents("td").css("background-color", "yellow")
+            if(Color == "yellow"){
+                if(check1 < check3){ //現在時間より先なら表示
+                    $(this).text(Data[Server - 1][Point] + "まで")
+                    $(this).parents("td").css("background-color", Color)
                 }else{
-                    $(this).text("--:--:--")
+                    /*
+                        if(check2 < check3){ //現在時間-1時間半より先なら表示
+                            $(this).text(Data[Server - 1][Point] + "確認")
+                            $(this).parents("td").css("background-color", Color)
+                        }else{
+                            $(this).text("--:--:--")
+                        }
+                    */
+                   $(this).text("--:--:--")
                 }
+            }else if(Color == "violet"){
+                $(this).text(Data[Server - 1][Point] + "確認")
+                $(this).parents("td").css("background-color", Color)
             }
-            Point++
+            Point += 2
         })
         $(".ServerList").append(CopyTemp)
     }
