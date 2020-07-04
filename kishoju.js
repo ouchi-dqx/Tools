@@ -227,10 +227,9 @@ $(document).on("click", ".btn", function(){
                 .attr("color", "red")
         break
         case "虹":
-            Sender(Server,Point,nowDate + nowTime,"violet")
-
             //虹継続時以外、前回時間更新
             if(nowColor != "violet" || befColor != "violet"){
+                Sender(Server,Point,nowDate + nowTime,"violet")
                 objBox.find(".befTime")
                     .attr("Date", befDate)
                     .text(befTime)
