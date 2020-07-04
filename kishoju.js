@@ -38,7 +38,7 @@ function sortPoint(){
 
 function Sender(Server,Point,Time,Color){
     //yearとseconds削除
-    if(Color == ""){
+    if(Color == "yellow"){
         Time = TimePlus(Time,"01:30:00","Date").substr(5).slice(0,-3)
     }else{
         Time = TimePlus(Time,"00:00:00","Date").substr(5).slice(0,-3)
