@@ -158,10 +158,12 @@ $(document).on("click", ".btn", function(){
         case "黄":
             //赤黄・虹黄判定
             if(nowColor == "red" || nowColor == "violet"){
-                if(nowColor == "violet"){
+                Time = memo.slice(0,-3)
+                if(befColor != "red"){
                     Time = "00:00:00"
                 }
-                Time = TimePlus(befDate + befTime,memo.slice(5),"Date")
+                Sender(Server,Point,Time,"yellow")
+                Time = TimePlus(befDate + befTime,Time,"Date")
                 Sender(Server,Point,Time,"yellow")
 
                 Time = TimePlus(befTime,"01:30:00","Time")
