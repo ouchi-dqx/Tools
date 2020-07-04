@@ -162,7 +162,6 @@ $(document).on("click", ".btn", function(){
                 if(befColor != "red"){
                     Time = "00:00:00"
                 }
-                Sender(Server,Point,Time,"yellow")
                 Time = TimePlus(befDate + befTime,Time,"Date")
                 Sender(Server,Point,Time,"yellow")
 
