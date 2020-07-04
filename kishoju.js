@@ -43,16 +43,13 @@ function Sender(Server,Point,Time,Color){
     }else{
         Time = TimePlus(Time,"00:00:00","Date").substr(5).slice(0,-3)
     }
-    alert(Time)
 
-    /*
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
         type: "GET",
         dataType: "jsonp",
         data: {Server: Server, Point: Point, Time: Time, Color: Color, mode: "write"}
     })
-    */
 }
 
 //←→ボタンイベント
@@ -162,7 +159,6 @@ $(document).on("click", ".btn", function(){
             //赤黄・虹黄判定
             if(nowColor == "red" || nowColor == "violet"){
                 Time = memo.slice(5)
-                alert(Time)
                 if(befColor != "red"){
                     Time = "00:00:00"
                 }
