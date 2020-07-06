@@ -10,6 +10,16 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="kishoju.js"></script>
         <link rel="manifest" href="manifest.json">
+        <script  type="application/javascript">
+            //Service Workerの読み込み
+            if('serviceWorker' in navigator){
+              navigator.serviceWorker
+              .register('/serviceworker.js')
+              .then(function(){
+                console.log('Service Worker Registered');
+              });
+            }
+        </script>
         <script type="text/Javascript">
         $(function(){
             //スライドボックス開閉
