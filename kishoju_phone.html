@@ -8,6 +8,16 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
         <link rel="manifest" href="manifest.json">
+        <script  type="application/javascript">
+            //Service Workerの読み込み
+            if('serviceWorker' in navigator){
+              navigator.serviceWorker
+              .register('/serviceworker.js')
+              .then(function(){
+                console.log('Service Worker Registered');
+              });
+            }
+        </script>
      </head>
 
 
