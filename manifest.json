@@ -1,0 +1,7 @@
+# manifest.json
+{
+  "name": "輝晶獣分散支援ツール",
+  "short_name": "輝晶獣分散支援ツール",
+  "start_url": "/kishoju.html",
+  "display": "standalone",
+}
