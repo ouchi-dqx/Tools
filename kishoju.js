@@ -1,5 +1,5 @@
 var Timers = {}
-var TMP
+var TMP = []
 
 window.onload = function(){
     setInitMoveBtn();
@@ -118,7 +118,10 @@ $(document).on("click", ".btn", function(){
     var befColor = objBox.find(".befTime").attr("color")
     var memo = objBox.find(".memo").val();
 
-    TMP = Array(Server,Point,old_befDate,old_befTime,befColor,memo)
+    TMP.push(Array(Server,Point,old_befDate,old_befTime,befColor,memo))
+    if(5 < TMP.length){
+        TMP.shift()
+    }
 
     //赤離脱判定
     if(nowColor == "red" && btnColor != "赤"){
@@ -303,7 +306,7 @@ function push_fix(){
     }
 
     var Text = Server.val() + Point.val() + " "
-        + sTime.val().slice(0,-3) + " - " + eTime.val().slice(0,-3)
+        + sTime.val() + " - " + eTime.val()
     $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
 
     $(".fix_red").find(".fix").each(function(){
@@ -343,18 +346,18 @@ function push_fix(){
 }
 
 function checkTime(Time) {
-    return Time.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/) !== null;
+    return Time.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9])$/) !== null;
 }
 
 $(document).on("click", "#sTime, #eTime", function() {
     if($(this).attr("id") == "sTime"){
         if($("#sTime").val() == ""){
-            $("#sTime").val(TimePlus(new Date(),"01:00:00","Time"))
+            $("#sTime").val(TimePlus(new Date(),"01:00:00","Time").slice(0,-3))
         }
     }else
     if($(this).attr("id") == "eTime"){
         if($("#eTime").val() == ""){
-            $("#eTime").val(TimePlus(new Date(),"01:00:00","Time"))
+            $("#eTime").val(TimePlus(new Date(),"01:00:00","Time").slice(0,-3))
         }
     }
 })
@@ -564,62 +567,63 @@ function save_Fix(){
 }
 
 function OneBack(){
-    var _this,nowColor,befDate,befTime,befColor,Text
+    if(TMP.length != 0){
+        var objBox,nowColor,befDate,befTime,befColor,Text
+        var n = TMP.length - 1
 
-    if(TMP != null){
         $(".Servers").each(function(){
             //TMP = Array(Server,Point,old_befDate,old_befTime,befColor,memo)
-            if(TMP[0] == $(this).find(".Server").text()){
+            if(TMP[n][0] == $(this).find(".Server").text()){
                 //変数セット
-                _this = $(this).find("." + TMP[1]).find(".template2-box")
-                nowColor = _this.find(".nowTime").attr("color")
-                befDate = _this.find(".befTime").attr("Date")
-                befTime = _this.find(".befTime").text()
-                befColor = _this.find(".befTime").attr("color")
+                objBox = $(this).find("." + TMP[n][1]).find(".template2-box")
+                nowColor = objBox.find(".nowTime").attr("color")
+                befDate = objBox.find(".befTime").attr("Date")
+                befTime = objBox.find(".befTime").text()
+                befColor = objBox.find(".befTime").attr("color")
 
                 //赤離脱判定
                 if(nowColor == "red" && befColor != "red"){
                     //ボタン禁止解除・タイマ削除 メモ背景色初期化
-                    _this.find(".btn[value=Red]").prop("disabled", false)
-                    clearInterval(Timers[TMP[0] + TMP[1]])
-                    _this.find(".memo")
+                    objBox.find(".btn[value=Red]").prop("disabled", false)
+                    clearInterval(Timers[TMP[n][0] + TMP[n][1]])
+                    objBox.find(".memo")
                         .css("background-color", "white")
                         .attr("color","white")
-                    clear_one_fix("fix_red",TMP[0] + TMP[1])
+                    clear_one_fix("fix_red",TMP[n][0] + TMP[n][1])
                 }
 
                 //リスト追加削除処理
                 switch(befColor){
                     case "skyblue" :
                         if(nowColor == "yellow"){ //青木リスト削除
-                            clear_one_fix("fix_blue",TMP[0] + TMP[1])
+                            clear_one_fix("fix_blue",TMP[n][0] + TMP[n][1])
                         }
                     break
                     case "yellow" :
-                        if(TMP[4] == "skyblue"){ //青黄リスト追加
-                            Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(TMP[3],"03:00:00","Time").slice(0,-3) + " - "
+                        if(TMP[n][4] == "skyblue"){ //青黄リスト追加
+                            Text = TMP[n][0] + TMP[n][1] + " "
+                                + TimePlus(TMP[n][3],"03:00:00","Time").slice(0,-3) + " - "
                                 + TimePlus(befTime,"03:00:00","Time").slice(0,-3)
                             $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
                         }
                     break
                     case "red" :
-                        _this.find(".btn[value=Red]").prop("disabled", true)
-                        Timers[TMP[0] + TMP[1]] = setInterval(setTimer,1000,_this.find(".btn[value=Red]"))
+                        objBox.find(".btn[value=Red]").prop("disabled", true)
+                        Timers[TMP[n][0] + TMP[n][1]] = setInterval(setTimer,1000,objBox.find(".btn[value=Red]"))
 
-                        if(TMP[3] == ""){ //前回時間空判定
-                            Text = TMP[0] + TMP[1] + " "
+                        if(TMP[n][3] == ""){ //前回時間空判定
+                            Text = TMP[n][0] + TMP[n][1] + " "
                                 + TimePlus(befTime,"00:00:00","Time").slice(0,-3) + " - "
                                 + TimePlus(befTime,"01:00:00","Time").slice(0,-3)
                         }else
-                        if(TMP[4] == "yellow"){ //黄赤判定
-                            Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(TMP[3],"01:00:00","Time").slice(0,-3) + " - "
+                        if(TMP[n][4] == "yellow"){ //黄赤判定
+                            Text = TMP[n][0] + TMP[n][1] + " "
+                                + TimePlus(TMP[n][3],"01:00:00","Time").slice(0,-3) + " - "
                                 + TimePlus(befTime,"01:00:00","Time").slice(0,-3)
                         }else
-                        if(TMP[4] != "yellow"){ //黄赤以外で赤判定
-                            Text = TMP[0] + TMP[1] + " "
-                                + TimePlus(TMP[3],"00:00:00","Time").slice(0,-3) + " - "
+                        if(TMP[n][4] != "yellow"){ //黄赤以外で赤判定
+                            Text = TMP[n][0] + TMP[n][1] + " "
+                                + TimePlus(TMP[n][3],"00:00:00","Time").slice(0,-3) + " - "
                                 + TimePlus(befTime,"01:00:00","Time").slice(0,-3)
                         }
                         $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
@@ -627,21 +631,21 @@ function OneBack(){
                 }
 
                 //時間ロールバック
-                _this.find(".nowTime")
+                objBox.find(".nowTime")
                     .attr("Date", befDate)
                     .text(befTime)
                     .css("background-color", befColor)
                     .attr("color", befColor)
-                _this.find(".befTime")
-                    .attr("Date", TMP[2])
-                    .text(TMP[3])
-                    .css("background-color", TMP[4])
-                    .attr("color", TMP[4])
-                _this.find(".memo").val(TMP[5])
+                objBox.find(".befTime")
+                    .attr("Date", TMP[n][2])
+                    .text(TMP[n][3])
+                    .css("background-color", TMP[n][4])
+                    .attr("color", TMP[n][4])
+                objBox.find(".memo").val(TMP[n][5])
             }
         })
 
-        TMP = null //初期化
+        TMP.pop()
     }
 }
 
@@ -705,7 +709,7 @@ function clear_input(){
         clearInterval(Timers[Server + "ゲル"])
         clearInterval(Timers[Server + "砂漠"])
         clearInterval(Timers[Server + "バル"])
-        TMP = null
+        TMP = []
     })
 }
 
@@ -803,7 +807,15 @@ function setTimer(_this){
 
     var nowTime = TimePlus(new Date(),"00:00:00","Time")
     var befTime = objBox.find(".nowTime").text()
-    var Time = objBox.find(".memo").val().slice(5) //「経過時間 」削除
+
+    var diffTime = new Date().getTime() - new Date(befDate + befTime).getTime()
+    var Hour = diffTime / (1000 * 60 *60)
+    var Minute = (Hour - Math.floor(Hour)) * 60
+    var Second = (Minute - Math.floor(Minute)) * 60
+    var Time = ('00' + Math.floor(Hour)).slice(-2) + ':'
+            + ('00' + Math.floor(Minute)).slice(-2) + ':'
+            + ('00' + Math.round(Second)).slice(-2)
+
 /*
     if(Time == "00:10:00" || Time == "00:20:00" || Time == "00:30:00" || Time == "00:40:00"){
         objBox.find(".befTime")
@@ -822,14 +834,12 @@ function setTimer(_this){
     }else
 */
     if(Time == "00:50:00"){
-        Time = TimePlus(Time,"00:00:01","Time")
         objBox.find(".memo")
             .val("経過時間:" + Time)
             .css("background-color", "violet")
             .attr("color", "violet")
     }else
     if(Time == "01:00:00"){
-    /*
         objBox.find(".befTime")
             .attr("Date", befDate)
             .text(befTime)
@@ -838,17 +848,41 @@ function setTimer(_this){
         objBox.find(".nowTime")
             .attr("Date", nowDate)
             .text(nowTime)
-            .css("background-color", "red")
-            .attr("color", "red")
-    */
+            .css("background-color", "violet")
+            .attr("color", "violet")
         objBox.find(".memo")
             .val("経過時間:" + Time)
             .css("background-color", "red")
             .attr("color", "red")
+
+        Sender(Server,Point,nowDate + nowTime,"violet")
         clearInterval(Timers[Server + Point])
         save_Storage()
-    }else{
-        Time = TimePlus(Time,"00:00:01","Time")
+    }else
+    if((1000 * 60 * 60) < diffTime){
+        nowDate = TimePlus(befDate + befTime,"01:00:00","Date").slice(0,-8)
+        nowTime = TimePlus(befTime,"01:00:00","Time")
+
+        objBox.find(".befTime")
+            .attr("Date", befDate)
+            .text(befTime)
+            .css("background-color", "red")
+            .attr("color", "red")
+        objBox.find(".nowTime")
+            .attr("Date", nowDate)
+            .text(nowTime)
+            .css("background-color", "violet")
+            .attr("color", "violet")
+        objBox.find(".memo")
+            .val("経過時間:01:00:00")
+            .css("background-color", "red")
+            .attr("color", "red")
+
+        Sender(Server,Point,nowDate + nowTime,"violet")
+        clearInterval(Timers[Server + Point])
+        save_Storage()
+    }
+    else{
         objBox.find(".memo").val("経過時間:" + Time)
     }
 }
