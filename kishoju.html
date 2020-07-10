@@ -14,7 +14,7 @@
         <link rel="apple-touch-icon-precomposed" href="icon.png" size="152x152">
         <script  type="application/javascript">
             //Service Workerの読み込み
-            if('serviceWorker' in navigator){
+            if('serviceWor' in navigator){
               navigator.serviceWorker
               .register('service-worker.js')
               .then(function(){
@@ -173,6 +173,7 @@
         <div class="slider-box list-box">
             <ul>
                 <li>2020/07/10 <b>[直前の状態に戻す]</b>ボタンで遡れる回数を5回に増やしました。</li>
+                <li>2020/07/10 ・赤時間の時の経過時間がサーバ切り替え等で実際の経過時間と合わなくなる不具合を修正しました。</li>
                 <li>2020/07/10 赤時間から1時間経過した時に前回・今回時間を自動で虹時間に更新するようにしました。</li>
                 <li>2020/07/06 本ツールをスマホ画面に追加できるようになりました。</li>
                 <li>2020/07/04 「虹黄情報共有ページ」を「虹・虹黄情報共有ぺージ」に変更しました。<br />
