@@ -833,34 +833,13 @@ function setTimer(_this){
         save_Storage()
     }else
 */
-    if(Time == "00:50:00"){
+    if(Time == "00:50:00" || ((1000 * 60 * 50) <= diffTime ) && (1000 * 60 * 60) > diffTime){
         objBox.find(".memo")
             .val("経過時間:" + Time)
             .css("background-color", "violet")
             .attr("color", "violet")
     }else
-    if(Time == "01:00:00"){
-        objBox.find(".befTime")
-            .attr("Date", befDate)
-            .text(befTime)
-            .css("background-color", "red")
-            .attr("color", "red")
-        objBox.find(".nowTime")
-            .attr("Date", nowDate)
-            .text(nowTime)
-            .css("background-color", "violet")
-            .attr("color", "violet")
-        objBox.find(".memo")
-            .val("経過時間:" + Time)
-            .css("background-color", "white")
-            .attr("color", "white")
-
-        Sender(Server,Point,nowDate + nowTime,"violet")
-        objBox.find(".btn[value=Red]").prop("disabled", false)
-        clearInterval(Timers[Server + Point])
-        save_Storage()
-    }else
-    if((1000 * 60 * 60) < diffTime){
+    if((1000 * 60 * 60) <= diffTime){
         nowDate = TimePlus(befDate + befTime,"01:00:00","Date").slice(0,-8)
         nowTime = TimePlus(befTime,"01:00:00","Time")
 
@@ -880,9 +859,12 @@ function setTimer(_this){
             .attr("color", "white")
 
         Sender(Server,Point,nowDate + nowTime,"violet")
-        objBox.find(".btn[value=Red]").prop("disabled", false)
+        objBox.parent().find(".btn[value=Red]").prop("disabled", false)
+        objBox.find(".memo")
+            .css("background-color", "white")
+            .attr("color","white")
         clearInterval(Timers[Server + Point])
-        save_Storage()
+        clear_one_fix("fix_red",Server + Point)
     }
     else{
         objBox.find(".memo").val("経過時間:" + Time)
