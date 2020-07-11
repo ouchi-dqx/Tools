@@ -852,10 +852,11 @@ function setTimer(_this){
             .attr("color", "violet")
         objBox.find(".memo")
             .val("経過時間:" + Time)
-            .css("background-color", "red")
-            .attr("color", "red")
+            .css("background-color", "white")
+            .attr("color", "white")
 
         Sender(Server,Point,nowDate + nowTime,"violet")
+        objBox.find(".btn[value=Red]").prop("disabled", false)
         clearInterval(Timers[Server + Point])
         save_Storage()
     }else
@@ -875,10 +876,11 @@ function setTimer(_this){
             .attr("color", "violet")
         objBox.find(".memo")
             .val("経過時間:01:00:00")
-            .css("background-color", "red")
-            .attr("color", "red")
+            .css("background-color", "white")
+            .attr("color", "white")
 
         Sender(Server,Point,nowDate + nowTime,"violet")
+        objBox.find(".btn[value=Red]").prop("disabled", false)
         clearInterval(Timers[Server + Point])
         save_Storage()
     }
