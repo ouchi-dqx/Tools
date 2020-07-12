@@ -860,9 +860,6 @@ function setTimer(_this){
 
         Sender(Server,Point,nowDate + nowTime,"violet")
         objBox.parent().find(".btn[value=Red]").prop("disabled", false)
-        objBox.find(".memo")
-            .css("background-color", "white")
-            .attr("color","white")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
     }
