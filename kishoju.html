@@ -14,7 +14,7 @@
         <link rel="apple-touch-icon-precomposed" href="icon.png" size="152x152">
         <script  type="application/javascript">
             //Service Workerの読み込み
-            if('serviceWor' in navigator){
+            if('serviceWorker' in navigator){
               navigator.serviceWorker
               .register('service-worker.js')
               .then(function(){
