@@ -116,7 +116,7 @@ $(document).on("click", ".btn", function(){
 
     var nowColor = objBox.find(".nowTime").attr("color")
     var befColor = objBox.find(".befTime").attr("color")
-    var memo = objBox.find(".memo").val();
+    var memo = objBox.find(".memo").text();
 
     TMP.push(Array(Server,Point,old_befDate,old_befTime,befColor,memo))
     if(5 < TMP.length){
@@ -140,7 +140,7 @@ $(document).on("click", ".btn", function(){
             //赤青・虹青判定
             if(nowColor == "red" || nowColor == "violet"){
                 Time = TimePlus(nowTime,"01:30:00","Time")
-                objBox.find(".memo").val(Time.slice(0,-3) + "までに黄変化")
+                objBox.find(".memo").text(Time.slice(0,-3) + "までに黄変化")
             }
 
             //青継続以外時、前回時間更新
@@ -169,7 +169,7 @@ $(document).on("click", ".btn", function(){
                 Sender(Server,Point,Time,"yellow")
 
                 Time = TimePlus(befTime,"01:30:00","Time")
-                objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
+                objBox.find(".memo").text(Time.slice(0,-3) + "まで色変化無し")
             }
 
             //青黄判定
@@ -180,7 +180,7 @@ $(document).on("click", ".btn", function(){
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
 
                 Time = TimePlus(befTime,"03:00:00","Time")
-                objBox.find(".memo").val(Time.slice(0,-3) + "まで色変化無し")
+                objBox.find(".memo").text(Time.slice(0,-3) + "まで色変化無し")
             }
 
             objBox.find(".befTime")
@@ -199,7 +199,7 @@ $(document).on("click", ".btn", function(){
             $(this).prop("disabled", true)
 
             //タイマーセット
-            objBox.find(".memo").val("経過時間:" + "00:00:00")
+            objBox.find(".memo").text("経過時間:" + "00:00:00")
             Timers[Server + Point] = setInterval(setTimer,1000,$(this))
 
             //黄赤判定
@@ -209,8 +209,7 @@ $(document).on("click", ".btn", function(){
                     + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
             }else //黄赤以外で赤判定
             if(nowColor != "yellow"){
-                Text = Server + Point + " "
-                    + TimePlus(nowTime,"00:00:00","Time").slice(0,-3) + " - "
+                Text = Server + Point + " - "
                     + TimePlus(nowTime,"01:00:00","Time").slice(0,-3)
             }
             $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
@@ -379,7 +378,7 @@ function save_Storage(){
             $(this).find(".ゲル").find(".befTime").attr("Date"),
             $(this).find(".ゲル").find(".befTime").text(),
             $(this).find(".ゲル").find(".befTime").attr("color"),
-            $(this).find(".ゲル").find(".memo").val(),
+            $(this).find(".ゲル").find(".memo").text(),
             $(this).find(".ゲル").find(".memo").attr("color"),
 
             $(this).find(".砂漠").find(".nowTime").attr("Date"),
@@ -388,7 +387,7 @@ function save_Storage(){
             $(this).find(".砂漠").find(".befTime").attr("Date"),
             $(this).find(".砂漠").find(".befTime").text(),
             $(this).find(".砂漠").find(".befTime").attr("color"),
-            $(this).find(".砂漠").find(".memo").val(),
+            $(this).find(".砂漠").find(".memo").text(),
             $(this).find(".砂漠").find(".memo").attr("color"),
 
             $(this).find(".バル").find(".nowTime").attr("Date"),
@@ -397,7 +396,7 @@ function save_Storage(){
             $(this).find(".バル").find(".befTime").attr("Date"),
             $(this).find(".バル").find(".befTime").text(),
             $(this).find(".バル").find(".befTime").attr("color"),
-            $(this).find(".バル").find(".memo").val(),
+            $(this).find(".バル").find(".memo").text(),
             $(this).find(".バル").find(".memo").attr("color"),
         ])
     })
@@ -466,7 +465,7 @@ function load_Storage(){
                 .css("background-color", Data[Server][6])
                 .attr("color", Data[Server][6])
             _this.find(".memo")
-                .val(Data[Server][7])
+                .text(Data[Server][7])
                 .css("background-color", Data[Server][8])
                 .attr("color", Data[Server][8])
             if(Data[Server][3] == "red"){
@@ -490,7 +489,7 @@ function load_Storage(){
                 .css("background-color", Data[Server][14])
                 .attr("color", Data[Server][14])
             _this.find(".memo")
-                .val(Data[Server][15])
+                .text(Data[Server][15])
                 .css("background-color", Data[Server][16])
                 .attr("color", Data[Server][16])
             if(Data[Server][11] == "red"){
@@ -514,7 +513,7 @@ function load_Storage(){
                 .css("background-color", Data[Server][22])
                 .attr("color", Data[Server][22])
             _this.find(".memo")
-                .val(Data[Server][23])
+                .text(Data[Server][23])
                 .css("background-color", Data[Server][24])
                 .attr("color", Data[Server][24])
             if(Data[Server][19] == "red"){
@@ -641,7 +640,7 @@ function OneBack(){
                     .text(TMP[n][3])
                     .css("background-color", TMP[n][4])
                     .attr("color", TMP[n][4])
-                objBox.find(".memo").val(TMP[n][5])
+                objBox.find(".memo").text(TMP[n][5])
             }
         })
 
@@ -701,7 +700,7 @@ function clear_input(){
             $(this).text("").css("background-color", "transparent").attr("color", "transparent")
         })
         $(this).find(".memo").each(function(){
-            $(this).val("").css("background-color", "white").attr("color", "white")
+            $(this).text("").css("background-color", "white").attr("color", "white")
         })
 
         //タイマー等初期化
@@ -829,13 +828,13 @@ function setTimer(_this){
             .css("background-color", "red")
             .attr("color", "red")
         Time = TimePlus(Time,"00:00:01","Time")
-        objBox.find(".memo").val("経過時間:" + Time)
+        objBox.find(".memo").text("経過時間:" + Time)
         save_Storage()
     }else
 */
     if(Time == "00:50:00" || ((1000 * 60 * 50) <= diffTime ) && (1000 * 60 * 60) > diffTime){
         objBox.find(".memo")
-            .val("経過時間:" + Time)
+            .text("経過時間:" + Time)
             .css("background-color", "violet")
             .attr("color", "violet")
     }else
@@ -854,7 +853,7 @@ function setTimer(_this){
             .css("background-color", "violet")
             .attr("color", "violet")
         objBox.find(".memo")
-            .val("経過時間:01:00:00")
+            .text("経過時間:01:00:00")
             .css("background-color", "white")
             .attr("color", "white")
 
@@ -864,6 +863,6 @@ function setTimer(_this){
         clear_one_fix("fix_red",Server + Point)
     }
     else{
-        objBox.find(".memo").val("経過時間:" + Time)
+        objBox.find(".memo").text("経過時間:" + Time)
     }
 }

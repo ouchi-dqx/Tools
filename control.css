@@ -132,6 +132,13 @@ div{ box-sizing: border-box; }
 .befTime{ color: #333; }
 
 /* メモ欄 */
+.memo{
+    display: table-cell;
+    padding: 0px 8px;
+    background-color: none;
+}
+
+/* メモ欄2 */
 .template2-box input[type="text"]{
     font-size: 13px;
     width: 120px;
@@ -139,6 +146,7 @@ div{ box-sizing: border-box; }
     padding-left: 2px;
     border: #999 solid 1px;
 }
+
 /* メモ欄　フォーカス時 */
 .template2-box input[type="text"]:focus{
     outline: 0;
