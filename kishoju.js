@@ -815,23 +815,6 @@ function setTimer(_this){
             + ('00' + Math.floor(Minute)).slice(-2) + ':'
             + ('00' + Math.round(Second)).slice(-2)
 
-/*
-    if(Time == "00:10:00" || Time == "00:20:00" || Time == "00:30:00" || Time == "00:40:00"){
-        objBox.find(".befTime")
-            .attr("Date", befDate)
-            .text(befTime)
-            .css("background-color", "red")
-            .attr("color", "red")
-        objBox.find(".nowTime")
-            .attr("Date", nowDate)
-            .text(nowTime)
-            .css("background-color", "red")
-            .attr("color", "red")
-        Time = TimePlus(Time,"00:00:01","Time")
-        objBox.find(".memo").text("経過時間:" + Time)
-        save_Storage()
-    }else
-*/
     if(Time == "00:50:00" || ((1000 * 60 * 50) <= diffTime ) && (1000 * 60 * 60) > diffTime){
         objBox.find(".memo")
             .text("経過時間:" + Time)
@@ -861,6 +844,7 @@ function setTimer(_this){
         objBox.parent().find(".btn[value=Red]").prop("disabled", false)
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
+        save_Storage()
     }
     else{
         objBox.find(".memo").text("経過時間:" + Time)
