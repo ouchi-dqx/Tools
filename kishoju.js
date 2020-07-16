@@ -694,10 +694,10 @@ function clear_input(){
         $(this).find(".btn[value=Red]").prop("disabled", false)
 
         $(this).find(".nowTime").each(function(){
-            $(this).text("").css("background-color", "transparent").attr("color", "transparent")
+            $(this).attr("Date", "").text("").css("background-color", "transparent").attr("color", "transparent")
         })
         $(this).find(".befTime").each(function(){
-            $(this).text("").css("background-color", "transparent").attr("color", "transparent")
+            $(this).attr("Date", "").text("").css("background-color", "transparent").attr("color", "transparent")
         })
         $(this).find(".memo").each(function(){
             $(this).text("").css("background-color", "white").attr("color", "white")
