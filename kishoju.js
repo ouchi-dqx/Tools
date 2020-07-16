@@ -169,7 +169,7 @@ $(document).on("click", ".btn", function(){
                 Sender(Server,Point,Time,"yellow")
 
                 Time = TimePlus(befTime,"01:30:00","Time")
-                objBox.find(".memo").text(Time.slice(0,-3) + "まで色変化無し")
+                objBox.find(".memo").text(Time.slice(0,-3) + "まで変化無し")
             }
 
             //青黄判定
@@ -180,7 +180,7 @@ $(document).on("click", ".btn", function(){
                 $(".fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
 
                 Time = TimePlus(befTime,"03:00:00","Time")
-                objBox.find(".memo").text(Time.slice(0,-3) + "まで色変化無し")
+                objBox.find(".memo").text(Time.slice(0,-3) + "まで変化無し")
             }
 
             objBox.find(".befTime")
