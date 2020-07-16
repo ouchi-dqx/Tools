@@ -134,6 +134,7 @@ div{ box-sizing: border-box; }
 /* メモ欄 */
 .memo{
     display: table-cell;
+    font-size: 12px;
     padding: 0px 8px;
     background-color: none;
 }
