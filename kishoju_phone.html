@@ -2,24 +2,14 @@
 <html>
     <head>
         <base target="_top">
-        <title>輝晶獣分散支援ツール(スマホ用)</title>
+        <title>輝晶獣分散支援ツール(スマホ用-β)</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-        <link rel="manifest" href="manifest.json">
-        <script  type="application/javascript">
-            //Service Workerの読み込み
-            if('serviceWorker' in navigator){
-              navigator.serviceWorker
-              .register('/serviceworker.js')
-              .then(function(){
-                console.log('Service Worker Registered');
-              });
-            }
-        </script>
+        <script src="src/kishoju_phone.js"></script>
      </head>
-
 
     <body><div class="ServerList" id="" align="center">
         </div>
@@ -81,6 +71,6 @@
             <input class="memo" size="13">
         </template>
 
-        <script src="kishoju_phone.js"></script>
+
     </body>
 </html>

@@ -5,10 +5,10 @@
         <title>輝晶獣分散支援ツール</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="control.css">
+        <link rel="stylesheet" type="text/css" href="src/control.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="kishoju.js"></script>
+        <script src="src/kishoju.js"></script>
         <link rel="manifest" href="manifest.json">
         <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
         <link rel="apple-touch-icon-precomposed" href="icon.png" size="152x152">
@@ -16,7 +16,7 @@
             //Service Workerの読み込み
             if('serviceWorker' in navigator){
               navigator.serviceWorker
-              .register('service-worker.js')
+              .register('src/service-worker.js')
               .then(function(){
                 console.log('Service Worker Registered');
               });
@@ -50,8 +50,7 @@
             </div>
             <div style="display: table-cell; width: auto; padding: 5px; border-right: solid 4px dimgray; background-color: #eee; font-size: 14px;">
                 ◆<b>虹・虹黄情報共有ページ</b>を公開しました。→<b><a href="https://ouchi-dqx.github.io/Tools/YellowList.html">サーバー情報(虹黄)</a></b><br />
-                ◆レイアウトを大幅に更新しました！！！(協力：<b>なっすん</b> 様)<br />
-                ◆虹になった時間を収集するようにしました。詳細は下部<b>更新履歴</b>まで。
+                ◆全体的なコードの見直しを行いました。不具合あれば報告お願いし〼。
             </div>
         </div>
 
@@ -137,14 +136,14 @@
                 <div>▼ 入力の保存と復旧</div>
                 <button onclick="save_Storage()">入力の保存</button>
                 <button onclick="load_Storage()">データ復旧</button>
-                <button onclick="OneBack()">直前の状態に戻す</button>
+                <button onclick="Rollback()">直前の状態に戻す</button>
                 <button onclick="save_Sort()">調査場所の並びを保存</button>
             </div>
             <div style="line-height: 30px; margin-top: 10px;">
                 <div>▼ 入力情報のクリア</div>
                 <button onclick="Cleaner(this)" value="all">　すべて　</button>
                 <button onclick="Cleaner(this)" value="input">チェックリスト</button>
-                <button onclick="clear_Sort()">調査場所の並びをリセット</button>
+                <button onclick="Cleaner(this)" value="sort">調査場所の並びをリセット</button>
             </div>
         </div>
 
@@ -176,7 +175,8 @@
         </div>
         <div class="slider-box list-box">
             <ul>
-                <li>2020/07/13 メモ欄に自由にメモを記入できるように変更しました。（要望）</li>
+                <li>2020/07/18 全体的なコードの見直しを行いました。</li>
+                <li>2020/07/13 メモ欄に自由にメモを記入できるように変更しました。(要望)</li>
                 <li>2020/07/13 「経過時間」等の表示場所を変更しました。</li>
                 <li>2020/07/13 初回の赤時間を確定リストに追加する時に終了時間のみ表示するように変更しました。</li>
                 <li>2020/07/11 ・赤時間から自動で虹時間に変更したときに<br />
@@ -206,6 +206,7 @@
             　それ以外の調査情報の取得は一切行っておりません。<br />
             ■ 動作ブラウザ：Chrome／FireFox／MS Edge。※IEでは動きません。<br />
             ■ 要望・不具合報告等は<a href="https://twitter.com/ouchi_dqx">こちら</a>まで。<br/>
+            ■ レイアウト協力:<b>なっすん</b> 様　　感謝！！<br />
             <br />
             <a href="https://ouchi-dqx.github.io/Tools/kishoju_phone.html">スマホ版(β)</a>
         </div>
@@ -228,10 +229,10 @@
         <template id="template2">
             <div class="template2-box">
                 <div class="btn-box">
-                    <button class="btn" value="Blue">青</button>
-                    <button class="btn" value="Yellow">黄</button>
-                    <button class="btn" value="Red">赤</button>
-                    <button class="btn" value="Rainbow">虹</button>
+                    <button class="btn" value="skyblue">青</button>
+                    <button class="btn" value="yellow">黄</button>
+                    <button class="btn" value="red">赤</button>
+                    <button class="btn" value="violet">虹</button>
                 </div>
                 <div class="bef-box" style=" margin:3px auto;">
                     <p class="time-title">前回</p>
