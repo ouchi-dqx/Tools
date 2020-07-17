@@ -224,7 +224,9 @@ function setClip(fix){
 
 //[(確定/青木リスト)クリア]
 function clear_fix(fix){
-    if(fix == "fix_blue"){ $(".fix_blue tr").slice(1).remove()}
+    if(fix == "fix_blue"){
+        $(".fix_blue tr").slice(1).remove()
+    }
     else if(fix == "fix_red"){
         $(".fix_red tr").slice(1).remove()
     }
@@ -699,18 +701,20 @@ function setTimer(objBox){
             .text(nowTime)
             .css("background-color", "red")
             .attr("color", "red")
+
         objBox.find(".nowTime")
             .attr("Date", TimePlus(newDate, "01:00:00").Date)
             .text(TimePlus(newDate, "01:00:00").Time)
             .css("background-color", "violet")
             .attr("color", "violet")
+
         objBox.find(".memo")
             .text("経過時間:01:00:00")
             .css("background-color", "white")
             .attr("color", "white")
 
-        Sender(Server, Point, newDate, "violet")
         objBox.find(".btn[value=red]").prop("disabled", false)
+        Sender(Server, Point, newDate, "violet")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
     }
