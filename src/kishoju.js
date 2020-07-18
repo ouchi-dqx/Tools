@@ -56,6 +56,7 @@ $(document).on("click", ".left, .right", function() {
 //サーバー追加
 $(document).on("click", ".setServers", function(){
     let i, max, num
+    num = $(this).val()
 
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
     $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
@@ -67,7 +68,6 @@ $(document).on("click", ".setServers", function(){
     }else{
         i = 0
         max = 10
-        num = $(this).val()
     }
 
     for(i; i<max; i++){
