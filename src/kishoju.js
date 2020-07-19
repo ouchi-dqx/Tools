@@ -257,7 +257,8 @@ function save_Storage(){
                 befTime: $(this).find("." + Point[i]).find(".befTime").text(),
                 befColor: $(this).find("." + Point[i]).find(".befTime").attr("color"),
                 memo: $(this).find("." + Point[i]).find(".memo").text(),
-                memoColor: $(this).find("." + Point[i]).find(".memo").attr("color")
+                memoColor: $(this).find("." + Point[i]).find(".memo").attr("color"),
+                memo2: $(this).find("." + Point[i]).find(".memo2").val()
             })
         }
 
@@ -281,7 +282,7 @@ function save_Storage(){
                     tmpData.push({
                         nowDate: "", nowTime: "", nowColor: "",
                         befDate: "", befTime: "", befColor: "",
-                        memo: "", memoColor: ""
+                        memo: "", memoColor: "", memo2: ""
                     })
                 }
 
@@ -353,6 +354,9 @@ function load_Storage(){
                 $(Servers).find("." + Point[i]).find(".memo")
                     .text(Data[Server + Point[i]].memo)
                     .attr("color", Data[Server + Point[i]].memoColor)
+
+                $(Servers).find("." + Point[i]).find(".memo2")
+                    .val(Data[Server + Point[i]].memo2)
 
                 if(Data[Server + Point[i]].nowColor == "red"){
                     objBox.find(".btn[value=red]").prop("disabled", true)
@@ -468,6 +472,9 @@ function clear_input(){
                 .text("")
                 .css("background-color", "transparent")
                 .attr("color", "transparent")
+        })
+        $(this).find(".memo2").each(function(){
+            $(this).val("")
         })
 
         //タイマー等初期化

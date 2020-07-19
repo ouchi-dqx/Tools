@@ -97,18 +97,18 @@ div{ box-sizing: border-box; }
 /* 4色ボタン フォーカス時の外枠を消す */
 .template2-box .btn:focus { outline: 0; }
 /* 4色ボタン デフォルトカラー */
-.template2-box .btn[value="Blue"]   { background-color: #cff; }
-.template2-box .btn[value="Yellow"] { background-color: #fec; }
-.template2-box .btn[value="Red"]    { background-color: #fcc; }
-.template2-box .btn[value="Rainbow"]{ background-color: #fcf; }
+.template2-box .btn[value="skyblue"]   { background-color: #cff; }
+.template2-box .btn[value="yellow"] { background-color: #fec; }
+.template2-box .btn[value="red"]    { background-color: #fcc; }
+.template2-box .btn[value="violet"]{ background-color: #fcf; }
 /* 4色ボタン オンマウスで強調 */
 .template2-box .btn:hover{ font-weight: bold; }
-.template2-box .btn[value="Blue"]:hover   { color: #000; background-color: deepskyblue; }
-.template2-box .btn[value="Yellow"]:hover { color: #000; background-color: yellow; }
-.template2-box .btn[value="Red"]:hover    { color: #000; background-color: red; }
-.template2-box .btn[value="Rainbow"]:hover{ color: #000; background-color: violet; }
+.template2-box .btn[value="skyblue"]:hover   { color: #000; background-color: deepskyblue; }
+.template2-box .btn[value="yellow"]:hover { color: #000; background-color: yellow; }
+.template2-box .btn[value="red"]:hover    { color: #000; background-color: red; }
+.template2-box .btn[value="violet"]:hover{ color: #000; background-color: violet; }
 /* 4色ボタン 赤が非活性のときは灰色にしてオンマウス動作を無効化 */
-.template2-box .btn[value="Red"]:disabled{
+.template2-box .btn[value="red"]:disabled{
     color: #666 ;
     background-color: #ccc;
     font-weight: normal;
