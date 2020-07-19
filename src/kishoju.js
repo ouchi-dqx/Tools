@@ -574,6 +574,14 @@ function timeStamp(objBox, Data){
         case "skyblue":
             //赤青・虹青判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
+                if(Data.nowColor == "red"){
+                    sendTime = Data.memo.slice(5)
+                }else{
+                    sendTime = "00:00:00"
+                }
+                sendTime = TimePlus(Data.nowDate, sendTime).Date
+                Sender(Data.Server, Data.Point, sendTime, "violet")
+
                 Time = TimePlus(Data.newDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "までに黄変化"
             }
