@@ -466,8 +466,8 @@ function clear_input(){
             $(this)
                 .attr("Date", "")
                 .text("")
-                .css("background-color", "white")
-                .attr("color", "white")
+                .css("background-color", "transparent")
+                .attr("color", "transparent")
         })
 
         //タイマー等初期化
@@ -562,8 +562,8 @@ function timeStamp(objBox, Data){
         //ボタン禁止解除・タイマ削除 メモ背景色初期化
         objBox.find(".btn[value=red]").prop("disabled", false)
         objBox.find(".memo")
-            .css("background-color", "white")
-            .attr("color", "white")
+            .css("background-color", "transparent")
+            .attr("color", "transparent")
         clearInterval(Timers[Data.Server + Data.Point])
         clear_one_fix("fix_red", Data.Server + Data.Point)
     }
@@ -718,8 +718,8 @@ function setTimer(objBox){
 
         objBox.find(".memo")
             .text("経過時間:01:00:00")
-            .css("background-color", "white")
-            .attr("color", "white")
+            .css("background-color", "transparent")
+            .attr("color", "transparent")
 
         objBox.find(".btn[value=red]").prop("disabled", false)
         Sender(Server, Point, newDate, "violet")
