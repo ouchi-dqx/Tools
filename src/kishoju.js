@@ -711,8 +711,8 @@ function setTimer(objBox){
             .attr("color", "red")
 
         objBox.find(".nowTime")
-            .attr("Date", TimePlus(newDate, "01:00:00").Date)
-            .text(TimePlus(newDate, "01:00:00").Time)
+            .attr("Date", TimePlus(nowDate, "01:00:00").Date)
+            .text(TimePlus(nowDate, "01:00:00").Time)
             .css("background-color", "violet")
             .attr("color", "violet")
 
