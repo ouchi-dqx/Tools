@@ -769,8 +769,10 @@ function setTimer(objBox){
         Sender(Server, Point, newDate, "violet")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
-    }
-    else{
+    }else
+    if(objBox.find(".memo").text() == "経過時間:01:00:00"){
+        clearInterval(Timers[Server + Point])
+    }else{
         objBox.find(".memo").text("経過時間:" + Time)
     }
 }
