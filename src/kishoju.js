@@ -111,7 +111,8 @@ $(document).on("click", ".btn", function(){
         Date: Data.befDate,
         Time: Data.befTime,
         Color: Data.befColor,
-        memo: Data.memo
+        memo: Data.memo,
+        memoDate: objBox.find(".memo").attr("Date")
     })
 
     if(5 < TMP.length){
@@ -257,6 +258,7 @@ function save_Storage(){
                 befTime: $(this).find("." + Point[i]).find(".befTime").text(),
                 befColor: $(this).find("." + Point[i]).find(".befTime").attr("color"),
                 memo: $(this).find("." + Point[i]).find(".memo").text(),
+                memoDate: $(this).find("." + Point[i]).find(".memo").attr("Date"),
                 memoColor: $(this).find("." + Point[i]).find(".memo").attr("color"),
                 memo2: $(this).find("." + Point[i]).find(".memo2").val()
             })
@@ -282,7 +284,7 @@ function save_Storage(){
                     tmpData.push({
                         nowDate: "", nowTime: "", nowColor: "",
                         befDate: "", befTime: "", befColor: "",
-                        memo: "", memoColor: "", memo2: ""
+                        memo: "", memoDate: "", memoColor: "", memo2: ""
                     })
                 }
 
@@ -353,6 +355,7 @@ function load_Storage(){
 
                 $(Servers).find("." + Point[i]).find(".memo")
                     .text(Data[Server + Point[i]].memo)
+                    .attr("Date", Data[Server + Point[i]].memoDate)
                     .attr("color", Data[Server + Point[i]].memoColor)
 
                 $(Servers).find("." + Point[i]).find(".memo2")
@@ -363,6 +366,11 @@ function load_Storage(){
                     Timers[Server + Point[i]] = setInterval(setTimer, 1000, objBox)
                 }else{
                     objBox.find(".btn[value=red]").prop("disabled", false)
+                }
+
+                if(Data[Server + Point[i]].memoDate != ""){
+                    let diffTime = Data[Server + Point[i]].memoDate - new Date().getTime()
+                    Timers[Server + Point[i]] = setTimeout(memoClearTimer, diffTime, objBox)
                 }
             }
             n++
@@ -400,7 +408,9 @@ function Rollback(){
                     befDate: objBox.find(".nowTime").attr("Date"),
                     befTime: objBox.find(".nowTime").text(),
                     befColor: objBox.find(".nowTime").attr("color"),
-                    memo: TMP[n].memo
+                    memo: TMP[n].memo,
+                    memoDate: TMP[n].memoDate,
+                    flg: true
                 }
 
                 timeStamp(objBox, Data)
@@ -448,36 +458,30 @@ function Cleaner(target){
 
 //[チェックリスト]
 function clear_input(){
+    $(".Servers").find(".nowTime")
+            .attr("Date", "")
+            .text("")
+            .css("background-color", "transparent")
+            .attr("color", "transparent")
+
+    $(".Servers").find(".befTime")
+            .attr("Date", "")
+            .text("")
+            .css("background-color", "transparent")
+            .attr("color", "transparent")
+
+    $(".Servers").find(".memo")
+            .attr("Date", "")
+            .text("")
+            .css("background-color", "transparent")
+            .attr("color", "transparent")
+
+    $(".Servers").find(".btn[value=red]").prop("disabled", false)
+    $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
+    $(".Servers").find(".memo2").val("")
+
+    //タイマー等初期化
     $(".Servers").each(function(){
-        $(this).find(".btn[value=red]").prop("disabled", false)
-
-        $(this).find(".nowTime").each(function(){
-            $(this)
-                .attr("Date", "")
-                .text("")
-                .css("background-color", "transparent")
-                .attr("color", "transparent")
-        })
-
-        $(this).find(".befTime").each(function(){
-            $(this)
-                .attr("Date", "")
-                .text("")
-                .css("background-color", "transparent")
-                .attr("color", "transparent")
-        })
-        $(this).find(".memo").each(function(){
-            $(this)
-                .attr("Date", "")
-                .text("")
-                .css("background-color", "transparent")
-                .attr("color", "transparent")
-        })
-        $(this).find(".memo2").each(function(){
-            $(this).val("")
-        })
-
-        //タイマー等初期化
         const Server = $(this).find(".Server").text()
         clearInterval(Timers[Server + "ゲル"])
         clearInterval(Timers[Server + "砂漠"])
@@ -565,7 +569,9 @@ function clear_one_fix(fix,Text){
 //タイムスタンプ設定
 function timeStamp(objBox, Data){
     //赤離脱判定
-    if((Data.nowColor == "red" && Data.newColor != "red") || Data.newTime == ""){
+    if((Data.nowColor == "red" && Data.newColor != "red")
+        || (Data.befColor == "red" && Data.nowColor != "red" && Data.flg == true)
+        || Data.newTime == ""){
         //ボタン禁止解除・タイマ削除 メモ背景色初期化
         objBox.find(".btn[value=red]").prop("disabled", false)
         objBox.find(".memo")
@@ -576,7 +582,7 @@ function timeStamp(objBox, Data){
     }
 
     //現在時間書き込み・背景色変更
-    let Time, sendTime, Text
+    let Time, sendTime, diffDate, memoDate, Text
     switch(Data.newColor){
         case "skyblue":
             //赤青・虹青判定
@@ -591,6 +597,10 @@ function timeStamp(objBox, Data){
 
                 Time = TimePlus(Data.newDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "までに黄変化"
+
+                memoDate = TimePlus(Data.newDate, "01:30:00").Date
+                diffDate = memoDate - Data.newDate
+                Timers[Data.Server + Data.Point] = setTimeout(memoClearTimer, diffDate, objBox)
             }
 
             if(Data.nowColor == "yellow" || Data.befColor == "yellow"){
@@ -610,6 +620,10 @@ function timeStamp(objBox, Data){
 
                 Time = TimePlus(Data.nowDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "まで変化無し"
+
+                memoDate = TimePlus(Data.newDate, "01:30:00").Date
+                diffDate = memoDate - Data.newDate
+                Timers[Data.Server + Data.Point] = setTimeout(memoClearTimer, diffDate, objBox)
             }
 
             //青黄判定
@@ -621,18 +635,36 @@ function timeStamp(objBox, Data){
 
                 Time = TimePlus(Data.nowDate, "03:00:00").Time.slice(0, -3)
                 Data.memo = Time + "まで変化無し"
+
+                clearTimeout(Timers[Data.Server + Data.Point])
+                memoDate = TimePlus(Data.newDate, "03:00:00").Date
+                diffDate = memoDate - Data.newDate
+                Timers[Data.Server + Data.Point] = setTimeout(memoClearTimer, memoDate, objBox)
             }
         break
         case "red":
             objBox.find(".btn[value=red]").prop("disabled", true)
             Data.memo = "経過時間:" + "00:00:00"
+            clearTimeout(Timers[Data.Server + Data.Point])
             Timers[Data.Server + Data.Point] = setInterval(setTimer, 1000, objBox)
 
             //黄赤判定
             if(Data.nowColor == "yellow"){
-                Text = Data.Server + Data.Point + " "
-                    + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
-                    + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                if(Data.befColor == "skyblue"){ //前回青判定
+                    if(Data.newDate > Data.nowDate){ //青黄時間より先の時間の場合
+                        Text = Data.Server + Data.Point + " "
+                            + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
+                            + TimePlus(Data.nowDate, "04:00:00").Time.slice(0, -3)
+                    }else{ //青木時間より早い時間の場合
+                        Text = Data.Server + Data.Point + " "
+                        + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
+                        + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                    }
+                }else{
+                    Text = Data.Server + Data.Point + " "
+                        + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
+                        + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                }
             }else{
                 //黄赤以外で赤判定
                 Text = Data.Server + Data.Point + " - "
@@ -666,7 +698,12 @@ function timeStamp(objBox, Data){
         .css("background-color", Data.newColor)
         .attr("color", Data.newColor)
 
-    objBox.find(".memo").text(Data.memo)
+    objBox.find(".memo")
+        .attr("Date", memoDate)
+        .text(Data.memo)
+
+    $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
+    objBox.parents("td").css("border", "2px solid")
 
     save_Storage(true)
 }
@@ -736,6 +773,13 @@ function setTimer(objBox){
     else{
         objBox.find(".memo").text("経過時間:" + Time)
     }
+}
+
+function memoClearTimer(objBox){
+    objBox.find(".memo")
+        .text("")
+        .css("background-color", "transparent")
+        .attr("color", "transparent")
 }
 
 //データ送信
