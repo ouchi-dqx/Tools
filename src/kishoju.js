@@ -365,12 +365,11 @@ function load_Storage(){
                     objBox.find(".btn[value=red]").prop("disabled", true)
                     Timers[Server + Point[i]] = setInterval(setTimer, 1000, objBox)
                 }else{
+                    if(Data[Server + Point[i]].memoDate != ""){
+                        let diffTime = Data[Server + Point[i]].memoDate - new Date().getTime()
+                        Timers[Server + Point[i]] = setTimeout(memoClearTimer, diffTime, objBox)
+                    }
                     objBox.find(".btn[value=red]").prop("disabled", false)
-                }
-
-                if(Data[Server + Point[i]].memoDate != ""){
-                    let diffTime = Data[Server + Point[i]].memoDate - new Date().getTime()
-                    Timers[Server + Point[i]] = setTimeout(memoClearTimer, diffTime, objBox)
                 }
             }
             n++
@@ -728,7 +727,6 @@ function TimePlus(Time, sumTime){
 function setTimer(objBox){
     const Server = objBox.closest("tr").find(".Server").text()
     const Point = objBox.closest("td").attr("class")
-    const memo = objBox.find(".memo").text()
 
     const newDate = new Date().getTime()
     const nowDate = objBox.find(".nowTime").attr("Date")
@@ -748,7 +746,7 @@ function setTimer(objBox){
             .css("background-color", "violet")
             .attr("color", "violet")
     }else
-    if((1000 * 60 * 60) <= diffTime && memo != "経過時間:01:00:00") {
+    if((1000 * 60 * 60) <= diffTime) {
         objBox.find(".befTime")
             .attr("Date", nowDate)
             .text(nowTime)
@@ -770,9 +768,6 @@ function setTimer(objBox){
         Sender(Server, Point, newDate, "violet")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
-    }else
-    if(memo == "経過時間:01:00:00"){
-        clearInterval(Timers[Server + Point])
     }else{
         objBox.find(".memo").text("経過時間:" + Time)
     }
