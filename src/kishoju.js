@@ -55,22 +55,11 @@ $(document).on("click", ".left, .right", function() {
 
 //サーバー追加
 $(document).on("click", ".setServers", function(){
-    let i, max, num
-    num = $(this).val()
-
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
     $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
 
-    if(num == "9-10"){
-        i = 9
-        max = 11
-        num = 0
-    }else{
-        i = 0
-        max = 10
-    }
-
-    for(i; i<max; i++){
+    const num = $(this).val()
+    for(let i=0; i<10; i++){
         const CopyTemp1 = $($("#template1").html()).clone()
         CopyTemp1.find(".Server").text(i + Number(num))
         CopyTemp1.find(".setTemp").each(function(){
@@ -78,6 +67,15 @@ $(document).on("click", ".setServers", function(){
             $(this).append(CopyTemp2)
         })
         $(".ServerList").append(CopyTemp1)
+    }
+
+    if($(this).text() == "9 - 10"){
+        $(".Servers").each(function(){
+            const Server = Number($(this).find(".Server").text())
+            if(Server != 9 && Server != 10){
+                $(this).hide()
+            }
+        })
     }
 
     //サーバ切り替え時のデータ保持処理
@@ -271,37 +269,6 @@ function save_Storage(){
         })
     })
 
-    if(boxName == "9 - 10"){
-        boxName = "1 - 10"
-        let tmp = JSON.parse(localStorage.getItem(boxName))
-
-        if(!tmp){
-            tmp = []
-
-            for(let Server=1; Server<9; Server++){
-                let tmpData = [] //初期化
-                for(let i=0; i<3; i++){
-                    tmpData.push({
-                        nowDate: "", nowTime: "", nowColor: "",
-                        befDate: "", befTime: "", befColor: "",
-                        memo: "", memoDate: "", memoColor: "", memo2: ""
-                    })
-                }
-
-                tmp.push({
-                    [Server + Point[0]]: tmpData[0],
-                    [Server + Point[1]]: tmpData[1],
-                    [Server + Point[2]]: tmpData[2]
-                })
-            }
-        }else{
-            tmp.splice(8, 2)
-        }
-
-        Storage = tmp.concat(Storage)
-        sessionStorage.setItem("1 - 10", true)
-    }
-
     $(".fix_blue").find(".fix").each(function(){
         fix_blue.push([$(this).text()])
     })
@@ -309,9 +276,11 @@ function save_Storage(){
         fix_red.push([$(this).text()])
     })
 
-    if(boxName == "1 - 10"){
+    if(boxName == "1 - 10" || boxName == "9 - 10"){
+        boxName = "1 - 10"
         sessionStorage.setItem("9 - 10", true)
     }
+
     sessionStorage.setItem(boxName, true)
     localStorage.setItem(boxName, JSON.stringify(Storage))
     localStorage.setItem("fix_blue", JSON.stringify(fix_blue))
@@ -328,7 +297,6 @@ function load_Storage(){
 
     if(boxName == "9 - 10"){
         Storage = JSON.parse(localStorage.getItem("1 - 10"))
-        n = 8
     }
 
     if(Storage != null){
