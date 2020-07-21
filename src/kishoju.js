@@ -55,6 +55,7 @@ $(document).on("click", ".left, .right", function() {
 
 //サーバー追加
 $(document).on("click", ".setServers", function(){
+    TMP = [] //初期化
     $(".ServerList tr").slice(1).remove() //テーブルの初期化
     $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
 
@@ -382,6 +383,7 @@ function Rollback(){
 
                 timeStamp(objBox, Data)
                 TMP.pop()
+                return false
             }
         })
     }
@@ -425,35 +427,52 @@ function Cleaner(target){
 
 //[チェックリスト]
 function clear_input(){
-    $(".Servers").find(".nowTime")
-            .attr("Date", "")
-            .text("")
-            .css("background-color", "transparent")
-            .attr("color", "transparent")
+    const ServerList = $(".ServerList").attr("id")
 
-    $(".Servers").find(".befTime")
-            .attr("Date", "")
-            .text("")
-            .css("background-color", "transparent")
-            .attr("color", "transparent")
-
-    $(".Servers").find(".memo")
-            .attr("Date", "")
-            .text("")
-            .css("background-color", "transparent")
-            .attr("color", "transparent")
-
-    $(".Servers").find(".btn[value=red]").prop("disabled", false)
-    $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
-    $(".Servers").find(".memo2").val("")
-
-    //タイマー等初期化
     $(".Servers").each(function(){
-        const Server = $(this).find(".Server").text()
-        clearInterval(Timers[Server + "ゲル"])
-        clearInterval(Timers[Server + "砂漠"])
-        clearInterval(Timers[Server + "バル"])
-        TMP = []
+        const Server = Number($(this).find(".Server").text())
+
+        if(ServerList != "9 - 10" || (ServerList == "9 - 10" && (Server == 9 || Server == 10))){
+            $(this).find(".nowTime").each(function(){
+                $(this)
+                    .attr("Date", "")
+                    .text("")
+                    .css("background-color", "transparent")
+                    .attr("color", "transparent")
+            })
+
+            $(this).find(".befTime").each(function(){
+                $(this)
+                    .attr("Date", "")
+                    .text("")
+                    .css("background-color", "transparent")
+                    .attr("color", "transparent")
+            })
+
+            $(this).find(".memo").each(function(){
+                $(this)
+                        .attr("Date", "")
+                        .text("")
+                        .css("background-color", "transparent")
+                        .attr("color", "transparent")
+            })
+
+            $(this).find(".memo2").each(function(){
+                $(this).val("")
+            })
+
+            $(this).find(".btn[value=red]").each(function(){
+                $(this).prop("disabled", false)
+            })
+
+            $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
+
+            //タイマー等初期化
+            clearInterval(Timers[Server + "ゲル"])
+            clearInterval(Timers[Server + "砂漠"])
+            clearInterval(Timers[Server + "バル"])
+            TMP = []
+        }
     })
 }
 
