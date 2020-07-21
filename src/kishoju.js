@@ -367,7 +367,7 @@ function load_Storage(){
                 }else{
                     if(Data[Server + Point[i]].memoDate != ""){
                         let diffTime = Data[Server + Point[i]].memoDate - new Date().getTime()
-                        Timers[Server + Point[i]] = setTimeout(memoClearTimer, diffTime, objBox)
+                        Timers[Server + Point[i]] = setTimeout(memoTimer, diffTime, objBox, Data[Server + Point[i]].nowColor)
                     }
                     objBox.find(".btn[value=red]").prop("disabled", false)
                 }
@@ -599,7 +599,7 @@ function timeStamp(objBox, Data){
 
                 memoDate = TimePlus(Data.newDate, "01:30:00").Date
                 diffDate = memoDate - Data.newDate
-                Timers[Data.Server + Data.Point] = setTimeout(memoClearTimer, diffDate, objBox)
+                Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "yellow")
             }
 
             if(Data.nowColor == "yellow" || Data.befColor == "yellow"){
@@ -622,7 +622,7 @@ function timeStamp(objBox, Data){
 
                 memoDate = TimePlus(Data.newDate, "01:30:00").Date
                 diffDate = memoDate - Data.newDate
-                Timers[Data.Server + Data.Point] = setTimeout(memoClearTimer, diffDate, objBox)
+                Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "yellow")
             }
 
             //青黄判定
@@ -638,7 +638,7 @@ function timeStamp(objBox, Data){
                 clearTimeout(Timers[Data.Server + Data.Point])
                 memoDate = TimePlus(Data.newDate, "03:00:00").Date
                 diffDate = memoDate - Data.newDate
-                Timers[Data.Server + Data.Point] = setTimeout(memoClearTimer, memoDate, objBox)
+                Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "skyblue")
             }
         break
         case "red":
@@ -768,16 +768,23 @@ function setTimer(objBox){
         Sender(Server, Point, newDate, "violet")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
+        save_Storage()
     }else{
         objBox.find(".memo").text("経過時間:" + Time)
     }
 }
 
-function memoClearTimer(objBox){
-    objBox.find(".memo")
-        .text("")
-        .css("background-color", "transparent")
-        .attr("color", "transparent")
+function memoTimer(objBox, Color){
+    if(Color == "skyblue"){
+        objBox.find(".memo")
+        .css("background-color", Color)
+        .attr("color", Color)
+    }else{
+        objBox.find(".memo")
+            .text("")
+            .css("background-color", "transparent")
+            .attr("color", "transparent")
+        }
 }
 
 //データ送信
