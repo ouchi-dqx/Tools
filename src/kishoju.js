@@ -1,6 +1,6 @@
 var Timers = {}
 var TMP = []
-var sendFlg = false
+var sendFlg = true
 var MODE = "PT4"
 
 window.onload = function(){
