@@ -68,12 +68,29 @@
                 <span style="margin-right: 10px;">調査サーバー設定</span>
                 <span class="material-icons" style="position: relative; top: 7px; left: -15px; margin-top: -12px;">play_arrow</span>
             </div>
-            <div style="display: table-cell;">
-                <button class="setServers" value="1">1 - 10</button>
-                <button class="setServers" value="11">11 - 20</button>
-                <button class="setServers" value="21">21 - 30</button>
-                <button class="setServers" value="31">31 - 40</button>
-                <button class="setServers" value="1">9 - 10</button>
+            <div class="PT4" style="display: table-cell;">
+                <button class="setServers" value="1" boxName="1 - 10">1 - 10</button>
+                <button class="setServers" value="11" boxName="11 - 20">11 - 20</button>
+                <button class="setServers" value="21" boxName="21 - 30">21 - 30</button>
+                <button class="setServers" value="31" boxName="31 - 40">31 - 40</button>
+                <button class="setServers" value="1" Start="9" End="10" boxName="1 - 10">9 - 10</button>
+                <button onclick="modeChange()">モード変更</button>
+            </div>
+
+            <div class="PT8" style="display: table-cell;">
+                <button class="setServers" value="1" Start="1" End="4" boxName="1 - 10">1 - 4</button>
+                <button class="setServers" value="1" Start="5" End="8" boxName="1 - 10">5 - 8</button>
+                <!--
+                <button class="setServers" value="1" Start="1" End="5" boxName="1 - 10">1 - 5</button>
+                <button class="setServers" value="1" Start="6" End="10" boxName="1 - 10">6 - 10</button>
+                -->
+                <button class="setServers" value="11" Start="11" End="15" boxName="11 - 20">11 - 15</button>
+                <button class="setServers" value="11" Start="16" End="20" boxName="11 - 20">16 - 20</button>
+                <button class="setServers" value="21" Start="21" End="25" boxName="21 - 30">21 - 25</button>
+                <button class="setServers" value="21" Start="26" End="30" boxName="21 - 30">26 - 30</button>
+                <button class="setServers" value="31" Start="31" End="35" boxName="31 - 40">31 - 35</button>
+                <button class="setServers" value="31" Start="36" End="40" boxName="31 - 40">36 - 40</button>
+                <button onclick="modeChange()">モード変更</button>
             </div>
         </div>
 

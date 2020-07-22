@@ -1,10 +1,12 @@
 var Timers = {}
 var TMP = []
-var sendFlg = true
+var sendFlg = false
+var MODE = "PT4"
 
 window.onload = function(){
     setInitMoveBtn();
     sortPoint()
+    $(".PT8").hide()
 }
 
 function debug(){
@@ -55,11 +57,15 @@ $(document).on("click", ".left, .right", function() {
 
 //サーバー追加
 $(document).on("click", ".setServers", function(){
-    TMP = [] //初期化
-    $(".ServerList tr").slice(1).remove() //テーブルの初期化
-    $(".ServerList").attr("id", $(this).text()) //サーバリストID設定
-
+    const boxName = $(this).attr("boxName")
     const num = $(this).val()
+    const Start = $(this).attr("Start")
+    const End = $(this).attr("End")
+    TMP = [] //初期化
+
+    $(".ServerList tr").slice(1).remove() //テーブルの初期化
+    $(".ServerList").attr("id", boxName) //サーバリストID設定
+
     for(let i=0; i<10; i++){
         const CopyTemp1 = $($("#template1").html()).clone()
         CopyTemp1.find(".Server").text(i + Number(num))
@@ -70,17 +76,16 @@ $(document).on("click", ".setServers", function(){
         $(".ServerList").append(CopyTemp1)
     }
 
-    if($(this).text() == "9 - 10"){
+    if($(this).text() == "9 - 10" || MODE == "PT8"){
         $(".Servers").each(function(){
             const Server = Number($(this).find(".Server").text())
-            if(Server != 9 && Server != 10){
+            if(Server < Start || Server > End){
                 $(this).hide()
             }
         })
     }
 
     //サーバ切り替え時のデータ保持処理
-    const boxName = $(".ServerList").attr("id")
     if(sessionStorage.getItem(boxName) == "true"){
         load_Storage()
     }
@@ -296,10 +301,6 @@ function load_Storage(){
     let Storage = JSON.parse(localStorage.getItem(boxName))
     let n = 0
 
-    if(boxName == "9 - 10"){
-        Storage = JSON.parse(localStorage.getItem("1 - 10"))
-    }
-
     if(Storage != null){
         const Point = ["ゲル", "砂漠", "バル"]
 
@@ -427,12 +428,12 @@ function Cleaner(target){
 
 //[チェックリスト]
 function clear_input(){
-    const ServerList = $(".ServerList").attr("id")
+    $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
 
     $(".Servers").each(function(){
         const Server = Number($(this).find(".Server").text())
 
-        if(ServerList != "9 - 10" || (ServerList == "9 - 10" && (Server == 9 || Server == 10))){
+        if($(this).is(":visible")){
             $(this).find(".nowTime").each(function(){
                 $(this)
                     .attr("Date", "")
@@ -465,8 +466,6 @@ function clear_input(){
                 $(this).prop("disabled", false)
             })
 
-            $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
-
             //タイマー等初期化
             clearInterval(Timers[Server + "ゲル"])
             clearInterval(Timers[Server + "砂漠"])
@@ -484,6 +483,21 @@ function clear_Sort(){
 }
 
 /*            ここから関数群            */
+//[モード変更]
+function modeChange(){
+    $(".ServerList tr").slice(1).remove() //テーブルの初期化
+    if(MODE == "PT4"){
+        MODE = "PT8"
+        $(".PT4").hide()
+        $(".PT8").show()
+    }else
+    if(MODE == "PT8"){
+        MODE = "PT4"
+        $(".PT8").hide()
+        $(".PT4").show()
+    }
+}
+
 //移動処理
 function movePoint(befPoint, afterPoint){
     //template内移動処理用変数

@@ -20,7 +20,7 @@ div{ box-sizing: border-box; }
     border: dotted 2px #333;
 }
 /* ボタン */
-.set-server-btn-box .setServers{
+.set-server-btn-box button{
     font-size: 15px;
     height: 30px;
     width: auto;
@@ -136,7 +136,6 @@ div{ box-sizing: border-box; }
     display: table-cell;
     font-size: 12px;
     padding: 0px 8px;
-    background-color: none;
 }
 
 /* メモ欄2 */
