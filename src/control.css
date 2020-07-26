@@ -38,10 +38,22 @@ div{ box-sizing: border-box; }
     border: solid 1px #999;
 }
 /* ヘッダ行 */
-#server-list-hd{
+#server-list-hd #server-no-hd{
     color: #fff;
     font-weight: bold;
     background-color: dimgray;
+}
+#server-list-hd .ゲル{
+    font-weight: bold;
+    background-color: #d9ead3;
+}
+#server-list-hd .砂漠{
+    font-weight: bold;
+    background-color: #fff2cc;
+}
+#server-list-hd .バル{
+    font-weight: bold;
+    background-color:#f4cccc;
 }
 /* ヘッダ行 テキストエリア */
 #server-list-hd .server-list-hd-text{
