@@ -684,7 +684,11 @@ function timeStamp(objBox, Data){
     }
 
     //青もしくは虹継続以外時、前回時間更新
-    if((Data.nowColor != "skyblue" || Data.befColor != "skyblue") && (Data.nowColor != "violet" || Data.befColor != "violet")){
+    if(
+        Data.befColor == "transparent" ||
+        !(Data.newColor == "skyblue" && Data.nowColor == "skyblue" && Data.befColor == "skyblue") &&
+        !(Data.newColor == "violet" && Data.nowColor == "violet" && Data.befColor == "violet")
+    ){
         objBox.find(".befTime")
             .attr("Date", Data.nowDate)
             .text(Data.nowTime)
