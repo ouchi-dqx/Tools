@@ -192,12 +192,12 @@ function push_fix(){
 $(document).on("click", "#sTime, #eTime", function() {
     if($(this).attr("id") == "sTime"){
         if($("#sTime").val() == ""){
-            $("#sTime").val(TimePlus(new Date(),"01:00:00","Time").slice(0,-3))
+            $("#sTime").val(TimePlus(new Date(),"01:00:00").Time.slice(0,-3))
         }
     }else
     if($(this).attr("id") == "eTime"){
         if($("#eTime").val() == ""){
-            $("#eTime").val(TimePlus(new Date(),"01:00:00","Time").slice(0,-3))
+            $("#eTime").val(TimePlus(new Date(),"01:00:00").Time.slice(0,-3))
         }
     }
 })
