@@ -106,7 +106,8 @@ $(document).on("click", ".btn", function(){
         befDate: objBox.find(".befTime").attr("Date"),
         befTime: objBox.find(".befTime").text(),
         befColor: objBox.find(".befTime").attr("color"),
-        memo: objBox.find(".memo").text()
+        memo: objBox.find(".memo").text(),
+        memoColor: objBox.find(".memo").attr("color")
     }
 
     TMP.push({
@@ -116,6 +117,7 @@ $(document).on("click", ".btn", function(){
         Time: Data.befTime,
         Color: Data.befColor,
         memo: Data.memo,
+        memoColor: objBox.find(".memo").attr("color"),
         memoDate: objBox.find(".memo").attr("Date")
     })
 
@@ -326,6 +328,7 @@ function load_Storage(){
                 $(Servers).find("." + Point[i]).find(".memo")
                     .text(Data[Server + Point[i]].memo)
                     .attr("Date", Data[Server + Point[i]].memoDate)
+                    .css("background-color", Data[Server + Point[i]].memoColor)
                     .attr("color", Data[Server + Point[i]].memoColor)
 
                 $(Servers).find("." + Point[i]).find(".memo2")
@@ -378,6 +381,7 @@ function Rollback(){
                     befTime: objBox.find(".nowTime").text(),
                     befColor: objBox.find(".nowTime").attr("color"),
                     memo: TMP[n].memo,
+                    memoColor: TMP[n].memoColor,
                     memoDate: TMP[n].memoDate,
                     flg: true
                 }
@@ -515,7 +519,6 @@ function movePoint(befPoint, afterPoint){
             .insertBefore($(".Servers").find(afterClass).eq(i))
     }
 
-    save_Sort()
     setInitMoveBtn();
 }
 
@@ -636,6 +639,7 @@ function timeStamp(objBox, Data){
 
                 Time = TimePlus(Data.nowDate, "03:00:00").Time.slice(0, -3)
                 Data.memo = Time + "まで変化無し"
+                Data.memoColor = "skyblue"
 
                 clearTimeout(Timers[Data.Server + Data.Point])
                 memoDate = TimePlus(Data.newDate, "03:00:00").Date
@@ -646,6 +650,7 @@ function timeStamp(objBox, Data){
         case "red":
             objBox.find(".btn[value=red]").prop("disabled", true)
             Data.memo = "経過時間:" + "00:00:00"
+            Data.memoColor = "transparent"
             clearTimeout(Timers[Data.Server + Data.Point])
             Timers[Data.Server + Data.Point] = setInterval(setTimer, 1000, objBox)
 
@@ -706,6 +711,8 @@ function timeStamp(objBox, Data){
     objBox.find(".memo")
         .attr("Date", memoDate)
         .text(Data.memo)
+        .css("background-color", Data.memoColor)
+        .attr("color", Data.memoColor)
 
     $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
     objBox.parents("td").css("border", "2px solid")
