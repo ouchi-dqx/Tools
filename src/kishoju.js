@@ -693,7 +693,8 @@ function timeStamp(objBox, Data){
     if(
         Data.befColor == "transparent" ||
         !(Data.newColor == "skyblue" && Data.nowColor == "skyblue" && Data.befColor == "skyblue") &&
-        !(Data.newColor == "violet" && Data.nowColor == "violet" && Data.befColor == "violet")
+        !(Data.newColor == "violet" && Data.nowColor == "violet" && Data.befColor == "violet") &&
+        !(Data.newColor == "yellow" && Data.nowColor == "yellow" && Data.befColor == "yellow")
     ){
         objBox.find(".befTime")
             .attr("Date", Data.nowDate)
