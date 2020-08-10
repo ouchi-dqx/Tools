@@ -1,12 +1,11 @@
 var Timers = {}
 var TMP = []
-var sendFlg = true
-var MODE = "PT4"
-
+var MODE = ""
 window.onload = function(){
-    setInitMoveBtn();
     sortPoint()
-    $(".PT8").hide()
+    modeChange();
+    setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
+    setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
 }
 
 function debug(){
@@ -89,6 +88,8 @@ $(document).on("click", ".setServers", function(){
     if(sessionStorage.getItem(boxName) == "true"){
         load_Storage()
     }
+
+    setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
 })
 
 //ボタンクリックイベント
@@ -124,6 +125,7 @@ $(document).on("click", ".btn", function(){
     if(5 < TMP.length){
         TMP.shift()
     }
+    setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
 
     timeStamp(objBox, Data)
 })
@@ -297,6 +299,20 @@ function save_Storage(){
 
 //[データ復旧]
 function load_Storage(){
+
+    //先にサーバ選択させる
+    if ( $(".ServerList").find('.Servers').length <= 1 ){
+        alert("先に調査サーバーを選択してください。");
+        return false;
+    }
+
+    $(".Servers").each(function(){
+        if($(this).find(".nowTime").text() != ""){
+            alert("既にデータが復元されています。")
+            return 0
+        }
+    })
+
     const boxName = $(".ServerList").attr("id")
     const fix_blue = JSON.parse(localStorage.getItem("fix_blue"))
     const fix_red = JSON.parse(localStorage.getItem("fix_red"))
@@ -392,6 +408,7 @@ function Rollback(){
             }
         })
     }
+    setRollbackEnable(); //【NaL】[戻す]ボタンの活性切替
 }
 
 //[調査場所の並びを保存]
@@ -406,12 +423,16 @@ function save_Sort(){
 
 //入力情報のクリア
 function Cleaner(target){
-    const flg = confirm("本当に削除していいですか？")
+    const flg = confirm("ブラウザ上の入力情報と保存情報がクリアされます。よろしいですか？")
 
     if(flg){
         if(target.value == "all"){
             clear_input()
             clear_fix()
+            localStorage.setItem("1 - 10", "")
+            localStorage.setItem("11 - 20", "")
+            localStorage.setItem("21 - 30", "")
+            localStorage.setItem("31 - 40", "")
         }
         else if(target.value == "input"){
             clear_input()
@@ -432,10 +453,12 @@ function Cleaner(target){
 
 //[チェックリスト]
 function clear_input(){
-    $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
+    //$(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
+    $('.Servers').find('.template2-box').removeClass('sel');
 
     $(".Servers").each(function(){
         const Server = Number($(this).find(".Server").text())
+        const Point = ["ゲル", "砂漠", "バル"]
 
         if($(this).is(":visible")){
             $(this).find(".nowTime").each(function(){
@@ -470,6 +493,10 @@ function clear_input(){
                 $(this).prop("disabled", false)
             })
 
+            Point.forEach(function(Text){
+                clear_one_fix("fix_blue", Server + Text)
+                clear_one_fix("fix_red", Server + Text)
+            })
             //タイマー等初期化
             clearInterval(Timers[Server + "ゲル"])
             clearInterval(Timers[Server + "砂漠"])
@@ -477,6 +504,7 @@ function clear_input(){
             TMP = []
         }
     })
+    setRollbackEnable(); //【NaL】[戻す]ボタンの活性切替
 }
 
 //[調査場所の並びをリセット]
@@ -487,19 +515,20 @@ function clear_Sort(){
 }
 
 /*            ここから関数群            */
+
 //[モード変更]
 function modeChange(){
-    $(".ServerList tr").slice(1).remove() //テーブルの初期化
-    if(MODE == "PT4"){
-        MODE = "PT8"
-        $(".PT4").hide()
-        $(".PT8").show()
-    }else
-    if(MODE == "PT8"){
-        MODE = "PT4"
-        $(".PT8").hide()
-        $(".PT4").show()
-    }
+    //【NaL】モード切替スイッチ追加に伴う変更
+    MODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
+    $('.select-mode').hide();               //一旦すべて非表示
+    $('.select-mode' + '.'+MODE).show();    //選択モードのみ表示
+}
+//【NaL】[戻す]ボタンの活性切替
+function setRollbackEnable(){
+    var flg = true
+    //TMPの中身がないときだけ非活性
+    if ( TMP.length > 0 ){ flg = false; }
+    $('#btn-rollback').prop('disabled', flg);
 }
 
 //移動処理
@@ -534,7 +563,7 @@ function checkTime(Time) {
     return Time.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9])$/) !== null;
 }
 
-//(確定/青木リスト)保存
+//(確定/青黄リスト)保存
 function save_Fix(){
     let fix_blue = []
     let fix_red = []
@@ -550,7 +579,7 @@ function save_Fix(){
     localStorage.setItem("fix_red", JSON.stringify(fix_red))
 }
 
-//(確定/青木リスト)選択クリア
+//(確定/青黄リスト)選択クリア
 function clear_one_fix(fix,Text){
     if(fix == "fix_blue"){
         $(".fix_blue").find(".fix").each(function(){
@@ -591,14 +620,6 @@ function timeStamp(objBox, Data){
         case "skyblue":
             //赤青・虹青判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
-                if(Data.nowColor == "red"){
-                    sendTime = Data.memo.slice(5)
-                }else{
-                    sendTime = "00:00:00"
-                }
-                sendTime = TimePlus(Data.nowDate, sendTime).Date
-                Sender(Data.Server, Data.Point, sendTime, "violet")
-
                 Time = TimePlus(Data.newDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "までに黄変化"
 
@@ -614,14 +635,6 @@ function timeStamp(objBox, Data){
         case "yellow":
             //赤黄・虹黄判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
-                if(Data.nowColor == "red"){
-                    sendTime = Data.memo.slice(5)
-                }else{
-                    sendTime = "00:00:00"
-                }
-                sendTime = TimePlus(Data.nowDate, sendTime).Date
-                Sender(Data.Server, Data.Point, sendTime, "yellow")
-
                 Time = TimePlus(Data.nowDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "まで変化無し"
 
@@ -661,7 +674,7 @@ function timeStamp(objBox, Data){
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
                             + TimePlus(Data.nowDate, "04:00:00").Time.slice(0, -3)
-                    }else{ //青木時間より早い時間の場合
+                    }else{ //青黄時間より早い時間の場合
                         Text = Data.Server + Data.Point + " "
                         + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
                         + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
@@ -681,10 +694,6 @@ function timeStamp(objBox, Data){
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
         case "violet":
-            if(Data.nowColor != "violet" || Data.befColor != "violet"){
-                Sender(Data.Server, Data.Point, Data.newDate, "violet")
-            }
-
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
     }
@@ -715,8 +724,11 @@ function timeStamp(objBox, Data){
         .css("background-color", Data.memoColor)
         .attr("color", Data.memoColor)
 
-    $(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
-    objBox.parents("td").css("border", "2px solid")
+    //【NaL】直近操作セルの強調表示を、直接書換からクラス切替に変更
+    //$(".Servers").find("td").css("border", "1px solid rgb(153, 153, 153)")
+    //objBox.parents("td").css("border", "2px solid")
+    $('.Servers').find('.template2-box').removeClass('sel');
+    objBox.addClass('sel');
 
     save_Storage(true)
 }
@@ -779,7 +791,6 @@ function setTimer(objBox){
             .attr("color", "transparent")
 
         objBox.find(".btn[value=red]").prop("disabled", false)
-        Sender(Server, Point, newDate, "violet")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
         save_Storage()
@@ -798,29 +809,6 @@ function memoTimer(objBox, Color){
             .text("")
             .css("background-color", "transparent")
             .attr("color", "transparent")
-        }
-}
-
-//データ送信
-function Sender(Server, Point, Time, Color){
-    if(sendFlg){
-        if(Color == "yellow"){
-            Time = TimePlus(Time, "01:30:00").Date
-        }else{
-            Time = TimePlus(Time, "00:00:00").Date
-        }
-
-        Time = new Date(Number(Time))
-        Time = ("0" + Number(Time.getMonth() + 1)).slice(-2) + "/"
-            + ("0" + Time.getDate()).slice(-2) + " "
-            + ("0" + Time.getHours()).slice(-2) + ":"
-            + ("0" + Time.getMinutes()).slice(-2)
-
-        $.ajax({
-            url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
-            type: "GET",
-            dataType: "jsonp",
-            data: {Server: Server, Point: Point, Time: Time, Color: Color, mode: "write"}
-        })
     }
 }
+

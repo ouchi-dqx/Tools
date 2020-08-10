@@ -1,35 +1,128 @@
 body{
     background-color: #fff;
     font-size: 14px;
-    max-width: 700px;
+    max-width: 650px;
     min-width: 470px;
     margin-right: auto;
     margin-left : auto;
     padding: 0px 5px;
+    margin-top: 0px;
 }
+/* divの基本設定 */
 div{ box-sizing: border-box; }
+/* アイコンフォントの基本設定 */
 .material-icons{ position: relative; }
 
-/************************************************　鯖選択　************************************************/
-/* ボタンBox */
-.set-server-btn-box{
-    padding: 2px 0px 2px 10px;
-    margin-bottom: 20px;
-
-    font-weight: bold;
-    border: dotted 2px #333;
+/************************************************　ヘッダ　************************************************/
+/* フキダシ-メッセージ部分 */
+.ouchi-msg{
+    position: relative;
+    display: table-cell; 
+    width: auto; 
+    padding: 5px; 
+    border: solid 2px dimgray; 
+    border-radius: 10px;
+    background-color: #eee; 
+    font-size: 14px;
 }
-/* ボタン */
-.set-server-btn-box button{
-    font-size: 15px;
+/* フキダシ-左上の尖ってる部分 */
+.ouchi-msg:before {
+    content: "";
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    margin-top: 11px;
+    margin-left: -16px;
+    border: 5px solid transparent;
+    border-right: 10px solid dimgray;
+}
+
+/************************************************　状態設定　************************************************/
+/* 外枠デザイン（共通） */
+.setting-box{    
+    margin-bottom: 8px;
+    font-weight: bold;
+    border: dotted 2px dimgray;
+}
+/* 設定-タイトル部分（共通） */
+.setting-title{
+    display: table-cell;
+    width: 155px;
+    padding-left: 10px;
+    vertical-align: top;
+    padding-top: 8px;
+}
+/* 設定-タイトル部分のアイコン（共通） */
+.setting-title .material-icons{
+    top: 7px; 
+    left: -15px; 
+    margin-top: -12px; 
+    margin-left: 12px; 
+    margin-right: -12px;
+}
+/* 設定-ボタンBOX＋ボタン（共通） */
+.setting-btn-box{
+    display: table-cell;
+    vertical-align: middle;
+    padding: 3px 0px;
+}
+.setting-btn-box button{
+    font-size: 13px;
     height: 30px;
     width: auto;
     font-weight: bold;
     margin: 2px 0px;
 }
+/* サーバ選択-切替ボタン */
+.mode-change-box{
+    display: inline-block;
+    width: 100%;
+}
+.mode-change-box label {
+    position: relative;
+}
+.mode-change-box [type=radio] {
+    -webkit-appearance: none;
+    -moz-appearance: none;    
+    outline: none;
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+}
+_:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
+    visibility: hidden;
+}
+.mode-change-box .btn-tgl {   
+    z-index: 1;
+    display: table-cell;
+    float: left;
+    cursor: pointer;
+    margin: 1px;    
+    padding: 1px 2px;
+    width: 60px;
+    height: 20px;
+    font-size: 11px;
+    color: #444;
+    background-color: #bbb;
+    border: #fff solid 1px;
+    border-radius: 10px;
+    text-align: center;
+}
+.mode-change-box .btn-tgl:hover { 
+    color: #fff; 
+    background-color: #999; 
+}
+.mode-change-box :checked + .btn-tgl{ 
+    color: #fff;
+    background-color: #e06651; 
+    border-color: #facf8e;
+}
 
 /************************************************　鯖テーブル　************************************************/
-/* 罫線 */
+/* テーブルの罫線 */
 .ServerList{
     border-collapse: collapse;
     margin-bottom: 10px;
@@ -37,50 +130,46 @@ div{ box-sizing: border-box; }
 .ServerList td{
     border: solid 1px #999;
 }
-/* ヘッダ行 */
+/* テーブルのヘッダ行 */
 #server-list-hd #server-no-hd{
     color: #fff;
     font-weight: bold;
-    background-color: dimgray;
+    background-color: #666; /* dimgray;*/
 }
-#server-list-hd .ゲル{
-    font-weight: bold;
-    background-color: #d9ead3;
-}
-#server-list-hd .砂漠{
-    font-weight: bold;
-    background-color: #fff2cc;
-}
-#server-list-hd .バル{
-    font-weight: bold;
-    background-color:#f4cccc;
-}
-/* ヘッダ行 テキストエリア */
+#server-list-hd .ゲル{ background-color: #505e4d;  /*#d9ead3;*/ }
+#server-list-hd .砂漠{ background-color: #696458;  /*#fff2cc;*/ }
+#server-list-hd .バル{ background-color:#695858;   /*#f4cccc;*/ }
+
+/* テーブルのヘッダ行 テキストエリア */
 #server-list-hd .server-list-hd-text{
+    font-size: 18px;
+    line-height: 22px;
     width: 140px;
-    padding: 5px 0px;
+    padding: 0px;
+    font-weight: bold;
+    color: #fff;
 }
-/* ヘッダ行 矢印ボタン */
+/* テーブルのヘッダ行 矢印ボタン */
 #server-list-hd button{
     width: 30px;
     height: 25px;
 }
+/* テーブルのヘッダ行 矢印ボタンのアイコン */
 #server-list-hd .arrow{
     font-size: 20px;
     top: 5px;
     left:-4px;
     line-height: 1px;
 }
-
-/* しましま 奇数trのtd */
+/* テーブル行　しましま設定 奇数trのtd */
 .ServerList tr:nth-child(even) {
     background-color: #fff;
 }
-/* しましま 偶数trのtd */
+/* テーブル行　しましま設定 偶数trのtd */
 .ServerList tr:nth-child(odd) {
     background-color: #ddd;
 }
-/*1カラム目 鯖No*/
+/* テーブル行　1カラム目 鯖No*/
 .Server{
     font-size: 18px;
     font-weight: bold;
@@ -89,7 +178,12 @@ div{ box-sizing: border-box; }
 
 /************************************************　template2　************************************************/
 .template2-box{
-    padding: 2px 3px;
+    padding: 2px;
+    border: solid 3px transparent;
+}
+/* フォーカスセル強調設定 */
+.ServerList .template2-box.sel{
+    border: solid 3px #333;
 }
 /* 4色ボタン */
 .template2-box .btn {
@@ -100,10 +194,8 @@ div{ box-sizing: border-box; }
     cursor: pointer;
     color: #333;
     margin-right: -3px;
-    /*
-    width: 28px;
+    width: 31px;
     height: 25px;
-    */
     font-size: 13px;
 }
 /* 4色ボタン フォーカス時の外枠を消す */
@@ -126,11 +218,11 @@ div{ box-sizing: border-box; }
     font-weight: normal;
     cursor: default;
 }
-/* タイム表示 タイトル */
+/* タイム表示 タイトル（前回/現在） */
 .time-title{
     display: table-cell;
     font-size: 12px;
-    line-height: 24px;
+    line-height: 22px;
     padding: 0px 5px 0px 3px;
 }
 /* タイム表示 hh:nn:ss */
@@ -142,15 +234,16 @@ div{ box-sizing: border-box; }
 }
 .nowTime{ color: #000; }
 .befTime{ color: #333; }
-
-/* メモ欄 */
+/* メモ欄（o） */
 .memo{
-    display: table-cell;
+    display: block;
+    width: 126px;
+    height: 17px;
     font-size: 12px;
-    padding: 0px 8px;
+    text-align: center;
+    margin-bottom: 2px;
 }
-
-/* メモ欄2 */
+/* メモ欄（i） */
 .template2-box input[type="text"]{
     font-size: 13px;
     width: 120px;
@@ -158,24 +251,123 @@ div{ box-sizing: border-box; }
     padding-left: 2px;
     border: #999 solid 1px;
 }
-
-/* メモ欄　フォーカス時 */
+/* メモ欄（i） フォーカス時 */
 .template2-box input[type="text"]:focus{
     outline: 0;
     box-shadow: none;
-    border: 1px solid red;
-    /*background-color: #cdf2fe;*/
+    border: 1px solid #e06651;
+    background-color: #fff1ef;
+}
+/************************************************　サイドリスト　************************************************/
+/* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
+.side-list-box.following-off{ display: table; }
+.side-list-box.following-on{
+    position: fixed;
+    top: 40px;
+    right: 0px;
+    z-index: 99;
+    background-color: #333;
+    opacity: 0.95;
+    padding: 5px;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+/* 追随ON時のテーブルbodyスクロール設定 */
+.side-list-box.following-on tbody{
+    display: block;
+    background-color: dimgray;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.side-list-box.following-on .fix_blue tbody{ height: 120px; }
+.side-list-box.following-on .fix_red tbody{ height: 220px; }
+.side-list-box.following-on tbody::-webkit-scrollbar {
+    width: 5px;
+    height: auto;
+    border-radius: 0px; 
+    background-color: dimgray;
+}
+.side-list-box.following-on tbody::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #ccc;
+}
+/* サイドリストBOX - ハンガーボタン */
+.side-list-btn.following-off{ display: none; }
+.side-list-btn.following-on{
+    position: fixed; 
+    top: 0px;     
+    right: 0px; 
+    width: 40px;
+    height: 40px;
+    z-index: 99;
+    padding: 5px;
+
+    color: #fff;
+    background-color: #333;
+    opacity: 0.95;
+    cursor: pointer;
+}
+.hung-icon.rev{ transform: rotate(180deg); }
+
+/* サイドリストBOX - 右側固定スイッチ */
+.chk-tgl-box{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.chk-tgl-box label {
+    position: relative;
+}
+.chk-tgl-box [type=checkbox] {
+    -webkit-appearance: none;
+    -moz-appearance: none;    
+    outline: none;
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+}
+_:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
+    visibility: hidden;
+}
+.chk-tgl-box .btn-tgl {   
+    z-index: 1;
+    display: table-cell;
+    float: left;
+    cursor: pointer;
+    padding: 1px 2px;
+    margin: 1px;    
+    width: 160px;
+    height: 25px;
+    font-size: 12px;
+    color: #444;
+    background-color: #bbb;    
+    border: #fff solid 1px;
+    border-radius: 10px;
+    text-align: center;
+}
+.chk-tgl-box .btn-tgl:hover { 
+    color: #fff; 
+    background-color: #999; 
+}
+.chk-tgl-box :checked + .btn-tgl{ 
+    color: #fff;
+    background-color: #e06651; 
+    border-color: #facf8e;
 }
 
-/************************************************　サイドリスト　************************************************/
-/* 罫線 */
+/* サイドリストテーブル 罫線 */
 .fix_blue, .fix_red{
     border-collapse: collapse;
     margin-bottom: 10px;
 }
-/* ヘッダ行 */
+/* サイドリストテーブル ヘッダ行 */
 .fix_blue th, .fix_red th{
-    width: 220px;
+    width: 170px;
     color: #333;
     font-weight: bold;
     background-color: dimgray;
@@ -183,15 +375,17 @@ div{ box-sizing: border-box; }
 }
 .fix_blue th{ background-color: #fec; }
 .fix_red th{ background-color: #fcc; }
-/* セルの設定 */
+/* サイドリストテーブル セル */
 .fix_blue td, .fix_red td{
+    width: 165px;
     text-align: center;
+    background-color: #fff;
     border: solid 1px #999;
 }
 .fix_blue td:hover{ background-color: yellow; cursor: pointer; }
 .fix_red td:hover{ background-color: red; cursor: pointer; }
 
-/* 追加確定フォーム */
+/* サイドリスト　確定リストの追加確定フォーム */
 .side-list-add-box{
     font-size: 12px;
     line-height: 30px;
@@ -207,52 +401,90 @@ div{ box-sizing: border-box; }
 .side-list-add-box select{
     height: 24px;
 }
-/* 機能ボタンBOX */
+/* サイドリスト　機能ボタンBOX（大） */
 .function-btn-box{
-    font-size: 14px;
-    display: table;
+    display: block;    
+    text-align: right; 
+
+    margin-bottom: 10px; 
+}
+.function-btn-box Button{
+    width: 78px;
+    font-size: 16px; 
+    font-weight: bold; 
+    line-height: 28px;
+}
+/* サイドリスト　機能ボタンBOX（小） */
+.function-btn-box-mini{
+    display: block;
+    text-align: right;
+    font-size: 13px;
+
     margin-bottom: 10px;
 }
+/************************************************　使い方／更新履歴　************************************************/
+/* 開閉スライダー */
+.slider-title{
+    display: block;
+    height: 32px;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: -10px;    
+    text-align: left;
+    padding-left: 12px;
 
-/************************************************　使い方　************************************************/
-/* リスト部分 */
-.list-box ul{
+    cursor: pointer;
+    border-left: solid 10px #666;
+
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #ccc;
+}
+.slider-title:hover { background-color: #999; }
+/* 開閉スライダーのアイコン */
+.slider-icon{ top: 8px; left: 5px; margin-top: -3px; }
+.slider-icon.rev{ transform: rotate(180deg); }
+
+/* 列挙リストの設定 */
+.box-list{
     border: solid 1px #ccc;
-    padding: 0.5em;
+    padding: 2px;
     position: relative;
     font-size: 13px;
 }
-.list-box li {
-    line-height: 1.4;
-    padding: 0.5em 0 0.5em 1.4em;
+.box-list>li {
+    line-height: 22px;
+    padding: 6px 0px 6px 18px;
     border-bottom: dashed 1px silver;
     list-style-type: none!important;
 }
-.list-box li:last-of-type {
+.box-list>li:last-of-type {
     border-bottom: none;
 }
-/* リスト内のアイコン */
-.list-box li:before {
+/* 列挙リストのアイコン */
+.box-list>li:before {
     content: "◆";
     position: absolute;
     left : 0.5em;        /*左端からのアイコンまで*/
     color: dimgray;    /*アイコン色*/
-  }
-
-/* 開閉スライダー */
-.slider-btn{ cursor: pointer; }
-.slider-icon{ top: 7px; left: 5px; }
-.slider-icon.rev{ transform: rotate(180deg); }
-.slider-title{
-    margin-top: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    display: block;
-    height: 35px;
-    width: 100%;
-    text-align: left;
-    padding-left: 20px;
-    background-color: #ccc;
-    margin-bottom: -10px;
 }
-.slider-title:hover { background-color: #999; }
+/* 列挙リストの中のテキスト装飾-ボタン */
+.box-list Span.text-btn{
+    margin: 0px 2px;
+    padding: 2px 3px;
+    background-color: #eee;
+    border: solid 1px #999;
+    border-radius: 3px;
+    font-size: 11px;
+}
+/* 列挙リストの中のテキスト装飾-リスト */
+.box-list Span.text-ylist, .box-list Span.text-rlist{
+    margin: 0px 2px;
+    padding: 0px 4px;
+    border: solid 1px #ccc;
+    font-size: 12px;
+    font-weight: bold;
+}
+.box-list Span.text-ylist{ background-color: #fec; }
+.box-list Span.text-rlist{ background-color: #fcc; }
+
