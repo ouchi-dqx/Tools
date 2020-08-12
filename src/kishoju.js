@@ -548,6 +548,7 @@ function movePoint(befPoint, afterPoint){
             .insertBefore($(".Servers").find(afterClass).eq(i))
     }
 
+    save_Sort()
     setInitMoveBtn();
 }
 
