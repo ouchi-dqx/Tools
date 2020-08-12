@@ -18,11 +18,11 @@ function sortPoint(){
     if(!Sort){ return 0 } //Storage内のSortデータ存在判定
 
     for(let i=0; i<2; i++){
-        const Point = $(".ServerList td").find(".server-list-hd-text")
+        const Point = $(".ServerList td").find("div.server-list-hd-text")
         let flg = false //フラグ初期化
 
         for(let n=1; n<4; n++){
-            if($(Point).eq(n).text() !== Sort[n - 1]){
+            if($(Point).eq(n).text() + $(Point).eq(n).next().text() !== Sort[n - 1]){
                 if(flg == false){
                     befPoint = $(Point).eq(n).closest("td")
                     flg = true
@@ -52,6 +52,7 @@ $(document).on("click", ".left, .right", function() {
         afterPoint = $(this).closest("td").next("td")
         movePoint(afterPoint, befPoint) //右移動
     }
+    save_Sort()
 })
 
 //サーバー追加
@@ -548,7 +549,6 @@ function movePoint(befPoint, afterPoint){
             .insertBefore($(".Servers").find(afterClass).eq(i))
     }
 
-    save_Sort()
     setInitMoveBtn();
 }
 
