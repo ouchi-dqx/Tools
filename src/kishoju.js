@@ -623,6 +623,7 @@ function timeStamp(objBox, Data){
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
                 Time = TimePlus(Data.newDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "までに黄変化"
+                Data.memoColor = "transparent"
 
                 memoDate = TimePlus(Data.newDate, "01:30:00").Date
                 diffDate = memoDate - Data.newDate
@@ -638,6 +639,7 @@ function timeStamp(objBox, Data){
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
                 Time = TimePlus(Data.nowDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "まで変化無し"
+                Data.memoColor = "transparent"
 
                 memoDate = TimePlus(Data.newDate, "01:30:00").Date
                 diffDate = memoDate - Data.newDate
@@ -671,14 +673,15 @@ function timeStamp(objBox, Data){
             //黄赤判定
             if(Data.nowColor == "yellow"){
                 if(Data.befColor == "skyblue"){ //前回青判定
-                    if(Data.newDate > Data.nowDate){ //青黄時間より先の時間の場合
+                    //if(Data.newDate > Data.nowDate){ //青黄時間より先の時間の場合
+                    if(Data.newDate > TimePlus(Data.befDate, "04:00:00").Date){ //青黄時間より先の時間の場合
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
                             + TimePlus(Data.nowDate, "04:00:00").Time.slice(0, -3)
                     }else{ //青黄時間より早い時間の場合
                         Text = Data.Server + Data.Point + " "
-                        + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
-                        + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                            + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
+                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
                     }
                 }else{
                     Text = Data.Server + Data.Point + " "
@@ -690,8 +693,8 @@ function timeStamp(objBox, Data){
                 Text = Data.Server + Data.Point + " - "
                     + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
             }
-            $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
 
+            $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
         case "violet":
