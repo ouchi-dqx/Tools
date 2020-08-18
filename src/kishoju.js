@@ -207,9 +207,17 @@ $(document).on("click", "#sTime, #eTime", function() {
 
 //(確定/青木リスト)クリッククリア
 $(document).on("click", ".fix", function() {
-    const flg = confirm("本当に削除していいですか？")
+    const flg = confirm("コピー/削除を行いますか？\nOK=コピー キャンセル=削除")
     if(flg){
-        $(this).closest("tr").remove()
+        const CopyText = $(this).text() + "\n"
+        navigator.clipboard.writeText(CopyText)
+        copy(CopyText)
+    }
+    else{
+        const flg = confirm("本当に削除していいですか？")
+        if(flg){
+            $(this).closest("tr").remove()
+        }
     }
     save_Fix()
 })
@@ -230,6 +238,7 @@ function setClip(fix){
 
     //iPhone用処理追加予定
     navigator.clipboard.writeText(CopyText)
+    copy(CopyText)
 }
 
 //[(確定/青木リスト)クリア]
@@ -816,3 +825,32 @@ function memoTimer(objBox, Color){
     }
 }
 
+function copy(str) {
+    if(!str || typeof(str) != "string") {
+        return "";
+    }
+
+    //strを含んだtextareaをbodyタグの末尾に設置
+    $(document.body).append("<textarea id=\"tmp_copy\" style=\"position:fixed;right:100vw;font-size:16px;\" readonly=\"readonly\">" + str + "</textarea>");
+
+
+    //elmはtextareaノード
+    var elm = $("#tmp_copy")[0];
+
+    //select()でtextarea内の文字を選択
+    elm.select();
+
+    //rangeでtextarea内の文字を選択
+    var range = document.createRange();
+    range.selectNodeContents(elm);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    elm.setSelectionRange(0, 999999);
+
+    //execCommandを実施
+    document.execCommand("copy");
+
+    //textareaを削除
+    $(elm).remove();
+}
