@@ -831,7 +831,7 @@ function copy(str) {
     }
 
     //strを含んだtextareaをbodyタグの末尾に設置
-    $(document.body).append("<textarea id=\"tmp_copy\" style=\"position:fixed;right:100vw;font-size:16px;\" readonly=\"readonly\">" + str + "</textarea>");
+    $(document.body).append("<textarea id=\"tmp_copy\" style=\"position:fixed;right:100vw;font-size:16px;\" readonly>" + str + "</textarea>");
 
 
     //elmはtextareaノード
