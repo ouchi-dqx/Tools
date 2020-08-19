@@ -210,7 +210,7 @@ $(document).on("click", ".fix", function() {
     const flg = confirm("コピー/削除を行いますか？\nOK=コピー キャンセル=削除")
     if(flg){
         const CopyText = $(this).text() + "\n"
-        navigator.clipboard.writeText(CopyText)
+        //navigator.clipboard.writeText(CopyText)
         copy(CopyText)
     }
     else{
@@ -236,7 +236,6 @@ function setClip(fix){
         })
     }
 
-    //iPhone用処理追加予定
     //navigator.clipboard.writeText(CopyText)
     copy(CopyText)
 }
