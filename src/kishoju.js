@@ -237,7 +237,7 @@ function setClip(fix){
     }
 
     //iPhone用処理追加予定
-    navigator.clipboard.writeText(CopyText)
+    //navigator.clipboard.writeText(CopyText)
     copy(CopyText)
 }
 
@@ -831,9 +831,18 @@ function copy(str) {
     }
 
     //strを含んだtextareaをbodyタグの末尾に設置
-    $(document.body).append("<textarea id=\"tmp_copy\" style=\"position:fixed;right:100vw;font-size:16px;\" readonly>" + str + "</textarea>");
+    $(document.body).append("<textarea id=\"tmp_copy\" style=\"position:fixed;right:100vw;font-size:16px;\">" + str + "</textarea>");
 
+    let target = document.querySelector('#tmp_copy');
+    target.contentEditable  = true;
+    target.readOnly = false;
+    var range = document.createRange();
+    range.selectNode(target);
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
 
+    target.remove()
+/*
     //elmはtextareaノード
     var elm = $("#tmp_copy")[0];
 
@@ -859,4 +868,5 @@ function copy(str) {
 
     //textareaを削除
     $(elm).remove();
+*/
 }
