@@ -837,6 +837,9 @@ function copy(str) {
     //elmはtextareaノード
     var elm = $("#tmp_copy")[0];
 
+    elm.contentEditable  = true;
+    elm.readOnly = false;
+
     //select()でtextarea内の文字を選択
     elm.select();
 
@@ -850,6 +853,9 @@ function copy(str) {
 
     //execCommandを実施
     document.execCommand("copy");
+
+    elm.contentEditable  = false;
+    elm.readOnly = true;
 
     //textareaを削除
     $(elm).remove();
