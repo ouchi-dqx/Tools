@@ -210,8 +210,10 @@ $(document).on("click", ".fix", function() {
     const flg = confirm("コピー/削除を行いますか？\nOK=コピー キャンセル=削除")
     if(flg){
         const CopyText = $(this).text() + "\n"
-        navigator.clipboard.writeText(CopyText)
-        copy(CopyText)
+
+        const promise = new Promise((resolve, reject) => resolve())
+        promise.then(() => navigator.clipboard.writeText(CopyText))
+        promise.then(() => copy(CopyText))
     }
     else{
         const flg = confirm("本当に削除していいですか？")
@@ -236,8 +238,9 @@ function setClip(fix){
         })
     }
 
-    navigator.clipboard.writeText(CopyText)
-    copy(CopyText)
+    const promise = new Promise((resolve, reject) => resolve())
+    promise.then(() => navigator.clipboard.writeText(CopyText))
+    promise.then(() => copy(CopyText))
 }
 
 //[(確定/青木リスト)クリア]
