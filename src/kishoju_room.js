@@ -1,7 +1,3 @@
-alert("aa");
-
-/*
-
 $(function(){
     const observer = new MutationObserver(callback)
     function callback(mutations){
@@ -30,5 +26,3 @@ $(function(){
         subtree: true
     })
 })
-
-*/
