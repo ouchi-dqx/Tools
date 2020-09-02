@@ -1,12 +1,28 @@
+function Sender(mode,Data,ListColumn){
+    const sheetID = $("#sheetID").val()
+    if(sheetID){
+        if(ListColumn == "fix_red") ListColumn = 12
+        if(ListColumn == "fix_blue") ListColumn = 14
+
+        $.ajax({
+            url: "https://script.google.com/macros/s/AKfycbzkQrkABe9voYP8PLwzvK-lKkxjTjitu1CZRR3pqCNj/dev",
+            type: "GET",
+            dataType: "jsonp",
+            data: {mode: mode, sheetID: sheetID, ListColumn: ListColumn, Data:Data},
+        })
+    }
+}
+
 $(function(){
     const observer = new MutationObserver(callback)
     function callback(mutations){
+        var ListColumn = mutations[0].target.offsetParent.className
         mutations.forEach(mutation => {
             mutation.addedNodes.forEach(node => {
-                alert(node.innerText)
+                Sender("write", node.innerText, ListColumn)
             })
             mutation.removedNodes.forEach(node => {
-                alert(node.innerText)
+                Sender("delete", node.innerText, ListColumn)
             })
         })
     }
