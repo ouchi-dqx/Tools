@@ -11,15 +11,14 @@ $(function(){
         })
     }
 
-
-    observer.observe($(document).$(".fix_blue")[0], {
+    observer.observe($(".fix_blue")[0], {
         childList: true,
         attributes: true,
         characterData: true,
         subtree: true
     });
 
-    observer.observe($(document).$(".fix_red")[0], {
+    observer.observe($(".fix_red")[0], {
         childList: true,
         attributes: true,
         characterData: true,
