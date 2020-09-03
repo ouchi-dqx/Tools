@@ -5,7 +5,7 @@ function Sender(mode,Data,ListColumn){
         if(ListColumn == "fix_blue") ListColumn = 14
 
         $.ajax({
-            url: "https://script.google.com/macros/s/AKfycbzkQrkABe9voYP8PLwzvK-lKkxjTjitu1CZRR3pqCNj/dev",
+            url: "https://script.google.com/macros/s/AKfycbxGwBzlzS2wA8zcnoyG9iCRY048zGrLuuPQAi-cBB3oVGuTi0nb/exec",
             type: "GET",
             dataType: "jsonp",
             data: {mode: mode, sheetID: sheetID, ListColumn: ListColumn, Data:Data},

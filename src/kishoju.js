@@ -11,6 +11,27 @@ window.onload = function(){
 function debug(){
 }
 
+function LoginCheck(){
+    const pass = window.prompt("パスワードを入力してください")
+    if(pass){
+        $.ajax({
+            url: "https://script.google.com/macros/s/AKfycbxGwBzlzS2wA8zcnoyG9iCRY048zGrLuuPQAi-cBB3oVGuTi0nb/exec",
+            type: "GET",
+            dataType: "jsonp",
+            data: {mode: "login", pass: pass},
+            success: res => {
+                if(res.HTMLData){
+                    const script = document.createElement('script');
+                    script.src = res.ScriptData;
+                    $("head").append(script);
+                    $("body").prepend(res.HTMLData);
+                }
+                else alert("パスワードが違います");
+            }
+        })
+    }
+}
+
 //読込時の場所並び替え
 function sortPoint(){
     let befPoint, afterPoint
