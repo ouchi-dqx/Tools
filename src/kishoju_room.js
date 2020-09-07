@@ -1,6 +1,9 @@
 function Sender(mode,Data,ListColumn){
-    const sheetID = $("#sheetID").val()
+    let sheetID = $("#sheetID").val()
     if(sheetID){
+        sheetID = sheetID.match(/\/d\/[^\/]*/);
+        sheetID = sheetID[0].replace("/d/","")
+
         if(ListColumn == "fix_red") ListColumn = 12
         if(ListColumn == "fix_blue") ListColumn = 14
 
