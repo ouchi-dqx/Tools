@@ -1,6 +1,7 @@
 function Sender(mode,Data,ListColumn){
     let sheetID = $("#sheetID").val()
     if(sheetID){
+        // eslint-disable-next-line no-useless-escape
         sheetID = sheetID.match(/\/d\/[^\/]*/);
         sheetID = sheetID[0].replace("/d/","")
 
