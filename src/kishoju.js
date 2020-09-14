@@ -12,7 +12,7 @@ function debug(){
 }
 
 function omikuji(){
-    const omikuji = ["1-10","11--20","21-30","31-40"]
+    const omikuji = ["1-10","11-20","21-30","31-40"]
     const rnd = Math.floor(Math.random() * omikuji.length)
     $(".omikuji").text("サーバー" + omikuji[rnd])
 }
