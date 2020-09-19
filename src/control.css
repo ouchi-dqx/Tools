@@ -17,12 +17,12 @@ div{ box-sizing: border-box; }
 /* フキダシ-メッセージ部分 */
 .ouchi-msg{
     position: relative;
-    display: table-cell; 
-    width: auto; 
-    padding: 5px; 
-    border: solid 2px dimgray; 
+    display: table-cell;
+    width: auto;
+    padding: 5px;
+    border: solid 2px dimgray;
     border-radius: 10px;
-    background-color: #eee; 
+    background-color: #eee;
     font-size: 14px;
 }
 /* フキダシ-左上の尖ってる部分 */
@@ -39,7 +39,7 @@ div{ box-sizing: border-box; }
 
 /************************************************　状態設定　************************************************/
 /* 外枠デザイン（共通） */
-.setting-box{    
+.setting-box{
     margin-bottom: 8px;
     font-weight: bold;
     border: dotted 2px dimgray;
@@ -54,10 +54,10 @@ div{ box-sizing: border-box; }
 }
 /* 設定-タイトル部分のアイコン（共通） */
 .setting-title .material-icons{
-    top: 7px; 
-    left: -15px; 
-    margin-top: -12px; 
-    margin-left: 12px; 
+    top: 7px;
+    left: -15px;
+    margin-top: -12px;
+    margin-left: 12px;
     margin-right: -12px;
 }
 /* 設定-ボタンBOX＋ボタン（共通） */
@@ -83,7 +83,7 @@ div{ box-sizing: border-box; }
 }
 .mode-change-box [type=radio] {
     -webkit-appearance: none;
-    -moz-appearance: none;    
+    -moz-appearance: none;
     outline: none;
     appearance: none;
     width: 100%;
@@ -95,12 +95,12 @@ div{ box-sizing: border-box; }
 _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
     visibility: hidden;
 }
-.mode-change-box .btn-tgl {   
+.mode-change-box .btn-tgl {
     z-index: 1;
     display: table-cell;
     float: left;
     cursor: pointer;
-    margin: 1px;    
+    margin: 1px;
     padding: 1px 2px;
     width: 60px;
     height: 20px;
@@ -111,13 +111,13 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
     border-radius: 10px;
     text-align: center;
 }
-.mode-change-box .btn-tgl:hover { 
-    color: #fff; 
-    background-color: #999; 
-}
-.mode-change-box :checked + .btn-tgl{ 
+.mode-change-box .btn-tgl:hover {
     color: #fff;
-    background-color: #e06651; 
+    background-color: #999;
+}
+.mode-change-box :checked + .btn-tgl{
+    color: #fff;
+    background-color: #e06651;
     border-color: #facf8e;
 }
 
@@ -285,7 +285,7 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
 .side-list-box.following-on tbody::-webkit-scrollbar {
     width: 5px;
     height: auto;
-    border-radius: 0px; 
+    border-radius: 0px;
     background-color: dimgray;
 }
 .side-list-box.following-on tbody::-webkit-scrollbar-thumb {
@@ -295,9 +295,9 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
 /* サイドリストBOX - ハンガーボタン */
 .side-list-btn.following-off{ display: none; }
 .side-list-btn.following-on{
-    position: fixed; 
-    top: 0px;     
-    right: 0px; 
+    position: fixed;
+    top: 0px;
+    right: 0px;
     width: 40px;
     height: 40px;
     z-index: 99;
@@ -322,7 +322,7 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
 }
 .chk-tgl-box [type=checkbox] {
     -webkit-appearance: none;
-    -moz-appearance: none;    
+    -moz-appearance: none;
     outline: none;
     appearance: none;
     width: 100%;
@@ -334,39 +334,39 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
 _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
     visibility: hidden;
 }
-.chk-tgl-box .btn-tgl {   
+.chk-tgl-box .btn-tgl {
     z-index: 1;
     display: table-cell;
     float: left;
     cursor: pointer;
     padding: 1px 2px;
-    margin: 1px;    
+    margin: 1px;
     width: 160px;
     height: 25px;
     font-size: 12px;
     color: #444;
-    background-color: #bbb;    
+    background-color: #bbb;
     border: #fff solid 1px;
     border-radius: 10px;
     text-align: center;
 }
-.chk-tgl-box .btn-tgl:hover { 
-    color: #fff; 
-    background-color: #999; 
-}
-.chk-tgl-box :checked + .btn-tgl{ 
+.chk-tgl-box .btn-tgl:hover {
     color: #fff;
-    background-color: #e06651; 
+    background-color: #999;
+}
+.chk-tgl-box :checked + .btn-tgl{
+    color: #fff;
+    background-color: #e06651;
     border-color: #facf8e;
 }
 
 /* サイドリストテーブル 罫線 */
-.fix_blue, .fix_red{
+.fix_blue, .fix_red, .other_fix_red{
     border-collapse: collapse;
     margin-bottom: 10px;
 }
 /* サイドリストテーブル ヘッダ行 */
-.fix_blue th, .fix_red th{
+.fix_blue th, .fix_red th, .other_fix_red th{
     width: 170px;
     color: #333;
     font-weight: bold;
@@ -375,8 +375,9 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 .fix_blue th{ background-color: #fec; }
 .fix_red th{ background-color: #fcc; }
+.other_fix_red th{ background-color: #fcc; }
 /* サイドリストテーブル セル */
-.fix_blue td, .fix_red td{
+.fix_blue td, .fix_red td, .other_fix_red td{
     width: 165px;
     text-align: center;
     background-color: #fff;
@@ -384,6 +385,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 .fix_blue td:hover{ background-color: yellow; cursor: pointer; }
 .fix_red td:hover{ background-color: red; cursor: pointer; }
+.other_fix_red td:hover{ background-color: red; cursor: pointer; }
 
 /* サイドリスト　確定リストの追加確定フォーム */
 .side-list-add-box{
@@ -403,15 +405,15 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 /* サイドリスト　機能ボタンBOX（大） */
 .function-btn-box{
-    display: block;    
-    text-align: right; 
+    display: block;
+    text-align: right;
 
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 .function-btn-box Button{
     width: 78px;
-    font-size: 16px; 
-    font-weight: bold; 
+    font-size: 16px;
+    font-weight: bold;
     line-height: 28px;
 }
 /* サイドリスト　機能ボタンBOX（小） */
@@ -429,7 +431,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
     height: 32px;
     width: 100%;
     margin-top: 20px;
-    margin-bottom: -10px;    
+    margin-bottom: -10px;
     text-align: left;
     padding-left: 12px;
 

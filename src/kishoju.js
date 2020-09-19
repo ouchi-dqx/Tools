@@ -6,10 +6,16 @@ window.onload = function(){
     modeChange();
     setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
+    $(".other_block").hide()
 }
 
 function debug(){
 }
+
+$(document).on("click", ".other_fix_red_head", function() {
+    $(".other_fix_red").find(".fix").toggle()
+    $(".other_block").toggle()
+});
 
 function omikuji(){
     const omikuji = ["1-10","11-20","21-30","31-40"]
@@ -251,7 +257,38 @@ $(document).on("click", ".fix", function() {
     save_Fix()
 })
 
-//[(確定/青木リスト)コピー]]
+//[外部確定リスト追加]
+function pushFixs(){
+    const Fixs = $(".push_fixs").val().split(/\r\n|\r|\n/)
+    let fix, Text
+    let Data = []
+
+    Fixs.forEach(function(fix){
+        if(fix != ""){
+            $(".other_fix_red").append('<tr><td class="fix">' + fix + "</td></tr>")
+        }
+    })
+
+    $(".other_fix_red").find(".fix").each(function(){
+        fix = $(this).text().split(" ")
+        Data.push(fix)
+    })
+
+    $(".other_fix_red tr").slice(1).remove()
+
+    Data.sort(function(a,b){
+        return (a[3] > b[3] ? 1 : -1)
+    })
+
+    Data.forEach(function(fix){
+        Text = fix.join(" ")
+        $(".other_fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+    })
+
+    $(".push_fixs").val("")
+}
+
+//[(確定/青木リスト)コピー]
 function setClip(fix){
     let CopyText = ""
     if(fix.value == "fix_blue"){
@@ -261,6 +298,11 @@ function setClip(fix){
     }
     else if(fix.value == "fix_red"){
         $(".fix_red").find(".fix").each(function(){
+            CopyText += $(this).text() + "\n"
+        })
+    }
+    else if(fix.value == "other_fix_red"){
+        $(".other_fix_red").find(".fix").each(function(){
             CopyText += $(this).text() + "\n"
         })
     }
@@ -278,9 +320,15 @@ function clear_fix(fix){
     else if(fix == "fix_red"){
         $(".fix_red tr").slice(1).remove()
     }
+    else if(fix == "other_fix_red"){
+        $(".other_fix_red tr").slice(1).remove()
+        $(".push_fixs").val("")
+    }
     else{
         $(".fix_blue tr").slice(1).remove()
         $(".fix_red tr").slice(1).remove()
+        $(".other_fix_red tr").slice(1).remove()
+        $(".push_fixs").val("")
     }
 }
 
@@ -481,7 +529,11 @@ function Cleaner(target){
         }
         else if(target.value == "fix_red"){
             clear_fix("fix_red")
-        }else if(target.value == "sort"){
+        }
+        else if(target.value == "other_fix_red"){
+            clear_fix("other_fix_red")
+        }
+        else if(target.value == "sort"){
             clear_Sort()
         }
 
@@ -636,6 +688,14 @@ function clear_one_fix(fix,Text){
             }
         })
     }
+    else if(fix == "other_fix_red"){
+        $(".other_fix_red").find(".fix").each(function(){
+            fix = $(this).text().split(" ")
+            if(fix[0] == Text){
+                    $(this).parent().remove()
+            }
+        })
+    }
 }
 
 //タイムスタンプ設定
@@ -651,6 +711,7 @@ function timeStamp(objBox, Data){
             .attr("color", "transparent")
         clearInterval(Timers[Data.Server + Data.Point])
         clear_one_fix("fix_red", Data.Server + Data.Point)
+        clear_one_fix("other_fix_red", Data.Server + Data.Point)
     }
 
     //現在時間書き込み・背景色変更
@@ -733,6 +794,8 @@ function timeStamp(objBox, Data){
             }
 
             $(".fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                $(".other_fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                if($(".other_block").is(":hidden")) $(".other_fix_red").find(".fix").hide()
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
         case "violet":
@@ -835,6 +898,7 @@ function setTimer(objBox){
         objBox.find(".btn[value=red]").prop("disabled", false)
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
+        clear_one_fix("other_fix_red",Server + Point)
         save_Storage()
     }else{
         objBox.find(".memo").text("経過時間:" + Time)

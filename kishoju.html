@@ -247,6 +247,25 @@
                 <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;" placeholder="時:分">
                 <button onclick="push_fix()">追加</button>
             </div>
+
+            <table id="other_fix_red" class="other_fix_red" style="margin-bottom: 3px;">
+                <thead class="other_fix_red_head">
+                    <tr><th>外部確定リスト</th></tr>
+                </thead>
+                <tbody>
+                    <!-- tbody -->
+                </tbody>
+            </table>
+            <div class="other_block">
+                <textarea class="push_fixs"></textarea>
+
+                <div class="function-btn-box-mini">
+                    <button onclick="pushFixs()">追加</button>
+                    <button onclick="setClip(this)" value="other_fix_red">コピー</button>
+                    <button onclick="Cleaner(this)" value="other_fix_red">クリア</button>
+                </div>
+            </div>
+
         </div>
         <!--ハンガーボタン-->
         <div class="side-list-btn following-off">
@@ -275,8 +294,11 @@
                 <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">save</i>保存</span>：入力情報（メモ欄など）を保存します。
                     時間情報はカラーボタンをクリックすることで自動的に保存されていきますので、こまめにこのボタンで保存する必要はありません。</li>
                 <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">undo</i>戻す</span>：チェックリストを1操作前の状態に戻します。最大5回まで。</li>
-                <li><span class="text-ylist">青黄リスト(赤時間)</span><span class="text-rlist">確定リスト</span>はチェックリスト入力時に自動的に追加されます。
-                    <span class="text-rlist">確定リスト</span>は手入力も可能です。サーバー番号、調査場所、時間を入力して<span class="text-btn">追加</span>クリックします。
+                <li><span class="text-ylist">青黄リスト(赤時間)</span><span class="text-rlist">確定リスト</span><span class="text-rlist">外部確定リスト</span>はチェックリスト入力時に自動的に追加されます。<br />
+                    <span class="text-rlist">確定リスト</span><span class="text-rlist">外部確定リスト</span>は手入力も可能です。<br />
+                    <span class="text-rlist">確定リスト</span>：サーバー番号、調査場所、時間を入力して<span class="text-btn">追加</span>をクリックします。<br />
+                    <span class="text-rlist">外部確定リスト</span>：<span class="text-rlist">外部確定リスト</span>をクリックし表示された入力欄に<br />
+                    　　　　　　　　　本ツールを利用してコピーされたリストを入力して<span class="text-btn">追加</span>をクリックします。<br />
                 </li>
                 <li><span class="text-btn">コピー</span>：<span class="text-ylist">青黄</span><span class="text-rlist">確定</span>の全体をクリップボードにコピーします。</li>
                 <li><span class="text-btn">クリア</span>：<span class="text-ylist">青黄</span><span class="text-rlist">確定</span>の全体をクリアします。1行だけ削除する場合は対象の行をクリックします。</li>
@@ -289,6 +311,10 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>2020/09/19 <br />
+                    外部確定リストを追加しました。<br />
+                    他人が本ツールを使ってコピーしたリストを追加できるようになりました。
+                </li>
                 <li>2020/09/14 調査鯖おみくじを追加しました。</li>
                 <li>2020/08/18<br />
                     ・青木・確定リストの欄を選択した時、コピーか削除か尋ねるように変更しました。<br />
