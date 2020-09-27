@@ -424,6 +424,11 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 
     margin-bottom: 10px;
 }
+
+textarea {
+    resize: none;
+    width: 160px;
+}
 /************************************************　使い方／更新履歴　************************************************/
 /* 開閉スライダー */
 .slider-title{
