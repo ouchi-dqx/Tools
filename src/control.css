@@ -266,9 +266,9 @@ button {
 /************************************************　サイドリスト　************************************************/
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
 .side-list-box.following-off{ display: table; }
-.other_fix_red.following-off{ display: none; }
-.other_fix_red.following-off{ display: table; }
+.other_box.following-off{ display: table; }
 
+.other_box.following-on{ display: none; }
 .side-list-box.following-on{
     position: fixed;
     top: 40px;

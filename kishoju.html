@@ -63,12 +63,12 @@
                 //追随切替
                 l_rightFollowFlg = $('#chk-side-follow').prop('checked');
                 if ( l_rightFollowFlg === true ){
-                    $('.side-list-box,.side-list-btn,.other_fix_red').removeClass(MODE_OFF);
-                    $('.side-list-box,.side-list-btn,.other_fix_red').addClass(MODE_ON);
+                    $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_OFF);
+                    $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_ON);
                     fncFixRedReSize();
                 }else{
-                    $('.side-list-box,.side-list-btn,.other_fix_red').removeClass(MODE_ON);
-                    $('.side-list-box,.side-list-btn,.other_fix_red').addClass(MODE_OFF);
+                    $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_ON);
+                    $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_OFF);
                 }
             });
             //サイドリスト収納切替
@@ -248,21 +248,23 @@
                 <button onclick="push_fix()">追加</button>
             </div>
 
-            <table id="other_fix_red" class="other_fix_red" style="margin-bottom: 3px;">
-                <thead class="other_fix_red_head">
-                    <tr><th>外部確定リスト</th></tr>
-                </thead>
-                <tbody>
-                    <!-- tbody -->
-                </tbody>
-            </table>
-            <div class="other_block">
-                <textarea class="push_fixs"></textarea>
+            <div class="other_box">
+                <table id="other_fix_red" class="other_fix_red" style="margin-bottom: 3px;">
+                    <thead class="other_fix_red_head">
+                        <tr><th>外部確定リスト</th></tr>
+                    </thead>
+                    <tbody>
+                        <!-- tbody -->
+                    </tbody>
+                </table>
+                <div class="other_block">
+                    <textarea class="push_fixs"></textarea>
 
-                <div class="function-btn-box-mini">
-                    <button onclick="pushFixs()">追加</button>
-                    <button onclick="setClip(this)" value="other_fix_red">コピー</button>
-                    <button onclick="Cleaner(this)" value="other_fix_red">クリア</button>
+                    <div class="function-btn-box-mini">
+                        <button onclick="pushFixs()">追加</button>
+                        <button onclick="setClip(this)" value="other_fix_red">コピー</button>
+                        <button onclick="Cleaner(this)" value="other_fix_red">クリア</button>
+                    </div>
                 </div>
             </div>
 
