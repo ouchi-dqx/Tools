@@ -121,6 +121,11 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
     border-color: #facf8e;
 }
 
+button {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
 /************************************************　鯖テーブル　************************************************/
 /* テーブルの罫線 */
 .ServerList{
@@ -261,6 +266,9 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
 /************************************************　サイドリスト　************************************************/
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
 .side-list-box.following-off{ display: table; }
+.other_fix_red.following-off{ display: none; }
+.other_fix_red.following-off{ display: table; }
+
 .side-list-box.following-on{
     position: fixed;
     top: 40px;
@@ -273,6 +281,7 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
     overflow-x: hidden;
     overflow-y: hidden;
 }
+
 /* 追随ON時のテーブルbodyスクロール設定 */
 .side-list-box.following-on tbody{
     display: block;
@@ -425,10 +434,6 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
     margin-bottom: 10px;
 }
 
-textarea {
-    resize: none;
-    width: 160px;
-}
 /************************************************　使い方／更新履歴　************************************************/
 /* 開閉スライダー */
 .slider-title{

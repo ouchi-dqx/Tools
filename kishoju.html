@@ -63,12 +63,12 @@
                 //追随切替
                 l_rightFollowFlg = $('#chk-side-follow').prop('checked');
                 if ( l_rightFollowFlg === true ){
-                    $('.side-list-box,.side-list-btn').removeClass(MODE_OFF);
-                    $('.side-list-box,.side-list-btn').addClass(MODE_ON);
+                    $('.side-list-box,.side-list-btn,.other_fix_red').removeClass(MODE_OFF);
+                    $('.side-list-box,.side-list-btn,.other_fix_red').addClass(MODE_ON);
                     fncFixRedReSize();
                 }else{
-                    $('.side-list-box,.side-list-btn').removeClass(MODE_ON);
-                    $('.side-list-box,.side-list-btn').addClass(MODE_OFF);
+                    $('.side-list-box,.side-list-btn,.other_fix_red').removeClass(MODE_ON);
+                    $('.side-list-box,.side-list-btn,.other_fix_red').addClass(MODE_OFF);
                 }
             });
             //サイドリスト収納切替
