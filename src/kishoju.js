@@ -1,12 +1,26 @@
 var Timers = {}
 var TMP = []
 var MODE = ""
+var sendFlg = ""
+
 window.onload = function(){
     sortPoint()
     modeChange();
     setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
     $(".other_block").hide()
+
+    sendFlg = localStorage.getItem("sendMode")
+    if(sendFlg == "ON"){
+        $('#chk-send-info').next('.btn-tgl').html('提供 ON');
+        $('#chk-send-info').prop('checked', true);
+        sendFlg = true
+    }
+    else if(sendFlg == "OFF"){
+        $('#chk-send-info').next('.btn-tgl').html('提供OFF');
+        $('#chk-send-info').prop('checked', false);
+        sendFlg = false
+    }
 }
 
 function debug(){
@@ -614,6 +628,10 @@ function modeChange(){
     $('.select-mode').hide();               //一旦すべて非表示
     $('.select-mode' + '.'+MODE).show();    //選択モードのみ表示
 }
+//【NaL】情報提供モード切替
+function setSendFlg(p_flg){
+    sendFlg = p_flg;
+}
 //【NaL】[戻す]ボタンの活性切替
 function setRollbackEnable(){
     var flg = true
@@ -720,6 +738,14 @@ function timeStamp(objBox, Data){
         case "skyblue":
             //赤青・虹青判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
+                if(Data.nowColor == "red"){
+                    sendTime = Data.memo.slice(5)
+                }else{
+                    sendTime = "00:00:00"
+                }
+                sendTime = TimePlus(Data.nowDate, sendTime).Date
+                Sender(Data.Server, Data.Point, sendTime, "violet")
+
                 Time = TimePlus(Data.newDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "までに黄変化"
                 Data.memoColor = "transparent"
@@ -736,6 +762,14 @@ function timeStamp(objBox, Data){
         case "yellow":
             //赤黄・虹黄判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
+                if(Data.nowColor == "red"){
+                    sendTime = Data.memo.slice(5)
+                }else{
+                    sendTime = "00:00:00"
+                }
+                sendTime = TimePlus(Data.nowDate, sendTime).Date
+                Sender(Data.Server, Data.Point, sendTime, "yellow")
+
                 Time = TimePlus(Data.nowDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "まで変化無し"
                 Data.memoColor = "transparent"
@@ -799,6 +833,10 @@ function timeStamp(objBox, Data){
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
         case "violet":
+            if(Data.nowColor != "violet" || Data.befColor != "violet"){
+                Sender(Data.Server, Data.Point, Data.newDate, "violet")
+            }
+
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
     }
@@ -896,6 +934,7 @@ function setTimer(objBox){
             .attr("color", "transparent")
 
         objBox.find(".btn[value=red]").prop("disabled", false)
+        Sender(Server, Point, newDate, "violet")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
         clear_one_fix("other_fix_red",Server + Point)
@@ -962,4 +1001,28 @@ function copy(str) {
     //textareaを削除
     $(elm).remove();
 */
+}
+
+//データ送信
+function Sender(Server, Point, Time, Color){
+    if(sendFlg){
+        if(Color == "yellow"){
+            Time = TimePlus(Time, "01:30:00").Date
+        }else{
+            Time = TimePlus(Time, "00:00:00").Date
+        }
+
+        Time = new Date(Number(Time))
+        Time = ("0" + Number(Time.getMonth() + 1)).slice(-2) + "/"
+            + ("0" + Time.getDate()).slice(-2) + " "
+            + ("0" + Time.getHours()).slice(-2) + ":"
+            + ("0" + Time.getMinutes()).slice(-2)
+
+        $.ajax({
+            url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
+            type: "GET",
+            dataType: "jsonp",
+            data: {Server: Server, Point: Point, Time: Time, Color: Color, mode: "write"}
+        })
+    }
 }

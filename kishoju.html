@@ -81,6 +81,21 @@
                 $(this).next('.slider-box').slideToggle("fast");
                 $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
             }).click();
+
+            //情報提供モード切替
+            $('#chk-send-info').click(function(){
+                var bFlg = $('#chk-send-info').prop('checked');
+                if ( bFlg === true ){
+                    var msg = confirm("情報提供モードをONにすると「虹」「虹(赤)→黄」の遷移時間が「サーバー情報(虹黄)」ページに公開されます。ONにしてもよろしいですか？");
+                    if( msg === false ){ return false; }
+                    $('#chk-send-info').next('.btn-tgl').html('提供 ON');
+                    localStorage.setItem("sendMode", "ON")
+                } else {
+                    $('#chk-send-info').next('.btn-tgl').html('提供OFF');
+                    localStorage.setItem("sendMode", "OFF")
+                }
+                setSendFlg(bFlg);
+            });
         });
         </script>
     </head>
@@ -94,7 +109,11 @@
             </span>
             <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
-                <a href="https://ouchi-dqx.github.io/Tools/kishoju_phone.html">スマホ版(β)</a>
+                <a href="https://ouchi-dqx.github.io/Tools/YellowList.html">サーバー情報(虹黄)</a>
+                <!--情報提供ボタン-->
+                <span class="chk-tgl-span">
+                    <label><input type="checkbox" id="chk-send-info" autocomplete="off"><span class="btn-tgl">提供OFF</span></label>
+                </span>
             </span>
             <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
@@ -103,8 +122,8 @@
             <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
                 <a href="javascript:omikuji();">調査鯖おみくじ</a>
+                <span class="omikuji"></span>
             </span>
-            <span class="omikuji"></span>
         </div>
         <div style="display: table; width: 100%; margin-bottom: 20px;">
             <div style="display: table-cell; width: 40px; text-align: left; vertical-align: top; color: dimgray;">
@@ -112,9 +131,9 @@
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆レイアウトと機能の追加。修正を行いました。不具合連絡歓迎いたし〼。<br />
                 ◆8人分散に対応しました。<br />
-                ◆調査鯖おみくじを追加しました。調査前の鯖決め等にお使い下さい。<br />
+                ◆虹黄情報共有ツールを復活させました。<br />
+                　デフォルトでは虹黄情報を提供しないようになっています。([提供OFF／ON]で切替)
             </div>
         </div>
 
@@ -313,6 +332,10 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>2020/10/02 <br />
+                    虹黄情報共有ツールを復活させました。<br />
+                    デフォルトでは虹黄情報を提供しないようになっています。([提供OFF／ON]で切替)
+                </li>
                 <li>2020/09/19 <br />
                     外部確定リストを追加しました。<br />
                     他人が本ツールを使ってコピーしたリストを追加できるようになりました。
@@ -341,10 +364,11 @@
 
         <div style="font-size: 13px; margin-top: 30px;">
             ■ 本ツールは <a href="https://kouseidq10.com/tools/bunsan">輝晶獣分散狩り支援ページ</a> 様の機能を参考に、独自で作成・拡張したものです。<br/>
-            ■ 本ツールを用いた調査情報の取得は一切行っておりません（情報収集機能を廃止しました）。<br />
+            ■ 本ツールには「虹」「虹(赤)→黄」遷移時間を収集・公開する機能がありますが<br />
+            　 情報提供は任意としています。その他の調査情報の取得は一切行っておりません。<br />
+            ■ <a href="https://ouchi-dqx.github.io/Tools/kishoju_phone.html">スマホ版(β)</a>
             ■ 動作ブラウザ：Chrome／FireFox／MS Edge。※IEでは動きません。<br />
             ■ 要望・不具合報告等は<a href="https://twitter.com/ouchi_dqx">こちら</a>まで。
-            ■ レイアウト協力:<b>なっすん</b> 様　　感謝！！<br />
         </div>
 
         <template id="template1">
