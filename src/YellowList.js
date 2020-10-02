@@ -3,7 +3,7 @@ function Getter(num){
         url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
         type: "GET",
         dataType: "jsonp",
-        data: {mode: "debug", Server: num.value},
+        data: {mode: "read", Server: num.value},
         success: res => {
             Loader(res.Array,num)
         }
