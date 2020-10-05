@@ -947,22 +947,21 @@ function setTimer(objBox){
 
 function memoTimer(objBox, Color){
     if(Color == "skyblue"){
-        if(objBox.find(".befTime").attr("color") == "skyblue"){
-            const newDate = new Date().getTime()
-            const newTime = TimePlus(new Date().getTime(), "00:00:00").Time
-            const nowDate = objBox.find(".nowTime").attr("Date")
-            const nowTime = objBox.find(".nowTime").text()
-            objBox.find(".befTime")
-                .attr("Date", nowDate)
-                .text(nowTime)
-                .css("background-color", "yellow")
-                .attr("color", "yellow")
-            objBox.find(".nowTime")
-                .attr("Date", newDate)
-                .text(newTime)
-                .css("background-color", "yellow")
-                .attr("color", "yellow")
-        }
+
+        const newDate = new Date().getTime()
+        const newTime = TimePlus(new Date().getTime(), "00:00:00").Time
+        const nowDate = objBox.find(".nowTime").attr("Date")
+        const nowTime = objBox.find(".nowTime").text()
+        objBox.find(".befTime")
+            .attr("Date", nowDate)
+            .text(nowTime)
+            .css("background-color", "yellow")
+            .attr("color", "yellow")
+        objBox.find(".nowTime")
+            .attr("Date", newDate)
+            .text(newTime)
+            .css("background-color", "yellow")
+            .attr("color", "yellow")
         objBox.find(".memo")
             .css("background-color", Color)
             .attr("color", Color)
