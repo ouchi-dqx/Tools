@@ -742,11 +742,9 @@ function timeStamp(objBox, Data){
         case "skyblue":
             //赤青・虹青判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
-                if(Data.nowColor == "red"){
-                    sendTime = Data.memo.slice(5)
-                }else{
-                    sendTime = "00:00:00"
-                }
+                if(Data.nowColor == "red") sendTime = Data.memo.slice(5)
+                else sendTime = "00:00:00"
+
                 sendTime = TimePlus(Data.nowDate, sendTime).Date
                 Sender(Data.Server, Data.Point, sendTime, "violet")
 
@@ -766,11 +764,9 @@ function timeStamp(objBox, Data){
         case "yellow":
             //赤黄・虹黄判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
-                if(Data.nowColor == "red"){
-                    sendTime = Data.memo.slice(5)
-                }else{
-                    sendTime = "00:00:00"
-                }
+                if(Data.nowColor == "red") sendTime = Data.memo.slice(5)
+                else sendTime = "00:00:00"
+
                 sendTime = TimePlus(Data.nowDate, sendTime).Date
                 Sender(Data.Server, Data.Point, sendTime, "yellow")
 
@@ -778,7 +774,8 @@ function timeStamp(objBox, Data){
                 Data.memo = Time + "まで変化無し"
                 Data.memoColor = "transparent"
 
-                memoDate = TimePlus(Data.newDate, "01:30:00").Date
+                memoDate = TimePlus(Data.nowDate, "01:30:00").Date
+                if(Data.nowColor == "red") memoDate = TimePlus(memoDate, objBox.find(".memo").text().slice(-8)).Date
                 diffDate = memoDate - Data.newDate
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "yellow")
             }
@@ -967,8 +964,8 @@ function memoTimer(objBox, Color){
                 .attr("color", "yellow")
         }
         objBox.find(".memo")
-        .css("background-color", Color)
-        .attr("color", Color)
+            .css("background-color", Color)
+            .attr("color", Color)
     }else{
         objBox.find(".memo")
             .text("")
