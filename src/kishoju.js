@@ -162,9 +162,12 @@ $(document).on("click", ".btn", function(){
     TMP.push({
         Server: Data.Server,
         Point: Data.Point,
-        Date: Data.befDate,
-        Time: Data.befTime,
-        Color: Data.befColor,
+        befDate: Data.befDate,
+        befTime: Data.befTime,
+        befColor: Data.befColor,
+        nowDate: Data.nowDate,
+        nowTime: Data.nowTime,
+        nowColor: Data.nowColor,
         memo: Data.memo,
         memoColor: objBox.find(".memo").attr("color"),
         memoDate: objBox.find(".memo").attr("Date")
@@ -488,15 +491,15 @@ function Rollback(){
                 const Data = {
                     Server: TMP[n].Server,
                     Point: TMP[n].Point,
-                    newDate: objBox.find(".befTime").attr("Date"),
-                    newTime: objBox.find(".befTime").text(),
-                    newColor: objBox.find(".befTime").attr("color"),
-                    nowDate: TMP[n].Date,
-                    nowTime: TMP[n].Time,
-                    nowColor: TMP[n].Color,
-                    befDate: objBox.find(".nowTime").attr("Date"),
-                    befTime: objBox.find(".nowTime").text(),
-                    befColor: objBox.find(".nowTime").attr("color"),
+                    newDate: TMP[n].nowDate,
+                    newTime: TMP[n].nowTime,
+                    newColor: TMP[n].nowColor,
+                    nowDate: TMP[n].befDate,
+                    nowTime: TMP[n].befTime,
+                    nowColor: TMP[n].befColor,
+                    befDate: objBox.find(".befTime").attr("Date"),
+                    befTime: objBox.find(".befTime").text(),
+                    befColor: objBox.find(".befTime").attr("color"),
                     memo: TMP[n].memo,
                     memoColor: TMP[n].memoColor,
                     memoDate: TMP[n].memoDate,
@@ -721,7 +724,8 @@ function timeStamp(objBox, Data){
     //赤離脱判定
     if((Data.nowColor == "red" && Data.newColor != "red")
         || (Data.befColor == "red" && Data.nowColor != "red" && Data.flg == true)
-        || Data.newTime == ""){
+        || Data.newTime == ""
+        || (objBox.find(".nowTime").attr("Color") == "red" && objBox.find(".nowTime").attr("Color") != Data.nowColor)){
         //ボタン禁止解除・タイマ削除 メモ背景色初期化
         objBox.find(".btn[value=red]").prop("disabled", false)
         objBox.find(".memo")
@@ -946,6 +950,22 @@ function setTimer(objBox){
 
 function memoTimer(objBox, Color){
     if(Color == "skyblue"){
+        if(objBox.find(".befTime").attr("color") == "skyblue"){
+            const newDate = new Date().getTime()
+            const newTime = TimePlus(new Date().getTime(), "00:00:00").Time
+            const nowDate = objBox.find(".nowTime").attr("Date")
+            const nowTime = objBox.find(".nowTime").text()
+            objBox.find(".befTime")
+                .attr("Date", nowDate)
+                .text(nowTime)
+                .css("background-color", "yellow")
+                .attr("color", "yellow")
+            objBox.find(".nowTime")
+                .attr("Date", newDate)
+                .text(newTime)
+                .css("background-color", "yellow")
+                .attr("color", "yellow")
+        }
         objBox.find(".memo")
         .css("background-color", Color)
         .attr("color", Color)
