@@ -807,20 +807,27 @@ function timeStamp(objBox, Data){
             //黄赤判定
             if(Data.nowColor == "yellow"){
                 if(Data.befColor == "skyblue"){ //前回青判定
-                    //if(Data.newDate > Data.nowDate){ //青黄時間より先の時間の場合
                     if(Data.newDate > TimePlus(Data.befDate, "04:00:00").Date){ //青黄時間より先の時間の場合
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
                             + TimePlus(Data.nowDate, "04:00:00").Time.slice(0, -3)
-                    }else{ //青黄時間より早い時間の場合
+                    }else{ //青黄時間より早い時間の場合 '2020/10/18 不要だけど一応残す
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
                             + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
                     }
-                }else{
-                    Text = Data.Server + Data.Point + " "
-                        + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
+                }else { //前回黄色判定
+                    if(Data.newDate - Data.nowDate > 3600000){ //前回時間から1時間経過した場合
+                        Data.nowDate = ""
+                        Data.nowTime = ""
+                        Data.nowColor = "transparent"
+                        Text = Data.Server + Data.Point + " - "
                         + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                    }else{
+                        Text = Data.Server + Data.Point + " "
+                            + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
+                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                    }
                 }
             }else{
                 //黄赤以外で赤判定
@@ -947,7 +954,6 @@ function setTimer(objBox){
 
 function memoTimer(objBox, Color){
     if(Color == "skyblue"){
-
         const newDate = new Date().getTime()
         const newTime = TimePlus(new Date().getTime(), "00:00:00").Time
         const nowDate = objBox.find(".nowTime").attr("Date")
