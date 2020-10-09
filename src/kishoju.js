@@ -460,7 +460,8 @@ function load_Storage(){
                 }else{
                     if(Data[Server + Point[i]].memoDate != ""){
                         let diffTime = Data[Server + Point[i]].memoDate - new Date().getTime()
-                        Timers[Server + Point[i]] = setTimeout(memoTimer, diffTime, objBox, Data[Server + Point[i]].nowColor)
+                        if(Data[Server + Point[i]].befColor == "skyblue") Timers[Server + Point[i]] = setTimeout(memoTimer, diffTime, objBox, "skyblue")
+                        else Timers[Server + Point[i]] = setTimeout(memoTimer, diffTime, objBox, Data[Server + Point[i]].nowColor)
                     }
                     objBox.find(".btn[value=red]").prop("disabled", false)
                 }
