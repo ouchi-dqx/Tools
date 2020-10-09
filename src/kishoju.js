@@ -792,7 +792,7 @@ function timeStamp(objBox, Data){
                 Data.memoColor = "skyblue"
 
                 clearTimeout(Timers[Data.Server + Data.Point])
-                memoDate = TimePlus(Data.newDate, "03:00:00").Date
+                memoDate = TimePlus(Data.nowDate, "03:00:00").Date
                 diffDate = memoDate - Data.newDate
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "skyblue")
             }
