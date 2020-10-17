@@ -101,7 +101,7 @@
     </head>
 
     <body>
-        <!--<button onclick="debug()">debug</button>-->
+        !--<button onclick="debug()">debug</button>-->
         <!--ヘッダ-->
         <div style="display: block; margin-bottom: 15px; width: 100%;">
             <span style="font-size: 14px; font-weight: bold; text-decoration: underline dotted;">
@@ -131,9 +131,9 @@
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆8人分散に対応しました。<br />
                 ◆虹黄情報共有ツールを復活させました。<br />
-                　デフォルトでは虹黄情報を提供しないようになっています。([提供OFF／ON]で切替)
+                　デフォルトでは虹黄情報を提供しないようになっています。([提供OFF／ON]で切替)<br />
+                ◆2垢用に[偶数奇数モード]を追加しました。詳細は更新履歴まで。
             </div>
         </div>
 
@@ -141,9 +141,6 @@
         <div class="setting-box">
             <div class="setting-title">
                 <span>調査サーバー選択</span><span class="material-icons">play_arrow</span>
-                <!--
-                <button style="font-size: 10px;" onclick="modeChange()">モード変更</button>
-                -->
                 <div class="mode-change-box">
                     <label><input type="radio" name="opt-tgl" value="PT4" autocomplete="off" checked><div class="btn-tgl">4人分散</div></label>
                     <label><input type="radio" name="opt-tgl" value="PT8" autocomplete="off"><div class="btn-tgl">8人分散</div></label>
@@ -179,6 +176,7 @@
                 <span>調査状態の設定</span><span class="material-icons">play_arrow</span>
             </div>
             <div class="setting-btn-box">
+                <button class="even_odd">標準モード</button>
                 <button onclick="load_Storage()">前回の続きから</button>
                 <button onclick="Cleaner(this)" value="all">すべて最初から</button>
                 <button onclick="Cleaner(this)" value="input">今のリストを最初から</button>
@@ -187,29 +185,33 @@
 
         <!--サーバー一覧-->
         <table class="ServerList" id="" align="left" style="margin-right:10px;">
-            <tr id="server-list-hd">
-                <td align="center" id="server-no-hd">
-                    <div class="server-list-hd-text" style="width: 40px;">鯖</div>
-                </td>
-                <td align="center" class="ゲル">
-                    <div class="server-list-hd-text" style="font-size: 12px;">ゲルヘナ</div>
-                    <span class="server-list-hd-text">幻野</span>
-                    <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
-                    <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
-                </td>
-                <td align="center" class="砂漠">
-                    <div class="server-list-hd-text" style="font-size: 12px;">ジャリムバハ</div>
-                    <span class="server-list-hd-text">砂漠</span>
-                    <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
-                    <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
-                </td>
-                <td align="center" class="バル">
-                    <div class="server-list-hd-text" style="font-size: 12px;">バルディア</div>
-                    <span class="server-list-hd-text">山岳</span>
-                    <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
-                    <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
-                </td>
-            </tr>
+            <thead>
+                <tr id="server-list-hd">
+                    <td align="center" id="server-no-hd">
+                        <div class="server-list-hd-text" style="width: 40px;">鯖</div>
+                    </td>
+                    <td align="center" class="ゲル">
+                        <div class="server-list-hd-text" style="font-size: 12px;">ゲルヘナ</div>
+                        <span class="server-list-hd-text">幻野</span>
+                        <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
+                        <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
+                    </td>
+                    <td align="center" class="砂漠">
+                        <div class="server-list-hd-text" style="font-size: 12px;">ジャリムバハ</div>
+                        <span class="server-list-hd-text">砂漠</span>
+                        <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
+                        <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
+                    </td>
+                    <td align="center" class="バル">
+                        <div class="server-list-hd-text" style="font-size: 12px;">バルディア</div>
+                        <span class="server-list-hd-text">山岳</span>
+                        <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
+                        <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
         </table>
 
         <!--サイドリスト-->
@@ -332,6 +334,11 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>2020/10/16 <br />
+                    ・2垢用に[偶数奇数モード]を追加しました。(要望)<br />
+                    　標準では[標準モード]で[偶数奇数モード]にするとサーバ番号の並びが偶数奇数になります。<br />
+                    　(4人分散モード時のみ)
+                </li>
                 <li>2020/10/08 <br />
                     ・黄→赤変化時、前回から1時間経過していた場合は前回時間を削除するようにしました(要望)
                 </li>

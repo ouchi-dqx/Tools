@@ -1,6 +1,7 @@
 var Timers = {}
 var TMP = []
-var MODE = ""
+var ptMODE = ""
+var even_oddMODE = ""
 var sendFlg = ""
 
 window.onload = function(){
@@ -11,6 +12,8 @@ window.onload = function(){
     $(".other_block").hide()
 
     sendFlg = localStorage.getItem("sendMode")
+    even_oddMODE = localStorage.getItem("even_oddMode")
+
     if(sendFlg == "ON"){
         $('#chk-send-info').next('.btn-tgl').html('提供 ON');
         $('#chk-send-info').prop('checked', true);
@@ -24,6 +27,38 @@ window.onload = function(){
 }
 
 function debug(){
+}
+
+$(document).on("click", ".even_odd", function() {
+    if($(this).text() == "標準モード"){
+        $(this).text("偶数奇数モード")
+        even_oddMODE = "ON"
+        localStorage.setItem("even_oddMODE", "ON")
+        tSort("even_odd")
+    }
+    else if($(this).text() == "偶数奇数モード"){
+        $(this).text("標準モード")
+        even_oddMODE = "OFF"
+        localStorage.setItem("even_oddMODE", "OFF")
+        tSort("default")
+    }
+})
+
+function tSort(mode){
+    const ServerID = $(".ServerList").attr("id")
+
+    if(ServerID != ""){
+        $(function(){
+            $('.ServerList tbody').html(
+                $(".Servers").sort(function(a, b){
+                    if(mode == "default") return $(a).find(".Server").text() - $(b).find(".Server").text();
+                    if(mode == "even_odd"){
+                        if(ptMODE == "PT4") return $(b).find(".Server").text() % 2 -$(a).find(".Server").text() % 2;
+                    }
+                })
+            );
+        });
+    }
 }
 
 $(document).on("click", ".other_fix_red_head", function() {
@@ -120,22 +155,19 @@ $(document).on("click", ".setServers", function(){
             const CopyTemp2 = $($("#template2").html()).clone()
             $(this).append(CopyTemp2)
         })
-        $(".ServerList").append(CopyTemp1)
+        $(".ServerList tbody").append(CopyTemp1)
     }
 
-    if($(this).text() == "9 - 10" || MODE == "PT8"){
+    if($(this).text() == "9 - 10" || ptMODE == "PT8"){
         $(".Servers").each(function(){
             const Server = Number($(this).find(".Server").text())
-            if(Server < Start || Server > End){
-                $(this).hide()
-            }
+            if(Server < Start || Server > End) $(this).hide()
         })
     }
+    if(even_oddMODE == "ON") tSort("even_odd")
 
     //サーバ切り替え時のデータ保持処理
-    if(sessionStorage.getItem(boxName) == "true"){
-        load_Storage()
-    }
+    if(sessionStorage.getItem(boxName) == "true") load_Storage()
 
     setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
 })
@@ -383,6 +415,20 @@ function save_Storage(){
         })
     })
 
+    if(even_oddMODE == "ON"){
+        let copyStorage = Storage.concat()
+        for(let cnt=0,i=0, n=5; cnt<Storage.length-1;cnt++){
+            if(cnt % 2 == 0){
+                Storage[cnt] = copyStorage[i]
+                i++
+            }
+            else{
+                Storage[cnt] = copyStorage[n]
+                n++
+            }
+        }
+    }
+
     $(".fix_blue").find(".fix").each(function(){
         fix_blue.push([$(this).text()])
     })
@@ -403,7 +449,6 @@ function save_Storage(){
 
 //[データ復旧]
 function load_Storage(){
-
     //先にサーバ選択させる
     if ( $(".ServerList").find('.Servers').length <= 1 ){
         alert("先に調査サーバーを選択してください。");
@@ -425,6 +470,18 @@ function load_Storage(){
 
     if(Storage != null){
         const Point = ["ゲル", "砂漠", "バル"]
+
+        if(even_oddMODE == "ON"){
+            let copyStorage = Storage.concat()
+            let keys = []
+
+            //偶数を上位に、奇数を下位にソート
+            for(let key in Storage) keys.push(key);
+            keys.sort(function(a,b){
+                return a % 2 - b % 2;
+            });
+            for(let i=0; i<keys.length; i++) Storage[i] = copyStorage[keys[i]]
+        }
 
         $(".Servers").each(function(){
             const Data = Storage[n]
@@ -628,9 +685,11 @@ function clear_Sort(){
 //[モード変更]
 function modeChange(){
     //【NaL】モード切替スイッチ追加に伴う変更
-    MODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
+    ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
+    if(ptMODE == "PT4") $(".even_odd").prop("disabled", false)
+    if(ptMODE == "PT8") $(".even_odd").prop("disabled", true)
     $('.select-mode').hide();               //一旦すべて非表示
-    $('.select-mode' + '.'+MODE).show();    //選択モードのみ表示
+    $('.select-mode' + '.'+ptMODE).show();    //選択モードのみ表示
 }
 //【NaL】情報提供モード切替
 function setSendFlg(p_flg){
