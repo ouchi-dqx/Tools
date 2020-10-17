@@ -450,7 +450,7 @@ function save_Storage(){
 //[データ復旧]
 function load_Storage(){
     //先にサーバ選択させる
-    if ( $(".ServerList").find('.Servers').length <= 1 ){
+    if($(".ServerList").find('.Servers').length <= 1){
         alert("先に調査サーバーを選択してください。");
         return false;
     }
@@ -458,7 +458,7 @@ function load_Storage(){
     $(".Servers").each(function(){
         if($(this).find(".nowTime").text() != ""){
             alert("既にデータが復元されています。")
-            return 0
+            return false
         }
     })
 
