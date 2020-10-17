@@ -471,6 +471,7 @@ function load_Storage(){
     if(Storage != null){
         const Point = ["ゲル", "砂漠", "バル"]
 
+        /*load_Storage関数実行後にtSort関数が実行されてしまうため一時停止
         if(even_oddMODE == "ON"){
             let copyStorage = Storage.concat()
             let keys = []
@@ -482,6 +483,7 @@ function load_Storage(){
             });
             for(let i=0; i<keys.length; i++) Storage[i] = copyStorage[keys[i]]
         }
+        */
 
         $(".Servers").each(function(){
             const Data = Storage[n]
