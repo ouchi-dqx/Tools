@@ -566,7 +566,7 @@ function Rollback(){
                     flg: true
                 }
 
-                timeStamp(objBox, Data)
+                timeStamp(objBox, Data, true)
                 TMP.pop()
                 return false
             }
@@ -782,7 +782,7 @@ function clear_one_fix(fix,Text){
 }
 
 //タイムスタンプ設定
-function timeStamp(objBox, Data){
+function timeStamp(objBox, Data, flg_back){
     //赤離脱判定
     if((Data.nowColor == "red" && Data.newColor != "red")
         || (Data.befColor == "red" && Data.nowColor != "red" && Data.flg == true)
@@ -819,9 +819,12 @@ function timeStamp(objBox, Data){
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "yellow")
             }
 
-            if(Data.nowColor == "yellow" || Data.befColor == "yellow"){
+            if(Data.nowColor == "yellow" || Data.befColor == "yellow")
                 clear_one_fix("fix_blue", Data.Server + Data.Point)
-            }
+
+            if((Data.nowColor == "transparent" || Data.nowColor == "skyblue") && Data.befColor == "skyblue")
+                clear_one_fix("fix_blue", Data.Server + Data.Point)
+
         break
         case "yellow":
             //赤黄・虹黄判定
@@ -844,6 +847,7 @@ function timeStamp(objBox, Data){
 
             //青黄判定
             if(Data.nowColor == "skyblue"){
+                clear_one_fix("fix_blue", Data.Server + Data.Point)
                 Text = Data.Server + Data.Point + " "
                     + TimePlus(Data.nowDate, "03:00:00").Time.slice(0, -3) + " - "
                     + TimePlus(Data.newDate, "03:00:00").Time.slice(0, -3)
