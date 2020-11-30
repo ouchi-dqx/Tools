@@ -822,7 +822,13 @@ function timeStamp(objBox, Data, flg_back){
             if(Data.nowColor == "yellow" || Data.befColor == "yellow")
                 clear_one_fix("fix_blue", Data.Server + Data.Point)
 
-            if((Data.nowColor == "transparent" || Data.nowColor == "skyblue") && Data.befColor == "skyblue")
+            if(
+                (
+                    Data.nowColor == "transparent" == "" ||
+                    Data.nowColor == "transparent" ||
+                    Data.nowColor == "skyblue"
+                ) && Data.befColor == "skyblue"
+            )
                 clear_one_fix("fix_blue", Data.Server + Data.Point)
 
         break
