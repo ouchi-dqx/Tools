@@ -82,20 +82,22 @@
                 $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
             }).click();
 
-            //情報提供モード切替
-            $('#chk-send-info').click(function(){
-                var bFlg = $('#chk-send-info').prop('checked');
-                if ( bFlg === true ){
-                    var msg = confirm("情報提供モードをONにすると「虹」「虹(赤)→黄」の遷移時間が「サーバー情報(虹黄)」ページに公開されます。ONにしてもよろしいですか？");
-                    if( msg === false ){ return false; }
-                    $('#chk-send-info').next('.btn-tgl').html('提供 ON');
-                    localStorage.setItem("sendMode", "ON")
-                } else {
-                    $('#chk-send-info').next('.btn-tgl').html('提供OFF');
-                    localStorage.setItem("sendMode", "OFF")
-                }
-                setSendFlg(bFlg);
-            });
+            /*
+                //情報提供モード切替
+                $('#chk-send-info').click(function(){
+                    var bFlg = $('#chk-send-info').prop('checked');
+                    if ( bFlg === true ){
+                        var msg = confirm("情報提供モードをONにすると「虹」「虹(赤)→黄」の遷移時間が「サーバー情報(虹黄)」ページに公開されます。ONにしてもよろしいですか？");
+                        if( msg === false ){ return false; }
+                        $('#chk-send-info').next('.btn-tgl').html('提供 ON');
+                        localStorage.setItem("sendMode", "ON")
+                    } else {
+                        $('#chk-send-info').next('.btn-tgl').html('提供OFF');
+                        localStorage.setItem("sendMode", "OFF")
+                    }
+                    setSendFlg(bFlg);
+                });
+            */
         });
         </script>
     </head>
@@ -107,14 +109,16 @@
             <span style="font-size: 14px; font-weight: bold; text-decoration: underline dotted;">
                 DQX - 輝晶獣分散支援ツール
             </span>
-            <span style="font-size: 14px;">｜</span>
-            <span style="font-size: 12px;">
-                <a href="https://ouchi-dqx.github.io/Tools/YellowList.html">サーバー情報(虹黄)</a>
-                <!--情報提供ボタン-->
-                <span class="chk-tgl-span">
-                    <label><input type="checkbox" id="chk-send-info" autocomplete="off"><span class="btn-tgl">提供OFF</span></label>
+            <!--
+                <span style="font-size: 14px;">｜</span>
+                <span style="font-size: 12px;">
+                    <a href="https://ouchi-dqx.github.io/Tools/YellowList.html">サーバー情報(虹黄)</a>
+                    <!--情報提供ボタン--
+                    <span class="chk-tgl-span">
+                        <label><input type="checkbox" id="chk-send-info" autocomplete="off"><span class="btn-tgl">提供OFF</span></label>
+                    </span>
                 </span>
-            </span>
+            -->
             <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
                 <a href="javascript:LoginCheck();">関係者向け</a>
@@ -131,9 +135,8 @@
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆虹黄情報共有ツールを復活させました。<br />
-                　デフォルトでは虹黄情報を提供しないようになっています。([提供OFF／ON]で切替)<br />
                 ◆2垢用に[偶数奇数モード]を追加しました。詳細は更新履歴まで。
+                ◆虹黄情報共通ツールを封印しました。
             </div>
         </div>
 
@@ -334,6 +337,9 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>2020/12/01 <br />
+                    ・虹黄情報共通ツールを封印しました。
+                </li>
                 <li>2020/11/15 <br />
                     ・青黄リスト関連の不具合を2件修正しました。
                         ①青→黄→黄変化後、戻るボタンを押すと青黄が二重登録される不具合

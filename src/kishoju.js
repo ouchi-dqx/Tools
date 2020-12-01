@@ -2,7 +2,7 @@ var Timers = {}
 var TMP = []
 var ptMODE = ""
 var even_oddMODE = ""
-var sendFlg = ""
+//var sendFlg = ""
 
 window.onload = function(){
     sortPoint()
@@ -11,19 +11,21 @@ window.onload = function(){
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
     $(".other_block").hide()
 
-    sendFlg = localStorage.getItem("sendMode")
-    even_oddMODE = localStorage.getItem("even_oddMode")
+    /*
+        sendFlg = localStorage.getItem("sendMode")
+        even_oddMODE = localStorage.getItem("even_oddMode")
 
-    if(sendFlg == "ON"){
-        $('#chk-send-info').next('.btn-tgl').html('提供 ON');
-        $('#chk-send-info').prop('checked', true);
-        sendFlg = true
-    }
-    else if(sendFlg == "OFF"){
-        $('#chk-send-info').next('.btn-tgl').html('提供OFF');
-        $('#chk-send-info').prop('checked', false);
-        sendFlg = false
-    }
+        if(sendFlg == "ON"){
+            $('#chk-send-info').next('.btn-tgl').html('提供 ON');
+            $('#chk-send-info').prop('checked', true);
+            sendFlg = true
+        }
+        else if(sendFlg == "OFF"){
+            $('#chk-send-info').next('.btn-tgl').html('提供OFF');
+            $('#chk-send-info').prop('checked', false);
+            sendFlg = false
+        }
+    */
 }
 
 function debug(){
@@ -693,10 +695,14 @@ function modeChange(){
     $('.select-mode').hide();               //一旦すべて非表示
     $('.select-mode' + '.'+ptMODE).show();    //選択モードのみ表示
 }
-//【NaL】情報提供モード切替
-function setSendFlg(p_flg){
-    sendFlg = p_flg;
-}
+
+/*
+    //【NaL】情報提供モード切替
+    function setSendFlg(p_flg){
+        sendFlg = p_flg;
+    }
+*/
+
 //【NaL】[戻す]ボタンの活性切替
 function setRollbackEnable(){
     var flg = true
@@ -804,11 +810,13 @@ function timeStamp(objBox, Data, flg_back){
         case "skyblue":
             //赤青・虹青判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
-                if(Data.nowColor == "red") sendTime = Data.memo.slice(5)
-                else sendTime = "00:00:00"
 
-                sendTime = TimePlus(Data.nowDate, sendTime).Date
-                Sender(Data.Server, Data.Point, sendTime, "violet")
+                /*
+                    if(Data.nowColor == "red") sendTime = Data.memo.slice(5)
+                    else sendTime = "00:00:00"
+                    sendTime = TimePlus(Data.nowDate, sendTime).Date
+                    Sender(Data.Server, Data.Point, sendTime, "violet")
+                */
 
                 Time = TimePlus(Data.newDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "までに黄変化"
@@ -835,11 +843,13 @@ function timeStamp(objBox, Data, flg_back){
         case "yellow":
             //赤黄・虹黄判定
             if(Data.nowColor == "red" || Data.nowColor == "violet"){
-                if(Data.nowColor == "red") sendTime = Data.memo.slice(5)
-                else sendTime = "00:00:00"
 
-                sendTime = TimePlus(Data.nowDate, sendTime).Date
-                Sender(Data.Server, Data.Point, sendTime, "yellow")
+                /*
+                    if(Data.nowColor == "red") sendTime = Data.memo.slice(5)
+                    else sendTime = "00:00:00"
+                    sendTime = TimePlus(Data.nowDate, sendTime).Date
+                    Sender(Data.Server, Data.Point, sendTime, "yellow")
+                */
 
                 Time = TimePlus(Data.nowDate, "01:30:00").Time.slice(0, -3)
                 Data.memo = Time + "まで変化無し"
@@ -913,10 +923,11 @@ function timeStamp(objBox, Data, flg_back){
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
         case "violet":
-            if(Data.nowColor != "violet" || Data.befColor != "violet"){
-                Sender(Data.Server, Data.Point, Data.newDate, "violet")
-            }
-
+            /*
+                if(Data.nowColor != "violet" || Data.befColor != "violet"){
+                    Sender(Data.Server, Data.Point, Data.newDate, "violet")
+                }
+            */
             clear_one_fix("fix_blue", Data.Server + Data.Point)
         break
     }
@@ -1014,7 +1025,7 @@ function setTimer(objBox){
             .attr("color", "transparent")
 
         objBox.find(".btn[value=red]").prop("disabled", false)
-        Sender(Server, Point, newDate, "violet")
+        //Sender(Server, Point, newDate, "violet")
         clearInterval(Timers[Server + Point])
         clear_one_fix("fix_red",Server + Point)
         clear_one_fix("other_fix_red",Server + Point)
@@ -1068,55 +1079,30 @@ function copy(str) {
     document.execCommand("copy");
 
     target.remove()
+}
+
 /*
-    //elmはtextareaノード
-    var elm = $("#tmp_copy")[0];
+    //データ送信
+    function Sender(Server, Point, Time, Color){
+        if(sendFlg){
+            if(Color == "yellow"){
+                Time = TimePlus(Time, "01:30:00").Date
+            }else{
+                Time = TimePlus(Time, "00:00:00").Date
+            }
 
-    elm.contentEditable  = true;
-    elm.readOnly = false;
+            Time = new Date(Number(Time))
+            Time = ("0" + Number(Time.getMonth() + 1)).slice(-2) + "/"
+                + ("0" + Time.getDate()).slice(-2) + " "
+                + ("0" + Time.getHours()).slice(-2) + ":"
+                + ("0" + Time.getMinutes()).slice(-2)
 
-    //select()でtextarea内の文字を選択
-    elm.select();
-
-    //rangeでtextarea内の文字を選択
-    var range = document.createRange();
-    range.selectNodeContents(elm);
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    elm.setSelectionRange(0, 999999);
-
-    //execCommandを実施
-    document.execCommand("copy");
-
-    elm.contentEditable  = false;
-    elm.readOnly = true;
-
-    //textareaを削除
-    $(elm).remove();
-*/
-}
-
-//データ送信
-function Sender(Server, Point, Time, Color){
-    if(sendFlg){
-        if(Color == "yellow"){
-            Time = TimePlus(Time, "01:30:00").Date
-        }else{
-            Time = TimePlus(Time, "00:00:00").Date
+            $.ajax({
+                url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
+                type: "GET",
+                dataType: "jsonp",
+                data: {Server: Server, Point: Point, Time: Time, Color: Color, mode: "write"}
+            })
         }
-
-        Time = new Date(Number(Time))
-        Time = ("0" + Number(Time.getMonth() + 1)).slice(-2) + "/"
-            + ("0" + Time.getDate()).slice(-2) + " "
-            + ("0" + Time.getHours()).slice(-2) + ":"
-            + ("0" + Time.getMinutes()).slice(-2)
-
-        $.ajax({
-            url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
-            type: "GET",
-            dataType: "jsonp",
-            data: {Server: Server, Point: Point, Time: Time, Color: Color, mode: "write"}
-        })
     }
-}
+*/
