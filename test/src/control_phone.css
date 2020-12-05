@@ -179,17 +179,17 @@ button {
 
 /* テーブルのヘッダ行 テキストエリア */
 #server-list-hd .server-list-hd-text{
-    font-size: 16px;
-    line-height: 22px;
-    width: 140px;
+    font-size: 20px;
+    line-height: 30px;
+    width: 180px;
     padding: 0px;
     font-weight: bold;
     color: #fff;
 }
 /* テーブルのヘッダ行 矢印ボタン */
 #server-list-hd button{
-    width: 30px;
-    height: 25px;
+    width: 35px;
+    height: 30px;
 }
 /* テーブルのヘッダ行 矢印ボタンのアイコン */
 #server-list-hd .arrow{
@@ -232,10 +232,8 @@ button {
     text-align: center;
     cursor: pointer;
     color: #333;
-    margin-right: -3px;
-    width: 31px;
-    height: 25px;
-    font-size: 13px;
+    margin-right: 0px;
+    font-size: 18px;
 }
 /* 4色ボタン フォーカス時の外枠を消す */
 .template2-box .btn:focus { outline: 0; }
@@ -260,14 +258,20 @@ button {
 /* タイム表示 タイトル（前回/現在） */
 .time-title{
     display: table-cell;
-    font-size: 12px;
-    line-height: 22px;
+    font-size: 18px;
+    line-height: 27px;
     padding: 0px 5px 0px 3px;
+}
+
+/*タイム表示 時間ブロック*/
+.bef-box, .now-box{
+    margin: 5px auto;
 }
 /* タイム表示 hh:nn:ss */
 .befTime, .nowTime{
     display: table-cell;
-    padding: 0px 8px;
+    font-size: 18px;
+    padding: 0px 10px;
     background-color: none;
     font-weight: bold;
 }
@@ -275,19 +279,20 @@ button {
 .befTime{ color: #333; }
 /* メモ欄（o） */
 .memo{
-    display: block;
-    width: 126px;
-    height: 17px;
-    font-size: 12px;
+    display: table-cell;
+    width: 155px;
+    height: 23px;
+    font-size: 15px;
     text-align: center;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
 }
 /* メモ欄（i） */
 .template2-box input[type="text"]{
-    font-size: 13px;
-    width: 120px;
-    height: 18px;
+    font-size: 15px;
+    width: 150px;
+    height: 20px;
     padding-left: 2px;
+    margin-top: 3px;
     border: #999 solid 1px;
 }
 /* メモ欄（i） フォーカス時 */
