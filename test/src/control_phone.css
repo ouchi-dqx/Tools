@@ -79,7 +79,6 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
 /* 設定-タイトル部分（共通） */
 .setting-title{
     display: table-cell;
-    width: 155px;
     padding-left: 10px;
     vertical-align: top;
     padding-top: 8px;
@@ -94,7 +93,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
 }
 /* 設定-ボタンBOX＋ボタン（共通） */
 .setting-btn-box{
-    display: table-cell;
+    display: inline-block;
     vertical-align: middle;
     padding: 3px 0px;
 }
@@ -108,7 +107,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
 /* サーバ選択-切替ボタン */
 .mode-change-box{
     display: inline-block;
-    width: 100%;
+    vertical-align: top;
 }
 .mode-change-box label {
     position: relative;
