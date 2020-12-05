@@ -164,21 +164,13 @@ $(document).on("click", ".setServers", function(){
         $('.ServerList').slick('slickAdd', CopyTemp1)
     }
 
+    if($(this).text() == "9 - 10" || ptMODE == "PT8"){
+        alert("制作中ですm(__)m")
+    }
     //if(even_oddMODE == "ON") tSort("even_odd")
 
     //サーバ切り替え時のデータ保持処理
     if(sessionStorage.getItem(boxName) == "true") load_Storage()
-
-    if($(this).text() == "9 - 10" || ptMODE == "PT8"){
-        $(".Servers").each(function(){
-            const Server = Number($(this).find(".Server").attr("ServerID"))
-            if(Server >= Start && Server <= End){
-                let cName = $(this).closest("div").attr("class") + " show"
-                $(this).closest("div").attr("class", cName)
-            }
-        })
-        $('.ServerList').slick('slickFilter', '.show');
-    }
 
     setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
 })
