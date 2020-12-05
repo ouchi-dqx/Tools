@@ -94,8 +94,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
 }
 /* 設定-ボタンBOX＋ボタン（共通） */
 .setting-btn-box{
-    display: inline-block;
-    vertical-align: middle;
+    display: block;
     padding: 3px 0px;
 }
 .setting-btn-box button{
