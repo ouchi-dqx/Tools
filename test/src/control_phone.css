@@ -75,10 +75,11 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
     margin-bottom: 8px;
     font-weight: bold;
     border: dotted 2px dimgray;
+    text-align: center;
 }
 /* 設定-タイトル部分（共通） */
 .setting-title{
-    display: table-cell;
+    display: inline-block;
     padding-left: 10px;
     vertical-align: top;
     padding-top: 8px;
