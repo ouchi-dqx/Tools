@@ -10,7 +10,11 @@ window.onload = function(){
     //setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
     $(".other_block").hide()
-    $(".ServerList").slick({ arrows: false })
+    $(".ServerList").slick({
+        arrows: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    })
 
     /*
         sendFlg = localStorage.getItem("sendMode")
@@ -47,6 +51,25 @@ $(document).on("click", ".even_odd", function() {
     }
     */
    alert("制作中ですm(__)m")
+})
+
+
+
+$(document).on("click", ".change_colomn", function() {
+    if($(this).text() == "1列モード"){
+        $(this).text("2列モード")
+        $('.ServerList').slick('slickSetOption', {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+        }, true);
+    }
+    else if($(this).text() == "2列モード"){
+        $(this).text("1列モード")
+        $('.ServerList').slick('slickSetOption', {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+        }, true);
+    }
 })
 
 function tSort(mode){
