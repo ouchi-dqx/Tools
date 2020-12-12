@@ -33,7 +33,10 @@ window.onload = function(){
     */
 }
 
-function debug(){}
+function debug(){
+    $('.ServerList').slick('unslick');
+
+}
 
 $(document).on("click", ".even_odd", function() {
     /*
@@ -64,11 +67,18 @@ $(document).on("click", ".change_colomn", function() {
         }, true);
     }
     else if($(this).text() == "2列モード"){
+        $(this).text("全体表示モード")
+        $('.ServerList').slick('unslick');
+        $('.ServerList > div').css("width","50%")
+    }
+    else if($(this).text() == "全体表示モード"){
         $(this).text("1列モード")
-        $('.ServerList').slick('slickSetOption', {
+        $(".ServerList").slick({
+            arrows: false,
             slidesToShow: 1,
             slidesToScroll: 1,
-        }, true);
+        })
+        $('.ServerList > div').css("width","100%")
     }
 })
 

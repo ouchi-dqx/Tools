@@ -158,6 +158,17 @@ button {
 }
 
 /************************************************　鯖テーブル　************************************************/
+/* テーブル2列表示設定 */
+.ServerList{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+.ServerList > div{
+	width: 100%;
+	padding: 10px;
+}
+
 /* テーブルの罫線 */
 .Servers{
     border-collapse: collapse;
