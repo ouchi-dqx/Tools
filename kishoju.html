@@ -135,8 +135,9 @@
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆スマホ版のテスト中 テスト協力いただけると嬉しいです<br>
-                　<a href="https://ouchi-dqx.github.io/Tools/test/testphone.html">スマホ版(β2)</a>
+                ◆スマホ版のテスト中 テスト協力いただけると嬉しいです<br />
+                　<a href="https://ouchi-dqx.github.io/Tools/test/testphone.html">スマホ版(β2)</a><br />
+                ◆鯖全体の時間を更新するボタンを追加しました。　詳細は下部の使い方まで。
             </div>
         </div>
 
@@ -317,8 +318,14 @@
                     <span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">skip_next</i></span>
                     <b>で調査場所を巡回順に並び替えます。</b>
                 </li>
-                <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">save</i>保存</span>：入力情報（メモ欄など）を保存します。
-                    時間情報はカラーボタンをクリックすることで自動的に保存されていきますので、こまめにこのボタンで保存する必要はありません。</li>
+                <li>
+                    <span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">autorenew</i></span>
+                    ：その鯖の全ての場所の時間を更新します。(青黄・赤を除く)
+                </li>
+                <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">save</i>保存</span>
+                    ：入力情報（メモ欄など）を保存します。
+                    時間情報はカラーボタンをクリックすることで自動的に保存されていきますので、こまめにこのボタンで保存する必要はありません。
+                </li>
                 <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">undo</i>戻す</span>：チェックリストを1操作前の状態に戻します。最大5回まで。</li>
                 <li><span class="text-ylist">青黄リスト(赤時間)</span><span class="text-rlist">確定リスト</span><span class="text-rlist">外部確定リスト</span>はチェックリスト入力時に自動的に追加されます。<br />
                     <span class="text-rlist">確定リスト</span><span class="text-rlist">外部確定リスト</span>は手入力も可能です。<br />
@@ -337,6 +344,11 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>2020/12/14 <br />
+                    ・鯖全体の時間を更新するボタンを追加しました。<br />
+                    　青黄・赤以外の場所を全て更新します。<br />
+                    ・iOSで青木・確定リストの確定リストをクリックしても反応しない不具合を修正しました？
+                </li>
                 <li>2020/12/01 <br />
                     ・虹黄情報共通ツールを封印しました。
                 </li>
@@ -399,7 +411,10 @@
 
         <template id="template1">
             <tr class="Servers">
-                <td class="Server">サーバー</td>
+                <td class="Server">
+                    <div class="ServerID">サーバー</div>
+                    <button class="btn_all"><i class="material-icons" style="font-size: 20px;">autorenew</i></button>
+                </td>
                 <td class="ゲル">
                     <div class="setTemp"></div>
                 </td>

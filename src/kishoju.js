@@ -53,9 +53,9 @@ function tSort(mode){
         $(function(){
             $('.ServerList tbody').html(
                 $(".Servers").sort(function(a, b){
-                    if(mode == "default") return $(a).find(".Server").text() - $(b).find(".Server").text();
+                    if(mode == "default") return $(a).find(".ServerID").text() - $(b).find(".ServerID").text();
                     if(mode == "even_odd"){
-                        if(ptMODE == "PT4") return $(b).find(".Server").text() % 2 -$(a).find(".Server").text() % 2;
+                        if(ptMODE == "PT4") return $(b).find(".ServerID").text() % 2 -$(a).find(".ServerID").text() % 2;
                     }
                 })
             );
@@ -152,7 +152,7 @@ $(document).on("click", ".setServers", function(){
 
     for(let i=0; i<10; i++){
         const CopyTemp1 = $($("#template1").html()).clone()
-        CopyTemp1.find(".Server").text(i + Number(num))
+        CopyTemp1.find(".ServerID").text(i + Number(num))
         CopyTemp1.find(".setTemp").each(function(){
             const CopyTemp2 = $($("#template2").html()).clone()
             $(this).append(CopyTemp2)
@@ -162,7 +162,7 @@ $(document).on("click", ".setServers", function(){
 
     if($(this).text() == "9 - 10" || ptMODE == "PT8"){
         $(".Servers").each(function(){
-            const Server = Number($(this).find(".Server").text())
+            const Server = Number($(this).find(".ServerID").text())
             if(Server < Start || Server > End) $(this).hide()
         })
     }
@@ -174,11 +174,59 @@ $(document).on("click", ".setServers", function(){
     setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
 })
 
+//全更新ボタンクリックイベント
+$(document).on("click", ".btn_all", function(){
+    $(this).closest("tr").find(".template2-box").each(function(){
+        const Data = {
+            Server: $(this).closest("tr").find(".ServerID").text(),
+            Point: $(this).closest("td").attr("class"),
+            newDate: new Date().getTime(),
+            newTime: TimePlus(new Date().getTime(), "00:00:00").Time,
+            newColor: "",
+            nowDate: $(this).find(".nowTime").attr("Date"),
+            nowTime: $(this).find(".nowTime").text(),
+            nowColor: $(this).find(".nowTime").attr("color"),
+            befDate: $(this).find(".befTime").attr("Date"),
+            befTime: $(this).find(".befTime").text(),
+            befColor: $(this).find(".befTime").attr("color"),
+            memo: $(this).find(".memo").text(),
+            memoColor: $(this).find(".memo").attr("color")
+        }
+
+        if(
+            Data.nowColor != "transparent" && Data.nowColor != "red" &&
+            !(Data.befColor == "skyblue" && Data.nowColor == "yellow")
+        ){
+            Data.newColor = Data.nowColor
+            TMP.push({
+                Server: Data.Server,
+                Point: Data.Point,
+                befDate: Data.befDate,
+                befTime: Data.befTime,
+                befColor: Data.befColor,
+                nowDate: Data.nowDate,
+                nowTime: Data.nowTime,
+                nowColor: Data.nowColor,
+                memo: Data.memo,
+                memoColor: $(this).find(".memo").attr("color"),
+                memoDate: $(this).find(".memo").attr("Date")
+            })
+
+            if(6 < TMP.length){
+                TMP.shift()
+            }
+            setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
+
+            timeStamp($(this), Data)
+        }
+    })
+})
+
 //ボタンクリックイベント
 $(document).on("click", ".btn", function(){
     const objBox = $(this).parents(".template2-box");
     const Data = {
-        Server: $(this).closest("tr").find(".Server").text(),
+        Server: $(this).closest("tr").find(".ServerID").text(),
         Point: $(this).closest("td").attr("class"),
         newDate: new Date().getTime(),
         newTime: TimePlus(new Date().getTime(), "00:00:00").Time,
@@ -392,7 +440,7 @@ function save_Storage(){
     let fix_red = []
 
     $(".Servers").each(function(){
-        const Server = $(this).find(".Server").text()
+        const Server = $(this).find(".ServerID").text()
         let Data = [] //配列初期化
 
         for(let i=0; i<3; i++){
@@ -490,7 +538,7 @@ function load_Storage(){
         $(".Servers").each(function(){
             const Data = Storage[n]
             const Servers = $(this)
-            const Server = Servers.find(".Server").text()
+            const Server = Servers.find(".ServerID").text()
 
             for(let i=0; i<3; i++){
                 const objBox = $(Servers).find("." + Point[i]).find(".template2-box")
@@ -548,7 +596,7 @@ function Rollback(){
         const n = TMP.length - 1
 
         $(".Servers").each(function(){
-            if(TMP[n].Server == $(this).find(".Server").text()){
+            if(TMP[n].Server == $(this).find(".ServerID").text()){
                 const objBox = $(this).find("." + TMP[n].Point).find(".template2-box")
                 const Data = {
                     Server: TMP[n].Server,
@@ -627,7 +675,7 @@ function clear_input(){
     $('.Servers').find('.template2-box').removeClass('sel');
 
     $(".Servers").each(function(){
-        const Server = Number($(this).find(".Server").text())
+        const Server = Number($(this).find(".ServerID").text())
         const Point = ["ゲル", "砂漠", "バル"]
 
         if($(this).is(":visible")){
@@ -985,7 +1033,7 @@ function TimePlus(Time, sumTime){
 
 //タイマ設置
 function setTimer(objBox){
-    const Server = objBox.closest("tr").find(".Server").text()
+    const Server = objBox.closest("tr").find(".ServerID").text()
     const Point = objBox.closest("td").attr("class")
 
     const newDate = new Date().getTime()
