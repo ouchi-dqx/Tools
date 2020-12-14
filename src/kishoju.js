@@ -194,7 +194,9 @@ $(document).on("click", ".btn_all", function(){
         }
 
         if(
-            Data.nowColor != "transparent" && Data.nowColor != "red" &&
+            Data.nowColor != "" &&
+            Data.nowColor != "transparent" &&
+            Data.nowColor != "red" &&
             !(Data.befColor == "skyblue" && Data.nowColor == "yellow")
         ){
             Data.newColor = Data.nowColor
