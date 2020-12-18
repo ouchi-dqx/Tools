@@ -14,6 +14,12 @@ div{ box-sizing: border-box; }
 .material-icons{ position: relative; }
 
 /************************************************　ヘッダ　************************************************/
+
+.ShortURL{
+    display: none;
+    margin-bottom: 15px;
+}
+
 /* フキダシ-メッセージ部分 */
 .ouchi-msg{
     position: relative;

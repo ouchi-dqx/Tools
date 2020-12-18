@@ -8,6 +8,7 @@
         <link rel="stylesheet" type="text/css" href="src/control.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
         <script src="src/kishoju.js"></script>
         <link rel="manifest" href="manifest.json">
         <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
@@ -128,17 +129,27 @@
                 <a href="javascript:omikuji();">調査鯖おみくじ</a>
                 <span class="omikuji"></span>
             </span>
+            <span style="font-size: 14px;">｜</span>
+            <span style="font-size: 12px;">
+                <a href="javascript:getShortURL();">調査データをURL化</a>
+            </span>
         </div>
+
+        <div class="ShortURL">
+            <input type="text" class="URL">
+            <button class="copyURL" onclick="copyURL()">コピー</button>
+        </div>
+
         <div style="display: table; width: 100%; margin-bottom: 20px;">
             <div style="display: table-cell; width: 40px; text-align: left; vertical-align: top; color: dimgray;">
                 <!--i class="material-icons" style="top: 3px;">house</i-->
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆スマホ版のテスト中 テスト協力いただけると嬉しいです<br />
-                　<a href="https://ouchi-dqx.github.io/Tools/test/testphone.html">スマホ版(β2)</a><br />
-                ◆鯖全体の時間を更新するボタンを追加しました。<br />
-                　詳細は下部の使い方まで。
+                ◆スマホ版のテスト中　テスト協力いただけると嬉しいです。→
+                <a href="https://ouchi-dqx.github.io/Tools/test/testphone.html">スマホ版(β2)</a><br />
+                ◆鯖全体の時間を更新するボタンを追加しました。詳細は下部の使い方まで。<br />
+                ◆調査データをURL化する機能を追加しました。詳細は下部(略)
             </div>
         </div>
 
@@ -323,6 +334,10 @@
                     <span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">autorenew</i></span>
                     ：その鯖の全ての場所の時間を更新します。(青黄・赤を除く)
                 </li>
+                <li>
+                    [調査データをURL化]：その鯖の調査データをURL化します。<br />
+                    URLを開く事で作成した時の調査データを他人が利用することができます。
+                </li>
                 <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">save</i>保存</span>
                     ：入力情報（メモ欄など）を保存します。
                     時間情報はカラーボタンをクリックすることで自動的に保存されていきますので、こまめにこのボタンで保存する必要はありません。
@@ -345,6 +360,10 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>2020/12/18 <br />
+                    ・調査データをURL化する機能を追加しました。<br />
+                    　青黄・確定以外の情報も全て他人に渡すことができます。
+                </li>
                 <li>2020/12/14 <br />
                     ・鯖全体の時間を更新するボタンを追加しました。<br />
                     　青黄・赤以外の場所を全て更新します。<br />
