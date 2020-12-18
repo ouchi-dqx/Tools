@@ -969,7 +969,7 @@ function debug(){}
             clearInterval(Timers[Server + Point])
             clear_one_fix("fix_red",Server + Point)
             clear_one_fix("other_fix_red",Server + Point)
-            save_Storage()
+            //save_Storage()
         }else{
             objBox.find(".memo").text("経過時間:" + Time)
         }
