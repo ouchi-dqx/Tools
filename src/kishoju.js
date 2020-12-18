@@ -43,7 +43,10 @@ function debug(){}
             fix_red : JSON.parse(getParam("fix_red")),
         }
 
-        if(getData.boxName == "")
+        if(getData.boxName == "" || getData.Storage == ""){
+            alert("不正なURLです")
+            return false
+        }
 
         if(ptMODE == "PT8"){
             $('.setting-box .mode-change-box input[value="PT8"]').prop('checked', true);
