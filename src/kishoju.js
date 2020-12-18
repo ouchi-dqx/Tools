@@ -43,6 +43,8 @@ function debug(){}
             fix_red : JSON.parse(getParam("fix_red")),
         }
 
+        if(getData.boxName == "")
+
         if(ptMODE == "PT8"){
             $('.setting-box .mode-change-box input[value="PT8"]').prop('checked', true);
             modeChange()
@@ -68,7 +70,7 @@ function debug(){}
         const Storage = localStorage.getItem(boxName)
         const fix_blue = localStorage.getItem("fix_blue")
         const fix_red = localStorage.getItem("fix_red")
-        const btnText = $(".Server:visible").first().text() + " - " + $(".Server:visible").last().text()
+        const btnText = $(".ServerID:visible").first().text() + " - " + $(".ServerID:visible").last().text()
         const params = LZString.compressToEncodedURIComponent(
             "ptMODE=" + ptMODE
                 + "&btnText=" + btnText
