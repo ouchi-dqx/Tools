@@ -372,7 +372,7 @@ function debug(){}
                 Data.nowColor != "red" &&
                 !(Data.befColor == "skyblue" && Data.nowColor == "yellow") &&
                 !(Data.befColor == "red" && Data.nowColor == "yellow") &&
-                !(Data.befColor == "violet" && Data.nowColor == "yellow") &&
+                !(Data.befColor == "violet" && Data.nowColor == "yellow")
             ){
                 Data.newColor = Data.nowColor
                 TMP.push({
