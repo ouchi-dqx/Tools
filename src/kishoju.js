@@ -82,6 +82,7 @@ function debug(){}
                 + "&fix_blue=" + fix_blue
                 + "&fix_red=" + fix_red
         )
+        $(".nowGetURL").show()
 
         $.ajax({
             url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
@@ -90,6 +91,7 @@ function debug(){}
             data: {params: params, mode: "shortURL"},
             success: res => {
                 $(".URL").val(res.URL)
+                $(".nowGetURL").hide()
                 $(".ShortURL").show()
             }
         })

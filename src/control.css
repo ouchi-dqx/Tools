@@ -15,6 +15,11 @@ div{ box-sizing: border-box; }
 
 /************************************************　ヘッダ　************************************************/
 
+.nowGetURL{
+    display: none;
+    margin-bottom: 15px;
+}
+
 .ShortURL{
     display: none;
     margin-bottom: 15px;
