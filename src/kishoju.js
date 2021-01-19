@@ -85,14 +85,27 @@ function debug(){}
         $(".nowGetURL").show()
 
         $.ajax({
+            async:false,
             url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
             type: "GET",
             dataType: "jsonp",
             data: {params: params, mode: "shortURL"},
+            beforeSend:function(xhr){
+                if (window.navigator.userAgent.toLowerCase().indexOf('safari') != -1)
+                xhr.setRequestHeader("If-Modified-Since", new Date().toUTCString())
+            },
             success: res => {
                 $(".URL").val(res.URL)
                 $(".nowGetURL").hide()
                 $(".ShortURL").show()
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown) {
+                $(".nowGetURL").html(
+                    "ERROR!!<br>" +
+                    "XMLHttpRequest.status:" + XMLHttpRequest.status + "<br>" +
+                    "textStatus:" + textStatus + "<br>" +
+                    "errorThrown:" + errorThrown.message
+                );
             }
         })
     }
