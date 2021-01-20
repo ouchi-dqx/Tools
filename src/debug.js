@@ -91,7 +91,7 @@ function debug(){}
 
         $.ajax({
             async:true,
-            url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
+            url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
             type: "GET",
             dataType: "jsonp",
             data: {params: params, mode: "shortURL"},

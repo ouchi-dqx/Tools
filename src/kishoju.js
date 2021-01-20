@@ -86,9 +86,11 @@ function debug(){}
 
         $.ajax({
             async:false,
-            url: "https://script.google.com/macros/s/AKfycbxlGCRghpYCAy7eyk0baCalwF0ZXjG_6tI-ZRVXdeiEo5kpUcw/exec",
+            url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
             type: "GET",
             dataType: "jsonp",
+            jsonpCallback: 'hoge',
+            cache: false,
             data: {params: params, mode: "shortURL"},
             beforeSend:function(xhr){
                 if (window.navigator.userAgent.toLowerCase().indexOf('safari') != -1)
@@ -103,6 +105,7 @@ function debug(){}
                 $(".nowGetURL").html(
                     "ERROR!!<br>" +
                     "XMLHttpRequest.status:" + XMLHttpRequest.status + "<br>" +
+                    "XMLHttpRequest.statusText:" + XMLHttpRequest.statusText + "<br>" +
                     "textStatus:" + textStatus + "<br>" +
                     "errorThrown:" + errorThrown.message
                 );
