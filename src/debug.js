@@ -38,24 +38,7 @@ function debug(){}
             "params=" + location.search.substring(1) + "<br>"
         )
 
-        try{
-            ptMODE = getParam("ptMODE")
-            const btnText =  getParam("btnText")
-            const getData = {
-                boxName : getParam("boxName"),
-                Storage : JSON.parse(getParam("Storage")),
-                fix_blue : JSON.parse(getParam("fix_blue")),
-                fix_red : JSON.parse(getParam("fix_red")),
-            }
-        }
-        catch(e){
-            $(".debugArea").html(
-                "params=" + location.search.substring(1) + "<br>" +
-                "error=" + e
-            )
-        }
-
-        ptMODE = getParam("ptMOsDE")
+        ptMODE = getParam("ptMODE")
         const btnText =  getParam("btnText")
         const getData = {
             boxName : getParam("boxName"),
@@ -138,11 +121,19 @@ function debug(){}
     }
 
     function getParam(params) {
-        const url = LZString.decompressFromEncodedURIComponent(location.search.substring(1));
-        params = params.replace(/[\[\]]/g, "\\$&");
-        const regex = new RegExp(params + "(=([^&#]*)|&|#|$)");
-        const param = regex.exec(url);
-        return param[2].replace(/\+/g, " ");
+        try{
+            const url = LZString.decompressFromEncodedURIComponent(location.search.substring(1));
+            params = params.replace(/[\[\]]/g, "\\$&");
+            const regex = new RegExp(params + "(=([^&#]*)|&|#|$)");
+            const param = regex.exec(url);
+            return param[2].replace(/\+/g, " ");
+        }
+        catch(e){
+            $(".debugArea").html(
+                "params=" + location.search.substring(1) + "<br>" +
+                "decode=" + e
+            )
+        }
     }
 
     function copyURL(){
