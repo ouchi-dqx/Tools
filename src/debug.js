@@ -34,6 +34,27 @@ function debug(){}
 
 /*最新コード*/
     function getURLData(){
+        $(".debugArea").html(
+            "params=" + location.search.substring(1) + "<br>"
+        )
+
+        try{
+            ptMODE = getParam("ptMODE")
+            const btnText =  getParam("btnText")
+            const getData = {
+                boxName : getParam("boxName"),
+                Storage : JSON.parse(getParam("Storage")),
+                fix_blue : JSON.parse(getParam("fix_blue")),
+                fix_red : JSON.parse(getParam("fix_red")),
+            }
+        }
+        catch(e){
+            $(".debugArea").html(
+                "params=" + location.search.substring(1) + "<br>" +
+                "error=" e
+            )
+        }
+
         ptMODE = getParam("ptMODE")
         const btnText =  getParam("btnText")
         const getData = {
