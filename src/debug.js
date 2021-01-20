@@ -51,11 +51,11 @@ function debug(){}
         catch(e){
             $(".debugArea").html(
                 "params=" + location.search.substring(1) + "<br>" +
-                "error=" e
+                "error=" + e
             )
         }
 
-        ptMODE = getParam("ptMODE")
+        ptMODE = getParam("ptMOsDE")
         const btnText =  getParam("btnText")
         const getData = {
             boxName : getParam("boxName"),
