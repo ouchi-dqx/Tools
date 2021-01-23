@@ -11,7 +11,13 @@ window.onload = function(){
     setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
     $(".other_block").hide()
-    if(location.search.substring(1) !== "") getURLData()
+    try{
+        $(".debugArea").html("params:" + location.search.substring(1))
+        if(location.search.substring(1) !== "") getURLData()
+    }
+    catch(e){
+        $(".debugArea").html("error:" + e)
+    }
 
     /*
         sendFlg = localStorage.getItem("sendMode")
@@ -121,19 +127,11 @@ function debug(){}
     }
 
     function getParam(params) {
-        try{
-            const url = LZString.decompressFromEncodedURIComponent(location.search.substring(1));
-            params = params.replace(/[\[\]]/g, "\\$&");
-            const regex = new RegExp(params + "(=([^&#]*)|&|#|$)");
-            const param = regex.exec(url);
-            return param[2].replace(/\+/g, " ");
-        }
-        catch(e){
-            $(".debugArea").html(
-                "params=" + location.search.substring(1) + "<br>" +
-                "decode=" + e
-            )
-        }
+        const url = LZString.decompressFromEncodedURIComponent(location.search.substring(1));
+        params = params.replace(/[\[\]]/g, "\\$&");
+        const regex = new RegExp(params + "(=([^&#]*)|&|#|$)");
+        const param = regex.exec(url);
+        return param[2].replace(/\+/g, " ");
     }
 
     function copyURL(){
