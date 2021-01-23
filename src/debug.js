@@ -40,10 +40,6 @@ function debug(){}
 
 /*最新コード*/
     function getURLData(){
-        $(".debugArea").html(
-            "params=" + location.search.substring(1) + "<br>"
-        )
-
         ptMODE = getParam("ptMODE")
         const btnText =  getParam("btnText")
         const getData = {
@@ -52,11 +48,6 @@ function debug(){}
             fix_blue : JSON.parse(getParam("fix_blue")),
             fix_red : JSON.parse(getParam("fix_red")),
         }
-
-        $(".debugArea").html(
-            "params=" + location.search.substring(1) + "<br>" +
-            "decode=" + JSON.stringify(getData)
-        )
 
         if(getData.boxName == "" || getData.Storage == ""){
             alert("不正なURLです")
