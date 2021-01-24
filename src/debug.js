@@ -357,11 +357,20 @@ function debug(){}
         const befClass = "." + $(befPoint).attr("class")
         const afterClass = "." + $(afterPoint).attr("class")
         const tmp1 = document.getElementById("template1")
-        const tmp1_befPoint = tmp1.content.querySelector(".Servers >" + befClass)
-        const tmp1_afterPoint = tmp1.content.querySelector(".Servers >" + afterClass)
-        const Servers = tmp1.content.querySelector(".Servers")
+        const tmp1_befPoint = tmp1.content.querySelectorAll(".Servers >" + befClass)
+        const tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers >" + afterClass)
+        const Servers = tmp1.content.querySelectorAll(".Servers")
 
-        Servers.insertBefore(tmp1_befPoint, tmp1_afterPoint)
+        $(".paramArea").html(
+            "befClass:" + befClass + "<br>" +
+            "afterClass:" + afterClass + "<br>" +
+            "tmp1:" + tmp1 + "<br>" +
+            "tm1_befPoint:" + tmp1_befPoint + "<br>" +
+            "tm1_afterPoint:" + tmp1_afterPoint + "<br>" +
+            "Servers:" + Servers + "<br>"
+        )
+
+        Servers[0].insertBefore(tmp1_befPoint[0], tmp1_afterPoint[0])
         befPoint.insertBefore(afterPoint[0])
         for(let i=0; i<10; i++){
             $(".Servers").find(befClass).eq(i)
