@@ -17,7 +17,7 @@ window.addEventListener("load",function() {
         if(location.search.substring(1) !== "") getURLData()
     }
     catch(e){
-        $(".debugArea").html("error:" + e)
+        $(".debugArea").html("error:" + e.stack)
     }
 
     /*
@@ -361,11 +361,11 @@ function debug(){}
         const tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers >" + afterClass)
         const Servers = tmp1.content.querySelectorAll(".Servers")
 
-        Servers.item(0).insertBefore(tmp1_befPoint.item(0), tmp1_afterPoint.item(0))
-        befPoint.insertBefore(afterPoint)
+        Servers[0].insertBefore(tmp1_befPoint[0], tmp1_afterPoint[0])
+        befPoint.insertBefore(afterPoint[0])
         for(let i=0; i<10; i++){
             $(".Servers").find(befClass).eq(i)
-                .insertBefore($(".Servers").find(afterClass).eq(i))
+                .insertBefore($(".Servers").find(afterClass).eq(i)[0])
         }
 
     setInitMoveBtn();
