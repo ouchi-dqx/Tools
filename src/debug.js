@@ -5,7 +5,8 @@ var even_oddMODE = ""
 var get_flg = false
 //var sendFlg = ""
 
-window.onload = function(){
+
+window.addEventListener("load",function() {
     try{
         sortPoint()
         modeChange();
@@ -34,7 +35,7 @@ window.onload = function(){
             sendFlg = false
         }
     */
-}
+})
 
 function debug(){}
 
