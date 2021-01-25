@@ -5,16 +5,15 @@ var even_oddMODE = ""
 var get_flg = false
 //var sendFlg = ""
 
-
 window.addEventListener("load",function() {
     try{
-        sortPoint()
         modeChange();
         setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
         setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
         $(".other_block").hide()
         $(".debugArea").html("params:" + location.search.substring(1))
         if(location.search.substring(1) !== "") getURLData()
+        else sortPoint()
     }
     catch(e){
         $(".debugArea").html("error:" + e.stack)
@@ -364,10 +363,7 @@ function debug(){}
         $(".paramArea").html(
             "befClass:" + befClass + "<br>" +
             "afterClass:" + afterClass + "<br>" +
-            "tmp1:" + tmp1 + "<br>" +
-            "tm1_befPoint:" + tmp1_befPoint + "<br>" +
-            "tm1_afterPoint:" + tmp1_afterPoint + "<br>" +
-            "Servers:" + Servers + "<br>"
+            "sort:" + JSON.parse(localStorage.getItem("Sort"))
         )
 
         Servers[0].insertBefore(tmp1_befPoint[0], tmp1_afterPoint[0])
