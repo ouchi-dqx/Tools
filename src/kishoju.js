@@ -6,12 +6,13 @@ var get_flg = false
 //var sendFlg = ""
 
 window.onload = function(){
-    sortPoint()
+
     modeChange();
     setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
     $(".other_block").hide()
     if(location.search.substring(1) !== "") getURLData()
+    else sortPoint()
 
     /*
         sendFlg = localStorage.getItem("sendMode")
