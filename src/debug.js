@@ -106,7 +106,8 @@ function debug(){}
                     "XMLHttpRequest.status:" + XMLHttpRequest.status + "<br>" +
                     "XMLHttpRequest.statusText:" + XMLHttpRequest.statusText + "<br>" +
                     "textStatus:" + textStatus + "<br>" +
-                    "errorThrown:" + errorThrown.message
+                    "errorThrown:" + errorThrown.message +  "<br>" +
+                    "params:" + params
                 );
             }
         })
