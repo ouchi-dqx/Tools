@@ -6,19 +6,13 @@ var get_flg = false
 //var sendFlg = ""
 
 window.addEventListener("load",function() {
-    try{
-        modeChange();
-        setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
-        setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
-        $(".other_block").hide()
-        $(".debugArea").html("params:" + location.search.substring(1))
-        if(location.search.substring(1) !== "") getURLData()
-        else sortPoint()
-    }
-    catch(e){
-        $(".debugArea").html("error:" + e.stack)
-    }
-
+    modeChange();
+    setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
+    setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
+    $(".other_block").hide()
+    $(".debugArea").html("params:" + location.search.substring(1))
+    if(location.search.substring(1) !== "") getURLData()
+    else sortPoint()
     /*
         sendFlg = localStorage.getItem("sendMode")
         even_oddMODE = localStorage.getItem("even_oddMode")
@@ -91,7 +85,8 @@ function debug(){}
         $(".nowGetURL").show()
 
         $.ajax({
-            async:true,
+            async:false,
+            cache:false,
             url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
             type: "GET",
             dataType: "jsonp",
@@ -367,10 +362,10 @@ function debug(){}
         )
 
         Servers[0].insertBefore(tmp1_befPoint[0], tmp1_afterPoint[0])
-        befPoint.insertBefore(afterPoint[0])
+        befPoint.insertBefore(afterPoint)
         for(let i=0; i<10; i++){
             $(".Servers").find(befClass).eq(i)
-                .insertBefore($(".Servers").find(afterClass).eq(i)[0])
+                .insertBefore($(".Servers").find(afterClass).eq(i))
         }
 
     setInitMoveBtn();

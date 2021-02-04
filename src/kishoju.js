@@ -87,11 +87,11 @@ function debug(){}
 
         $.ajax({
             async:false,
+            cache: false,
             url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
             type: "GET",
             dataType: "jsonp",
             jsonpCallback: 'hoge',
-            cache: false,
             data: {params: params, mode: "shortURL"},
             beforeSend:function(xhr){
                 if (window.navigator.userAgent.toLowerCase().indexOf('safari') != -1)
@@ -357,7 +357,7 @@ function debug(){}
         const tmp1_afterPoint = tmp1.content.querySelectorAll(".Servers >" + afterClass)
         const Servers = tmp1.content.querySelectorAll(".Servers")
 
-        Servers.item(0).insertBefore(tmp1_befPoint.item(0), tmp1_afterPoint.item(0))
+        Servers[0].insertBefore(tmp1_befPoint[0], tmp1_afterPoint[0])
         befPoint.insertBefore(afterPoint)
         for(let i=0; i<10; i++){
             $(".Servers").find(befClass).eq(i)
