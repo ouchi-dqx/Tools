@@ -107,7 +107,8 @@ function debug(){}
                     "XMLHttpRequest.statusText:" + XMLHttpRequest.statusText + "<br>" +
                     "textStatus:" + textStatus + "<br>" +
                     "errorThrown:" + errorThrown.message +  "<br>" +
-                    "params:" + params
+                    "params1:" + params + "<br>" +
+                    "params2:" + ZString.decompressFromEncodedURIComponent(params)
                 );
             }
         })
