@@ -65,9 +65,6 @@ function debug(){}
     }
 
     function getShortURL(){
-        alert("工事中です m(_ _ )m")
-
-        /*
         if($(".ServerList").find('.Servers').length <= 1){
             alert("先に調査サーバーを選択してください。");
             return 0
@@ -78,7 +75,7 @@ function debug(){}
         const fix_blue = localStorage.getItem("fix_blue")
         const fix_red = localStorage.getItem("fix_red")
         const btnText = $(".ServerID:visible").first().text() + " - " + $(".ServerID:visible").last().text()
-        const params = LZString.compressToEncodedURIComponent(
+        const params = deflate(
             "ptMODE=" + ptMODE
                 + "&btnText=" + btnText
                 + "&boxName=" + boxName
@@ -115,11 +112,10 @@ function debug(){}
                 );
             }
         })
-        */
     }
 
     function getParam(params) {
-        const url = LZString.decompressFromEncodedURIComponent(location.search.substring(1));
+        const url = inflate(location.search.substring(1));
         params = params.replace(/[\[\]]/g, "\\$&");
         const regex = new RegExp(params + "(=([^&#]*)|&|#|$)");
         const param = regex.exec(url);
@@ -133,6 +129,21 @@ function debug(){}
         promise.then(() => copy(CopyText))
     }
 
+
+    //圧縮・復号関数
+    function deflate(val) {
+        val = encodeURIComponent(val); // UTF16 → UTF8
+        val = RawDeflate.deflate(val); // 圧縮
+        val = btoa(val); // base64エンコード
+        return val;
+    }
+
+    function inflate(val) {
+        val = atob(val); // base64デコード
+        val = RawDeflate.inflate(val); // 復号
+        val = decodeURIComponent(val); // UTF8 → UTF16
+        return val;
+    }
 
 /*ヘッダ部機能(リンク)*/
     //関係者向け

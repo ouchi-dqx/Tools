@@ -74,7 +74,7 @@ function debug(){}
         const fix_blue = localStorage.getItem("fix_blue")
         const fix_red = localStorage.getItem("fix_red")
         const btnText = $(".ServerID:visible").first().text() + " - " + $(".ServerID:visible").last().text()
-        const params = LZString.compressToEncodedURIComponent(
+        const params = deflate(
             "ptMODE=" + ptMODE
                 + "&btnText=" + btnText
                 + "&boxName=" + boxName
@@ -87,7 +87,7 @@ function debug(){}
         $.ajax({
             async:false,
             cache:false,
-            url: "",
+            url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
             type: "GET",
             dataType: "jsonp",
             jsonpCallback: 'hoge',
@@ -115,7 +115,7 @@ function debug(){}
     }
 
     function getParam(params) {
-        const url = LZString.decompressFromEncodedURIComponent(location.search.substring(1));
+        const url = inflate(location.search.substring(1));
         params = params.replace(/[\[\]]/g, "\\$&");
         const regex = new RegExp(params + "(=([^&#]*)|&|#|$)");
         const param = regex.exec(url);
@@ -129,6 +129,20 @@ function debug(){}
         promise.then(() => copy(CopyText))
     }
 
+    //圧縮・復号関数
+    function deflate(val) {
+        val = encodeURIComponent(val); // UTF16 → UTF8
+        val = RawDeflate.deflate(val); // 圧縮
+        val = btoa(val); // base64エンコード
+        return val;
+    }
+
+    function inflate(val) {
+        val = atob(val); // base64デコード
+        val = RawDeflate.inflate(val); // 復号
+        val = decodeURIComponent(val); // UTF8 → UTF16
+        return val;
+    }
 
 /*ヘッダ部機能(リンク)*/
     //関係者向け
@@ -136,7 +150,7 @@ function debug(){}
         const pass = window.prompt("パスワードを入力してください")
         if(pass){
             $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbxGwBzlzS2wA8zcnoyG9iCRY048zGrLuuPQAi-cBB3oVGuTi0nb/exec",
+                url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
                 type: "GET",
                 dataType: "jsonp",
                 data: {mode: "login", pass: pass},
