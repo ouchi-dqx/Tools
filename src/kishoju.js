@@ -65,6 +65,9 @@ function debug(){}
     }
 
     function getShortURL(){
+        alert("工事中です m(_ _ )m")
+
+        /*
         if($(".ServerList").find('.Servers').length <= 1){
             alert("先に調査サーバーを選択してください。");
             return 0
@@ -112,6 +115,7 @@ function debug(){}
                 );
             }
         })
+        */
     }
 
     function getParam(params) {
