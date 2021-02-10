@@ -154,6 +154,9 @@ function updateList(mode, fix, Text) {
                     fix_blue = res.fix_blue.split(","),
                     fix_red = res.fix_red.split(",");
 
+                $(".other_fix_blue tr").slice(1).remove();
+                $(".other_fix_red tr").slice(1).remove();
+
                 fix_blue.each(function (Text) {
                     $(".other_fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>");
                 })
