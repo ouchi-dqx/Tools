@@ -166,12 +166,12 @@ function updateList(mode, fix, Text) {
                 $(".other_fix_blue tr").slice(1).remove();
                 $(".other_fix_red tr").slice(1).remove();
 
-                fix_blue.each(function (Text) {
-                    $(".other_fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>");
-                })
-                fix_red.each(function (Text) {
-                    $(".other_fix_red").append('<tr><td class="fix">' + Text + "</td></tr>");
-                })
+                fix_blue.forEach((Text) =>
+                    $(".other_fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
+                )
+                fix_red.forEach((Text) =>
+                    $(".other_fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                )
             }
         })
     }
