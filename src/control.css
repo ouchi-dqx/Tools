@@ -18,14 +18,10 @@ div{ box-sizing: border-box; }
 
 /************************************************　ヘッダ　************************************************/
 
-.nowGetURL{
+.message, .copyArea{
     display: none;
     margin-bottom: 15px;
-}
-
-.ShortURL{
-    display: none;
-    margin-bottom: 15px;
+    font-size: 15px;
 }
 
 /* フキダシ-メッセージ部分 */
@@ -416,12 +412,12 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 
 /* サイドリストテーブル 罫線 */
-.fix_blue, .fix_red, .other_fix_red{
+.fix_blue, .fix_red, .other_fix_blue, .other_fix_red{
     border-collapse: collapse;
     margin-bottom: 10px;
 }
 /* サイドリストテーブル ヘッダ行 */
-.fix_blue th, .fix_red th, .other_fix_red th{
+.fix_blue th, .fix_red th, .other_fix_blue th, .other_fix_red th{
     width: 170px;
     color: #333;
     font-weight: bold;
@@ -430,9 +426,10 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 .fix_blue th{ background-color: #fec; }
 .fix_red th{ background-color: #fcc; }
+.other_fix_blue th{ background-color: #fec; }
 .other_fix_red th{ background-color: #fcc; }
 /* サイドリストテーブル セル */
-.fix_blue td, .fix_red td, .other_fix_red td{
+.fix_blue td, .fix_red td, .other_fix_blue td, .other_fix_red td{
     width: 165px;
     text-align: center;
     background-color: #fff;
@@ -440,6 +437,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 .fix_blue td:hover{ background-color: yellow; cursor: pointer; }
 .fix_red td:hover{ background-color: red; cursor: pointer; }
+.other_fix_blue td:hover{ background-color: yellow; cursor: pointer; }
 .other_fix_red td:hover{ background-color: red; cursor: pointer; }
 
 /* サイドリスト　確定リストの追加確定フォーム */

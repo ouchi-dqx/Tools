@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <base target="_top">
         <title>輝晶獣分散支援ツール</title>
@@ -14,21 +15,21 @@
         <link rel="manifest" href="manifest.json">
         <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
         <link rel="apple-touch-icon-precomposed" href="icon.png" size="152x152">
-        <script  type="application/javascript">
+        <script type="application/javascript">
             //Service Workerの読み込み
-            if('serviceWorker' in navigator){
-              navigator.serviceWorker
-              .register('src/service-worker.js')
-              .then(function(){
-                console.log('Service Worker Registered');
-              });
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker
+                    .register('src/service-worker.js')
+                    .then(function () {
+                        console.log('Service Worker Registered');
+                    });
             }
         </script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171127523-1"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
+            function gtag() { dataLayer.push(arguments); }
             gtag('js', new Date());
             gtag('config', 'UA-171127523-1');
         </script>
@@ -108,9 +109,9 @@
         !--<button onclick="debug()">debug</button>-->
         <!--ヘッダ-->
         <div style="display: block; margin-bottom: 15px; width: 100%;">
-            <span style="font-size: 14px; font-weight: bold; text-decoration: underline dotted;">
+            <div style="font-size: 14px; font-weight: bold; text-decoration: underline dotted;">
                 DQX - 輝晶獣分散支援ツール
-            </span>
+            </div>
             <!--
                 <span style="font-size: 14px;">｜</span>
                 <span style="font-size: 12px;">
@@ -121,28 +122,32 @@
                     </span>
                 </span>
             -->
+            <span style="font-size: 12px;">
+                <a href="javascript:addShare();">共有表を作成</a>
+            </span>
             <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
-                <a href="javascript:LoginCheck();">関係者向け</a>
+                <a href="javascript:connectShare();">共有表に参加</a>
+            </span>
+            <span style="font-size: 14px;">｜</span>
+            <span style="font-size: 12px;">
+                <a href="javascript:getShortURL();">調査データをURL化</a>
             </span>
             <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
                 <a href="javascript:omikuji();">調査鯖おみくじ</a>
                 <span class="omikuji"></span>
             </span>
-            <span style="font-size: 14px;">｜</span>
-            <span style="font-size: 12px;">
-                <a href="javascript:getShortURL();">調査データをURL化</a>
-            </span>
         </div>
 
-        <div class="nowGetURL">
-            <span style="font-size: 12px;">URLを取得中...</span>
+        <div class="messageArea">
+            <div class="message"></div>
+            <div class="copyArea">
+                <input type="text" class="copyText">
+                <button onclick="TextCopy($('.copyText').val())">コピー</button>
+            </div>
         </div>
-        <div class="ShortURL">
-            <input type="text" class="URL">
-            <button class="copyURL" onclick="copyURL()">コピー</button>
-        </div>
+
         <div style="display: table; width: 100%; margin-bottom: 20px;">
             <div style="display: table-cell; width: 40px; text-align: left; vertical-align: top; color: dimgray;">
                 <!--i class="material-icons" style="top: 3px;">house</i-->
@@ -151,7 +156,8 @@
             <div class="ouchi-msg">
                 ◆スマホ版のテスト中　テスト協力いただけると嬉しいです。→
                 <a href="https://ouchi-dqx.github.io/Tools/test/testphone.html">スマホ版(β2)</a><br />
-                ◆鯖全体の現在時間を更新するボタンを追加しました。<a href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a><br />
+                ◆鯖全体の現在時間を更新するボタンを追加しました。<a
+                    href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a><br />
                 ◆調査データをURL化する機能がiOSで動かない？不具合を修正しました？
             </div>
         </div>
@@ -161,8 +167,12 @@
             <div class="setting-title">
                 <span>調査サーバー選択</span><span class="material-icons">play_arrow</span>
                 <div class="mode-change-box">
-                    <label><input type="radio" name="opt-tgl" value="PT4" autocomplete="off" checked><div class="btn-tgl">4人分散</div></label>
-                    <label><input type="radio" name="opt-tgl" value="PT8" autocomplete="off"><div class="btn-tgl">8人分散</div></label>
+                    <label><input type="radio" name="opt-tgl" value="PT4" autocomplete="off" checked>
+                        <div class="btn-tgl">4人分散</div>
+                    </label>
+                    <label><input type="radio" name="opt-tgl" value="PT8" autocomplete="off">
+                        <div class="btn-tgl">8人分散</div>
+                    </label>
                 </div>
             </div>
             <div class="setting-btn-box" style="font-size: 15px;">
@@ -197,8 +207,8 @@
             <div class="setting-btn-box">
                 <button class="even_odd">標準モード</button>
                 <button onclick="load_Storage()">前回の続きから</button>
-                <button onclick="Cleaner(this)" value="all">すべて最初から</button>
-                <button onclick="Cleaner(this)" value="input">今のリストを最初から</button>
+                <button onclick="Cleaner('all')">すべて最初から</button>
+                <button onclick="Cleaner('input')">今のリストを最初から</button>
             </div>
         </div>
 
@@ -212,20 +222,26 @@
                     <td align="center" class="ゲル">
                         <div class="server-list-hd-text" style="font-size: 12px;">ゲルヘナ</div>
                         <span class="server-list-hd-text">幻野</span>
-                        <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
-                        <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
+                        <span style="float:left"><button class="left"><i
+                                    class="material-icons arrow">skip_previous</i></button></span>
+                        <span style="float:right"><button class="right"><i
+                                    class="material-icons arrow">skip_next</i></button></span>
                     </td>
                     <td align="center" class="砂漠">
                         <div class="server-list-hd-text" style="font-size: 12px;">ジャリムバハ</div>
                         <span class="server-list-hd-text">砂漠</span>
-                        <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
-                        <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
+                        <span style="float:left"><button class="left"><i
+                                    class="material-icons arrow">skip_previous</i></button></span>
+                        <span style="float:right"><button class="right"><i
+                                    class="material-icons arrow">skip_next</i></button></span>
                     </td>
                     <td align="center" class="バル">
                         <div class="server-list-hd-text" style="font-size: 12px;">バルディア</div>
                         <span class="server-list-hd-text">山岳</span>
-                        <span style="float:left"><button class="left"><i class="material-icons arrow">skip_previous</i></button></span>
-                        <span style="float:right"><button class="right"><i class="material-icons arrow">skip_next</i></button></span>
+                        <span style="float:left"><button class="left"><i
+                                    class="material-icons arrow">skip_previous</i></button></span>
+                        <span style="float:right"><button class="right"><i
+                                    class="material-icons arrow">skip_next</i></button></span>
                     </td>
                 </tr>
             </thead>
@@ -238,38 +254,46 @@
             <div class="chk-tgl-box">
                 <label>
                     <input type="checkbox" id="chk-side-follow" autocomplete="off">
-                    <div class="btn-tgl"><i class="material-icons" style="top: 4px; font-size: 16px;">push_pin</i>右サイドに固定</div>
+                    <div class="btn-tgl"><i class="material-icons"
+                            style="top: 4px; font-size: 16px;">push_pin</i>右サイドに固定
+                    </div>
                 </label>
             </div>
             <div class="function-btn-box">
-                <button id="btn-save" onclick="save_Storage()"><i class="material-icons" style="top: 5px;">save</i>保存</button>
-                <button id="btn-rollback" onclick="Rollback()"><i class="material-icons" style="top: 6px;">undo</i>戻す</button>
+                <button id="btn-save" onclick="save_Storage()"><i class="material-icons"
+                        style="top: 5px;">save</i>保存</button>
+                <button id="btn-rollback" onclick="Rollback()"><i class="material-icons"
+                        style="top: 6px;">undo</i>戻す</button>
             </div>
 
             <table id="fix-blue" class="fix_blue" style="margin-bottom: 3px;">
                 <thead>
-                    <tr><th>青黄リスト(赤時間)</th></tr>
+                    <tr>
+                        <th>青黄リスト(赤時間)</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <!-- tbody -->
                 </tbody>
             </table>
             <div class="function-btn-box-mini">
-                <button onclick="setClip(this)" value="fix_blue">コピー</button>
-                <button onclick="Cleaner(this)" value="fix_blue">クリア</button>
+                <button onclick="setClip('fix_blue')">コピー</button>
+                <button onclick="Cleaner('fix_blue')">クリア</button>
             </div>
 
             <table id="fix-red" class="fix_red" style="margin-bottom: 3px;">
                 <thead>
-                    <tr><th>確定リスト</th></tr>
+                    <tr>
+                        <th>確定リスト</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <!-- tbody -->
                 </tbody>
             </table>
             <div class="function-btn-box-mini">
-                <button onclick="setClip(this)" value="fix_red">コピー</button>
-                <button onclick="Cleaner(this)" value="fix_red">クリア</button>
+                <button onclick="setClip('fix_red')">コピー</button>
+                <button onclick="Cleaner('fix_red')">クリア</button>
             </div>
 
             <div class="side-list-add-box">
@@ -284,26 +308,49 @@
                     </select>
                 </span>
                 <br />
-                <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;" placeholder="時:分">
-                <button onclick="push_fix()">追加</button>
+                <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;"
+                    placeholder="時:分">
+                <button onclick="push_fix_old()">追加</button>
             </div>
 
             <div class="other_box">
-                <table id="other_fix_red" class="other_fix_red" style="margin-bottom: 3px;">
-                    <thead class="other_fix_red_head">
-                        <tr><th>外部確定リスト</th></tr>
+                <table id="other_fix_blue" class="other_fix_blue" style="margin-bottom: 3px;">
+                    <thead class="other_fix_blue_head">
+                        <tr>
+                            <th>外部青黄リスト</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <!-- tbody -->
                     </tbody>
                 </table>
-                <div class="other_block">
-                    <textarea class="push_fixs"></textarea>
+                <div class="other_block_fix_blue">
+                    <textarea class="push_fixs_blue"></textarea>
 
                     <div class="function-btn-box-mini">
-                        <button onclick="pushFixs()">追加</button>
-                        <button onclick="setClip(this)" value="other_fix_red">コピー</button>
-                        <button onclick="Cleaner(this)" value="other_fix_red">クリア</button>
+                        <button onclick="push_fixs('other_fix_blue', 'push_fixs_blue')">追加</button>
+                        <button onclick="setClip('other_fix_blue')">コピー</button>
+                        <button onclick="Cleaner('other_fix_blue')">クリア</button>
+                    </div>
+                </div>
+
+                <table id="other_fix_red" class="other_fix_red" style="margin-bottom: 3px;">
+                    <thead class="other_fix_red_head">
+                        <tr>
+                            <th>外部確定リスト</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- tbody -->
+                    </tbody>
+                </table>
+                <div class="other_block_fix_red">
+                    <textarea class="push_fixs_red"></textarea>
+
+                    <div class="function-btn-box-mini">
+                        <button onclick="pushFixs('other_fix_red', 'push_fixs_red')">追加</button>
+                        <button onclick="setClip('other_fix_red')">コピー</button>
+                        <button onclick="Cleaner('other_fix_red')">クリア</button>
                     </div>
                 </div>
             </div>
@@ -329,12 +376,15 @@
                 </li>
                 <li>
                     <b>【Step3】チェックリスト ヘッダの</b>
-                    <span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">skip_previous</i></span>
-                    <span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">skip_next</i></span>
+                    <span class="text-btn"><i class="material-icons arrow"
+                            style="font-size: 18px; line-height: 12px; top: 5px;">skip_previous</i></span>
+                    <span class="text-btn"><i class="material-icons arrow"
+                            style="font-size: 18px; line-height: 12px; top: 5px;">skip_next</i></span>
                     <b>で調査場所を巡回順に並び替えます。</b>
                 </li>
                 <li>
-                    <span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">autorenew</i></span>
+                    <span class="text-btn"><i class="material-icons arrow"
+                            style="font-size: 18px; line-height: 12px; top: 5px;">autorenew</i></span>
                     ：その鯖のゲル・砂漠・バルの現在時間を更新します。(青黄、赤、前回赤or虹+今回黄を除く)<br />
                     　青～虹のボタンを押すのと同じ処理をゲル・砂漠・バル一括で行います。
                     　<a href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a>
@@ -343,19 +393,26 @@
                     [調査データをURL化]：その鯖の調査データをURL化します。<br />
                     URLを開く事で作成した時の調査データを他人が利用することができます。
                 </li>
-                <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">save</i>保存</span>
+                <li><span class="text-btn"><i class="material-icons arrow"
+                            style="font-size: 18px; line-height: 12px; top: 5px;">save</i>保存</span>
                     ：入力情報（メモ欄など）を保存します。
                     時間情報はカラーボタンをクリックすることで自動的に保存されていきますので、こまめにこのボタンで保存する必要はありません。
                 </li>
-                <li><span class="text-btn"><i class="material-icons arrow" style="font-size: 18px; line-height: 12px; top: 5px;">undo</i>戻す</span>：チェックリストを1操作前の状態に戻します。最大5回まで。</li>
-                <li><span class="text-ylist">青黄リスト(赤時間)</span><span class="text-rlist">確定リスト</span><span class="text-rlist">外部確定リスト</span>はチェックリスト入力時に自動的に追加されます。<br />
+                <li><span class="text-btn"><i class="material-icons arrow"
+                            style="font-size: 18px; line-height: 12px; top: 5px;">undo</i>戻す</span>：チェックリストを1操作前の状態に戻します。最大5回まで。
+                </li>
+                <li><span class="text-ylist">青黄リスト(赤時間)</span><span class="text-rlist">確定リスト</span><span
+                        class="text-rlist">外部確定リスト</span>はチェックリスト入力時に自動的に追加されます。<br />
                     <span class="text-rlist">確定リスト</span><span class="text-rlist">外部確定リスト</span>は手入力も可能です。<br />
-                    <span class="text-rlist">確定リスト</span>：サーバー番号、調査場所、時間を入力して<span class="text-btn">追加</span>をクリックします。<br />
+                    <span class="text-rlist">確定リスト</span>：サーバー番号、調査場所、時間を入力して<span
+                        class="text-btn">追加</span>をクリックします。<br />
                     <span class="text-rlist">外部確定リスト</span>：<span class="text-rlist">外部確定リスト</span>をクリックし表示された入力欄に<br />
                     　　　　　　　　　本ツールを利用してコピーされたリストを入力して<span class="text-btn">追加</span>をクリックします。<br />
                 </li>
-                <li><span class="text-btn">コピー</span>：<span class="text-ylist">青黄</span><span class="text-rlist">確定</span>の全体をクリップボードにコピーします。</li>
-                <li><span class="text-btn">クリア</span>：<span class="text-ylist">青黄</span><span class="text-rlist">確定</span>の全体をクリアします。1行だけ削除する場合は対象の行をクリックします。</li>
+                <li><span class="text-btn">コピー</span>：<span class="text-ylist">青黄</span><span
+                        class="text-rlist">確定</span>の全体をクリップボードにコピーします。</li>
+                <li><span class="text-btn">クリア</span>：<span class="text-ylist">青黄</span><span
+                        class="text-rlist">確定</span>の全体をクリアします。1行だけ削除する場合は対象の行をクリックします。</li>
                 <li>使用イメージ動画は<a href="https://twitter.com/ouchi_dqx/status/1271044499561570307">こちら</a></li>
             </ul>
         </div>
@@ -389,8 +446,8 @@
                 </li>
                 <li>2020/11/15 <br />
                     ・青黄リスト関連の不具合を2件修正しました。
-                        ①青→黄→黄変化後、戻るボタンを押すと青黄が二重登録される不具合
-                        ②青→黄変化後、戻るボタンを押しても青黄リストから消えない不具合を修正
+                    ①青→黄→黄変化後、戻るボタンを押すと青黄が二重登録される不具合
+                    ②青→黄変化後、戻るボタンを押しても青黄リストから消えない不具合を修正
                 </li>
                 <li>2020/10/16 <br />
                     ・2垢用に[偶数奇数モード]を追加しました。(要望)<br />
@@ -414,7 +471,7 @@
         </div>
 
         <div style="font-size: 13px; margin-top: 30px;">
-            ■ 本ツールは <a href="https://kouseidq10.com/tools/bunsan">輝晶獣分散狩り支援ページ</a> 様の機能を参考に、独自で作成・拡張したものです。<br/>
+            ■ 本ツールは <a href="https://kouseidq10.com/tools/bunsan">輝晶獣分散狩り支援ページ</a> 様の機能を参考に、独自で作成・拡張したものです。<br />
             ■ 本ツールには「虹」「虹(赤)→黄」遷移時間を収集・公開する機能がありますが<br />
             　 情報提供は任意としています。その他の調査情報の取得は一切行っておりません。<br />
             ■ <a href="https://ouchi-dqx.github.io/Tools/kishoju_phone.html">スマホ版(β)</a><br />
@@ -456,11 +513,12 @@
                     <p class="time-title">現在</p>
                     <p class="nowTime" color="" Date="" style="background-color: transparent;"></p>
                 </div>
-                <div class="memo" color="" Date="">
-
+                <div class="memo-box">
+                    <p class="memo" color="" Date=""></p>
                 </div>
                 <input type="text" class="memo2" placeholder="メモ欄">
             </div>
         </template>
     </body>
+
 </html>
