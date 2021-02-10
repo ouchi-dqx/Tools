@@ -160,8 +160,8 @@ function updateList(mode, fix, Text) {
                 else $(".message").hide();
 
                 const
-                    fix_blue = res.fix_blue.split(","),
-                    fix_red = res.fix_red.split(",");
+                    fix_blue = res[0].fix_blue.split(","),
+                    fix_red = res[0].fix_red.split(",");
 
                 $(".other_fix_blue tr").slice(1).remove();
                 $(".other_fix_red tr").slice(1).remove();

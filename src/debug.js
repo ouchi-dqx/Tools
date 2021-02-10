@@ -95,6 +95,10 @@ function addShare() {
                 $(".message").hide();
                 $(".copyText").val(share_ID);
                 $(".copyArea").show()
+                $(".other_fix_blue").find(".fix").show();
+                $(".other_block_fix_blue").show();
+                $(".other_fix_red").find(".fix").show();
+                $(".other_block_fix_red").show();
 
                 updateList("GET");
                 clearInterval(Timers.updateTime);
@@ -120,6 +124,11 @@ function connectShare() {
                 share_ID = res.share_ID;
 
                 $(".message").text("接続に成功しました");
+                $(".other_fix_blue").find(".fix").show();
+                $(".other_block_fix_blue").show();
+                $(".other_fix_red").find(".fix").show();
+                $(".other_block_fix_red").show();
+
                 updateList("GET");
                 clearInterval(Timers.updateTime);
                 Timers.updateTime = setInterval(updateList, 60000, "GET");
@@ -151,18 +160,18 @@ function updateList(mode, fix, Text) {
                 else $(".message").hide();
 
                 const
-                    fix_blue = res.fix_blue.split(","),
-                    fix_red = res.fix_red.split(",");
+                    fix_blue = res[0].fix_blue.split(","),
+                    fix_red = res[0].fix_red.split(",");
 
                 $(".other_fix_blue tr").slice(1).remove();
                 $(".other_fix_red tr").slice(1).remove();
 
-                fix_blue.each(function (Text) {
-                    $(".other_fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>");
-                })
-                fix_red.each(function (Text) {
-                    $(".other_fix_red").append('<tr><td class="fix">' + Text + "</td></tr>");
-                })
+                fix_blue.forEach((Text) =>
+                    $(".other_fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
+                )
+                fix_red.forEach((Text) =>
+                    $(".other_fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
+                )
             }
         })
     }
