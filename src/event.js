@@ -95,6 +95,10 @@ function addShare() {
                 $(".message").hide();
                 $(".copyText").val(share_ID);
                 $(".copyArea").show()
+                $(".other_fix_blue").find(".fix").show();
+                $(".other_block_fix_blue").show();
+                $(".other_fix_red").find(".fix").show();
+                $(".other_block_fix_red").show();
 
                 updateList("GET");
                 clearInterval(Timers.updateTime);
@@ -120,6 +124,11 @@ function connectShare() {
                 share_ID = res.share_ID;
 
                 $(".message").text("接続に成功しました");
+                $(".other_fix_blue").find(".fix").show();
+                $(".other_block_fix_blue").show();
+                $(".other_fix_red").find(".fix").show();
+                $(".other_block_fix_red").show();
+
                 updateList("GET");
                 clearInterval(Timers.updateTime);
                 Timers.updateTime = setInterval(updateList, 60000, "GET");
