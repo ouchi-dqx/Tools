@@ -1193,7 +1193,9 @@ function Cleaner(target) {
 //チェックリストのクリア
 function clear_input() {
     $('.Servers').find('.template2-box').removeClass('sel');
+    clearInterval(Timers.updateTime);
     TMP = [];
+    share_flg = false;
 
     $(".Servers").each(function () {
         const
@@ -1222,8 +1224,6 @@ function clear_input() {
             Points.forEach(function (Point) {
                 clear_fix("fix_blue", Server + Point);
                 clear_fix("fix_red", Server + Point);
-                clear_fix("other_fix_blue", Server + Point);
-                clear_fix("other_fix_red", Server + Point);
                 clearInterval(Timers[Server + Point]);  //タイマ初期化
             })
         }
@@ -1256,6 +1256,7 @@ function clear_fixs(fix) {
 
 //(確定/青黄リスト)選択クリア
 function clear_fix(fix, Text) {
+
     $("." + fix).find(".fix").each(function () {
         let obj = $(this).text().split(" ");
         if (obj[0] == Text) $(this).closest("tr").remove();
