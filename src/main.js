@@ -571,8 +571,6 @@ function clear_fixs(fix) {
 
 //(確定/青黄リスト)選択クリア
 function clear_fix(fix, Text) {
-    let del_flg;
-
     $("." + fix).find(".fix").each(function () {
         let obj = $(this).text().split(" ");
         if (obj[0] == Text) $(this).closest("tr").remove();
@@ -581,9 +579,8 @@ function clear_fix(fix, Text) {
         let obj = $(this).text().split(" ");
         if (obj[0] == Text) {
             $(this).closest("tr").remove();
-            del_flg = true;
+            if (share_flg) updateList("DEL", fix, Text);
         }
-        if (share_flg && del_flg) updateList("DEL", fix, Text);
     })
 }
 
