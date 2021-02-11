@@ -84,7 +84,7 @@ function addShare() {
     if (flg) {
         const params = {
             mode: "addShare",
-        }
+        };
 
         $(".message").text("共有表を作成中...").show();
         xhrSend(params, (res) => {
@@ -115,7 +115,7 @@ function connectShare() {
         const params = {
             mode: "connectShare",
             share_ID: share_ID,
-        }
+        };
 
         $(".message").text("共有表にアクセス中...").show();
         xhrSend(params, (res) => {
@@ -149,7 +149,7 @@ function updateList(mode, fix, Text) {
             share_ID: share_ID,
             fix: fix,
             Text: Text,
-        }
+        };
 
         xhrSend(params, (res) => {
             if (res) {
