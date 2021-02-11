@@ -84,7 +84,7 @@ function addShare() {
     if (flg) {
         const params = {
             mode: "addShare",
-        }
+        };
 
         $(".message").text("共有表を作成中...").show();
         xhrSend(params, (res) => {
@@ -115,7 +115,7 @@ function connectShare() {
         const params = {
             mode: "connectShare",
             share_ID: share_ID,
-        }
+        };
 
         $(".message").text("共有表にアクセス中...").show();
         xhrSend(params, (res) => {
@@ -149,7 +149,7 @@ function updateList(mode, fix, Text) {
             share_ID: share_ID,
             fix: fix,
             Text: Text,
-        }
+        };
 
         xhrSend(params, (res) => {
             if (res) {
@@ -177,24 +177,23 @@ function updateList(mode, fix, Text) {
     }
 }
 
-//[関係者向け]#廃止
+//[関係者向け]#廃止予定
 function LoginCheck() {
     const pass = window.prompt("パスワードを入力してください")
     if (pass) {
-        $.ajax({
-            url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
-            type: "GET",
-            dataType: "jsonp",
-            data: { mode: "login", pass: pass },
-            success: res => {
-                if (res.HTMLData) {
-                    const script = document.createElement('script');
-                    script.src = res.ScriptData;
-                    $("head").append(script);
-                    $("body").prepend(res.HTMLData);
-                }
-                else alert("パスワードが違います");
+        const params = {
+            mode: "login",
+            pass: pass,
+        };
+
+        xhrSend(params, (res) => {
+            if (res.HTMLData) {
+                const script = document.createElement('script');
+                script.src = res.ScriptData;
+                $("head").append(script);
+                $("body").prepend(res.HTMLData);
             }
+            else alert("パスワードが違います");
         })
     }
 }
