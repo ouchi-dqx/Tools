@@ -426,9 +426,9 @@ $(document).on("click", ".left, .right", function () {
 $(document).on("click", ".btn_all", function () {
     const Rows = $(this).closest("tr").find(".template2-box")
 
-    Rows.each(function (objBox) {
+    Rows.each(function () {
         const
-            Cell = new Cells(objBox),
+            Cell = new Cells($(this)),
             Data = Cell.Data;
 
         if (
