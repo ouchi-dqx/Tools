@@ -9,8 +9,10 @@ function debug() {
         mode: "getAnalytics",
         getDate: Time
     }
+    $(".message").text("データを取得中...").show();
 
     xhrSend(params, (res) => {
+        $(".message").hide();
         const myData = document.getElementById('AnalyticsChart');
 
         let Times = [];
