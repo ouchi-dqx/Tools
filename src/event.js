@@ -117,6 +117,11 @@ function addShare() {
 function connectShare() {
     share_ID = window.prompt("パスワードを入力してください");
     if (share_ID) {
+        if (share_ID.indexOf(" ") != -1) {
+            alert("パスワードに空白が含まれています")
+            return 0;
+        }
+
         const params = {
             mode: "connectShare",
             share_ID: share_ID,

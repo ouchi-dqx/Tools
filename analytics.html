@@ -2,78 +2,39 @@
 <html>
 
     <head>
-        <title>Embed API Demo</title>
+        <base target="_top">
+        <title>輝晶獣分散支援ツール</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+        <script src="src/getAnalytics.js"></script>
+        <link rel="manifest" href="manifest.json">
+        <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
+        <link rel="apple-touch-icon-precomposed" href="icon.png" size="152x152">
+        <script type="application/javascript">
+            //Service Workerの読み込み
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker
+                    .register('src/service-worker.js')
+                    .then(function () {
+                        console.log('Service Worker Registered');
+                    });
+            }
+        </script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171127523-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'UA-171127523-1');
+        </script>
     </head>
 
     <body>
-
-        <!-- Step 1: Create the containing elements. -->
-
-        <section id="auth-button"></section>
-        <section id="view-selector"></section>
-        <section id="timeline"></section>
-
-        <!-- Step 2: Load the library. -->
-
-        <script>
-            (function (w, d, s, g, js, fjs) {
-                g = w.gapi || (w.gapi = {}); g.analytics = { q: [], ready: function (cb) { this.q.push(cb) } };
-                js = d.createElement(s); fjs = d.getElementsByTagName(s)[0];
-                js.src = 'https://apis.google.com/js/platform.js';
-                fjs.parentNode.insertBefore(js, fjs); js.onload = function () { g.load('analytics') };
-            }(window, document, 'script'));
-        </script>
-
-        <script>
-            gapi.analytics.ready(function () {
-
-                // Step 3: Authorize the user.
-
-                var CLIENT_ID = '1015900207151-j6bnimnt04hv4fr5lecn8pgbmhl3tit9.apps.googleusercontent.com';
-
-                gapi.analytics.auth.authorize({
-                    container: 'auth-button',
-                    clientid: CLIENT_ID,
-                });
-
-                // Step 4: Create the view selector.
-
-                var viewSelector = new gapi.analytics.ViewSelector({
-                    container: 'view-selector'
-                });
-
-                // Step 5: Create the timeline chart.
-
-                var timeline = new gapi.analytics.googleCharts.DataChart({
-                    reportType: 'ga',
-                    query: {
-                        'dimensions': 'ga:date',
-                        'metrics': 'ga:sessions',
-                        'start-date': '30daysAgo',
-                        'end-date': 'yesterday',
-                    },
-                    chart: {
-                        type: 'LINE',
-                        container: 'data-chart'
-                    }
-                });
-
-                // Step 6: Hook up the components to work together.
-
-                gapi.analytics.auth.on('success', function (response) {
-                    viewSelector.execute();
-                });
-
-                viewSelector.on('change', function (ids) {
-                    var newIds = {
-                        query: {
-                            ids: ids
-                        }
-                    }
-                    timeline.set(newIds).execute();
-                });
-            });
-        </script>
+        !--<button onclick="debug()">debug</button>-->
+        <canvas id="AnalyticsChart"></canvas>
     </body>
 
 </html>

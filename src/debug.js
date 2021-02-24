@@ -89,6 +89,11 @@ function addShare() {
         $(".message").text("共有表を作成中...").show();
         xhrSend(params, (res) => {
             if (res) {
+                if (res.err) {
+                    $(".message").text("Error:" + res.err).show();
+                    return 0;
+                }
+
                 share_flg = true;
                 share_ID = res.share_ID;
 
@@ -102,7 +107,7 @@ function addShare() {
 
                 updateList("GET");
                 clearInterval(Timers.updateTime);
-                Timers.updateTime = setInterval(updateList, 60000, "GET");
+                Timers.updateTime = setInterval(updateList, 180000, "GET");
             }
         })
     }
@@ -112,6 +117,11 @@ function addShare() {
 function connectShare() {
     share_ID = window.prompt("パスワードを入力してください");
     if (share_ID) {
+        if (share_ID.indexOf(" ") != -1) {
+            alert("パスワードに空白が含まれています")
+            return 0;
+        }
+
         const params = {
             mode: "connectShare",
             share_ID: share_ID,
@@ -120,10 +130,16 @@ function connectShare() {
         $(".message").text("共有表にアクセス中...").show();
         xhrSend(params, (res) => {
             if (res) {
+                if (res.err) {
+                    alert(res.err)
+                    $(".message").text("Error:" + res.err).show();
+                    return 0;
+                }
+
                 share_flg = true;
                 share_ID = res.share_ID;
 
-                $(".message").text("接続に成功しました");
+                $(".message").html("接続に成功しました<br />リストからデータを取得しています....");
                 $(".other_fix_blue").find(".fix").show();
                 $(".other_block_fix_blue").show();
                 $(".other_fix_red").find(".fix").show();
@@ -131,12 +147,7 @@ function connectShare() {
 
                 updateList("GET");
                 clearInterval(Timers.updateTime);
-                Timers.updateTime = setInterval(updateList, 60000, "GET");
-            }
-            else {
-                $(".message").hide()
-                share_ID = "";
-                alert("パスワードが違います");
+                Timers.updateTime = setInterval(updateList, 180000, "GET");
             }
         })
     }
@@ -153,8 +164,8 @@ function updateList(mode, fix, Text) {
 
         xhrSend(params, (res) => {
             if (res) {
-                if (res[0].error) {
-                    $(".message").text("Error:" + res[0].error).show();
+                if (res.err) {
+                    $(".message").text("Error:" + res.err).show();
                     return 0;
                 }
                 else $(".message").hide();
@@ -253,7 +264,7 @@ function modeChange() {
     //【NaL】モード切替スイッチ追加に伴う変更
     ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
     if (ptMODE == "PT4") $(".even_odd").prop("disabled", false);
-    if (ptMODE == "PT8") $(".even_odd").prop("disabled", true);
+    if (ptMODE == "PT8" || ptMODE == "select") $(".even_odd").prop("disabled", true);
     $('.select-mode').hide();                    //一旦すべて非表示
     $('.select-mode' + '.' + ptMODE).show();    //選択モードのみ表示
 }
@@ -678,9 +689,6 @@ function push_fixs(fixObj, fixArea) {
     })
     $(".push_fixs").val("");
 }
-
-
-/*関数群*/
 
 /*初回設定関連*/
 //読込時の場所並び替え

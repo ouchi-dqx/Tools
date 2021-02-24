@@ -144,7 +144,7 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
     cursor: pointer;
     margin: 1px;
     padding: 1px 2px;
-    width: 60px;
+    width: 40px;
     height: 20px;
     font-size: 11px;
     color: #444;
