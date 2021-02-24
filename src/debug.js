@@ -228,6 +228,10 @@ function getShortURL() {
         alert("先に調査サーバーを選択してください。");
         return 0;
     }
+    if (ptMODE == "PTselect") {
+        alert("調査サーバー選択が選択モードの時は使用できません。")
+        return 0;
+    }
 
     const boxName = $(".ServerList").attr("id"),
         Storage = localStorage.getItem(boxName),
@@ -264,7 +268,7 @@ function modeChange() {
     //【NaL】モード切替スイッチ追加に伴う変更
     ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
     if (ptMODE == "PT4") $(".even_odd").prop("disabled", false);
-    if (ptMODE == "PT8" || ptMODE == "select") $(".even_odd").prop("disabled", true);
+    if (ptMODE == "PT8" || ptMODE == "PTselect") $(".even_odd").prop("disabled", true);
     $('.select-mode').hide();                    //一旦すべて非表示
     $('.select-mode' + '.' + ptMODE).show();    //選択モードのみ表示
 }
@@ -306,6 +310,33 @@ $(document).on("click", ".setServers", function () {
     ) load_Storage();
 
     setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
+})
+
+//調査サーバー選択式
+$(document).on('change', '.select-mode.PTselect input', function () {
+    const num = $(this).val();
+
+    if ($(".ServerList").attr("id") != "select") {
+        $(".ServerList tr").slice(1).remove();  //テーブルの初期化
+        TMP = []; //初期化
+    }
+    $(".ServerList").attr("id", "select");      //サーバリストID設定
+
+    if ($(this).prop('checked')) {
+        const CopyTemp1 = $($("#template1").html()).clone();
+        CopyTemp1.find(".ServerID").text(num);
+        CopyTemp1.find(".setTemp").each(function () {
+            const CopyTemp2 = $($("#template2").html()).clone();
+            $(this).append(CopyTemp2);
+        })
+        $(".ServerList tbody").append(CopyTemp1);
+    }
+    else {
+        $(".Servers").each(function () {
+            const Server = $(this).find(".ServerID").text();
+            if (Server == num) $(this).remove();
+        })
+    }
 })
 
 //[標準モード/偶数奇数モード]偶数・奇数モード切替
@@ -477,6 +508,8 @@ $(document).on("click", ".btn", function () {
 /*サイド画面*/
 //[保存]
 function save_Storage() {
+    if (ptMODE == "PTselect") return 0;
+
     const Points = ["ゲル", "砂漠", "バル"];
     let
         boxName = $(".ServerList").attr("id"),
