@@ -163,7 +163,7 @@
                 <a href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a><br />
                 ◆青黄・確定をPTで共有する機能を追加しました。詳細は下部の[使い方]を確認ください。<br />
                 ◆共有機能の動作が遅い問題を(多分)解決させました。<br />
-                ◆共有機能のリスト更新の間隔を1分→3分に変更しました。
+                ◆調査するサーバーを自由に設定できるようにしました(要望)
             </div>
         </div>
 
@@ -173,10 +173,13 @@
                 <span>調査サーバー選択</span><span class="material-icons">play_arrow</span>
                 <div class="mode-change-box">
                     <label><input type="radio" name="opt-tgl" value="PT4" autocomplete="off" checked>
-                        <div class="btn-tgl">4人分散</div>
+                        <div class="btn-tgl">4PT</div>
                     </label>
                     <label><input type="radio" name="opt-tgl" value="PT8" autocomplete="off">
-                        <div class="btn-tgl">8人分散</div>
+                        <div class="btn-tgl">8PT</div>
+                    </label>
+                    <label><input type="radio" name="opt-tgl" value="PTselect" autocomplete="off">
+                        <div class="btn-tgl">選択</div>
                     </label>
                 </div>
             </div>
@@ -201,6 +204,48 @@
                     <button class="setServers" value="21" Start="26" End="30" boxName="21 - 30">26 - 30</button>
                     <button class="setServers" value="31" Start="31" End="35" boxName="31 - 40">31 - 35</button>
                     <button class="setServers" value="31" Start="36" End="40" boxName="31 - 40">36 - 40</button>
+                </span>
+                <span class="select-mode PTselect">
+                    01<input type="checkbox" value="1">
+                    02<input type="checkbox" value="2">
+                    03<input type="checkbox" value="3">
+                    04<input type="checkbox" value="4">
+                    05<input type="checkbox" value="5">
+                    06<input type="checkbox" value="6">
+                    07<input type="checkbox" value="7">
+                    08<input type="checkbox" value="8">
+                    09<input type="checkbox" value="9">
+                    10<input type="checkbox" value="10"><br />
+                    11<input type="checkbox" value="11">
+                    12<input type="checkbox" value="12">
+                    13<input type="checkbox" value="13">
+                    14<input type="checkbox" value="14">
+                    15<input type="checkbox" value="15">
+                    16<input type="checkbox" value="16">
+                    17<input type="checkbox" value="17">
+                    18<input type="checkbox" value="18">
+                    19<input type="checkbox" value="19">
+                    20<input type="checkbox" value="20"><br />
+                    21<input type="checkbox" value="21">
+                    22<input type="checkbox" value="22">
+                    23<input type="checkbox" value="23">
+                    24<input type="checkbox" value="24">
+                    25<input type="checkbox" value="25">
+                    26<input type="checkbox" value="26">
+                    27<input type="checkbox" value="27">
+                    28<input type="checkbox" value="28">
+                    29<input type="checkbox" value="29">
+                    30<input type="checkbox" value="30"><br />
+                    31<input type="checkbox" value="31">
+                    32<input type="checkbox" value="32">
+                    33<input type="checkbox" value="33">
+                    34<input type="checkbox" value="34">
+                    35<input type="checkbox" value="35">
+                    36<input type="checkbox" value="36">
+                    37<input type="checkbox" value="37">
+                    38<input type="checkbox" value="38">
+                    39<input type="checkbox" value="39">
+                    40<input type="checkbox" value="40">
                 </span>
             </div>
         </div>
@@ -478,6 +523,10 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>
+                    2021/02/23 <br />
+                    ・調査するサーバーを自由に設定できるようにしました(要望)
+                </li>
                 <li>
                     2021/02/23 <br />
                     ・共有機能の動作が遅い問題を(多分)解決させました。<br />
