@@ -656,8 +656,9 @@ function push_fix_old() {
     if (!checkTime(sTime.val()) || !checkTime(eTime.val())) return 0;
 
     var Text = Server.val() + Point.val() + " "
-        + sTime.val() + " - " + eTime.val()
-    push_fix("fix_red", Text, "fix");
+        + sTime.val() + " - " + eTime.val();
+    if (share_ID) push_fix("fix_red", Text, "all");
+    else push_fix("fix_red", Text, "fix");
 
     $(".fix_red").find(".fix").each(function () {
         fix = $(this).text().split(" ")
