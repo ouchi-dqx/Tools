@@ -118,7 +118,7 @@ function connectShare() {
     share_ID = window.prompt("パスワードを入力してください");
     if (share_ID) {
         if (share_ID.indexOf(" ") != -1) {
-            alert("パスワードに空白が含まれています")
+            alert("パスワードに空白が含まれています");
             return 0;
         }
 
@@ -165,7 +165,9 @@ function updateList(mode, fix, Text) {
         xhrSend(params, (res) => {
             if (res) {
                 if (res.err) {
-                    $(".message").text("Error:" + res.err).show();
+                    clearInterval(Timers.updateTime);
+                    alert(res.err);
+                    $(".message").html("Error:" + res.err + "<br /" + "接続を切断しました").show();
                     return 0;
                 }
                 else $(".message").hide();
