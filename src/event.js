@@ -167,7 +167,10 @@ function updateList(mode, fix, Text) {
                 if (res.err) {
                     clearInterval(Timers.updateTime);
                     alert(res.err);
-                    $(".message").html("Error:" + res.err + "<br /" + "接続を切断しました").show();
+                    $(".message").html(
+                        "Error:" + res.err + "<br /" +
+                        "接続を切断しました"
+                    ).show();
                     return 0;
                 }
                 else $(".message").hide();
@@ -235,13 +238,23 @@ function getShortURL() {
         return 0;
     }
 
-    const boxName = $(".ServerList").attr("id"),
-        Storage = localStorage.getItem(boxName),
+    const
+        boxName = $(".ServerList").attr("id"),
         fix_blue = localStorage.getItem("fix_blue"),
         fix_red = localStorage.getItem("fix_red"),
         btnText =
             $(".ServerID:visible").first().text() + " - "
             + $(".ServerID:visible").last().text();
+    let
+        Storage = JSON.parse(localStorage.getItem(boxName)),
+        objKeys;
+
+    for (let key1 in Storage) {
+        for (let key2 in Storage[key1]) {
+            objKeys = Object.keys(Storage[key1][key2]);
+            Storage[key1][key2] = Object.values(Storage[key1][key2]);
+        }
+    }
 
     const params = {
         mode: "shortURL",
@@ -249,7 +262,8 @@ function getShortURL() {
             "ptMODE=" + ptMODE
             + "&btnText=" + btnText
             + "&boxName=" + boxName
-            + "&Storage=" + Storage
+            + "&objKeys=" + JSON.stringify(objKeys)
+            + "&Storage=" + JSON.stringify(Storage)
             + "&fix_blue=" + fix_blue
             + "&fix_red=" + fix_red
         )

@@ -51,6 +51,7 @@ function getURLData(params) {
         btnText = getParam("btnText", params),
         getData = {
             boxName: getParam("boxName", params),
+            objKeys: JSON.parse(getParam("objKeys", params)),
             Storage: JSON.parse(getParam("Storage", params)),
             fix_blue: JSON.parse(getParam("fix_blue", params)),
             fix_red: JSON.parse(getParam("fix_red", params)),
@@ -58,8 +59,8 @@ function getURLData(params) {
 
     //パラメータチェック
     if (
-        !ptMODE || !btnText ||
-        !getData.boxName || !getData.Storage ||
+        !ptMODE || !btnText || !getData.boxName ||
+        !getData.objKeys || !getData.Storage ||
         !getData.fix_blue || !getData.fix_red
     ) {
         $(".message").text("ERROR:不正なURLです").show();
@@ -76,6 +77,15 @@ function getURLData(params) {
             $(this).click();    //調査鯖ボタンクリック
         }
     })
+
+    for (let key1 in getData.Storage) {
+        for (let key2 in getData.Storage[key1]) {
+            getData.objKeys.forEach((key3, i) => {
+                getData.Storage[key1][key2][key3] = getData.Storage[key1][key2][i]
+                delete getData.Storage[key1][key2][i]
+            })
+        }
+    }
 
     load_Storage(getData);
 }

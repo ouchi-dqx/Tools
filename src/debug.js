@@ -238,13 +238,23 @@ function getShortURL() {
         return 0;
     }
 
-    const boxName = $(".ServerList").attr("id"),
-        Storage = localStorage.getItem(boxName),
+    const
+        boxName = $(".ServerList").attr("id"),
         fix_blue = localStorage.getItem("fix_blue"),
         fix_red = localStorage.getItem("fix_red"),
         btnText =
             $(".ServerID:visible").first().text() + " - "
             + $(".ServerID:visible").last().text();
+    let
+        Storage = JSON.parse(localStorage.getItem(boxName)),
+        objKeys;
+
+    for (let key1 in Storage) {
+        for (let key2 in Storage[key1]) {
+            objKeys = Object.keys(Storage[key1][key2]);
+            Storage[key1][key2] = Object.values(Storage[key1][key2]);
+        }
+    }
 
     const params = {
         mode: "shortURL",
@@ -252,7 +262,8 @@ function getShortURL() {
             "ptMODE=" + ptMODE
             + "&btnText=" + btnText
             + "&boxName=" + boxName
-            + "&Storage=" + Storage
+            + "&objKeys=" + JSON.stringify(objKeys)
+            + "&Storage=" + JSON.stringify(Storage)
             + "&fix_blue=" + fix_blue
             + "&fix_red=" + fix_red
         )
@@ -782,6 +793,7 @@ function getURLData(params) {
         btnText = getParam("btnText", params),
         getData = {
             boxName: getParam("boxName", params),
+            objKeys: JSON.parse(getParam("objKeys", params)),
             Storage: JSON.parse(getParam("Storage", params)),
             fix_blue: JSON.parse(getParam("fix_blue", params)),
             fix_red: JSON.parse(getParam("fix_red", params)),
@@ -789,8 +801,8 @@ function getURLData(params) {
 
     //パラメータチェック
     if (
-        !ptMODE || !btnText ||
-        !getData.boxName || !getData.Storage ||
+        !ptMODE || !btnText || !getData.boxName ||
+        !getData.objKeys || !getData.Storage ||
         !getData.fix_blue || !getData.fix_red
     ) {
         $(".message").text("ERROR:不正なURLです").show();
@@ -807,6 +819,15 @@ function getURLData(params) {
             $(this).click();    //調査鯖ボタンクリック
         }
     })
+
+    for (let key1 in getData.Storage) {
+        for (let key2 in getData.Storage[key1]) {
+            getData.objKeys.forEach((key3, i) => {
+                getData.Storage[key1][key2][key3] = getData.Storage[key1][key2][i]
+                delete getData.Storage[key1][key2][i]
+            })
+        }
+    }
 
     load_Storage(getData);
 }
