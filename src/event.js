@@ -731,11 +731,14 @@ function push_fixs(fixObj, fixArea) {
     Fixs.sort((a, b) => {
         a = a.split(" ");
         b = b.split(" ");
-        return (a[3] > b[3] ? 1 : -1);
+        if (a.length == 3 && b.length == 3) return (a[2] > b[2] ? 1 : -1);
+        if (a.length == 3 && b.length == 4) return (a[2] > b[3] ? 1 : -1);
+        if (a.length == 4 && b.length == 4) return (a[3] > b[3] ? 1 : -1);
+        if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
     })
 
     Fixs.forEach(function (Text) {
         push_fix(fixObj, Text, "other");
     })
-    $(".push_fixs").val("");
+    $("." + fixArea).val("");
 }

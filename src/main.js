@@ -465,10 +465,9 @@ function push_fix(fix, Text, flg) {
     if (flg == "fix" || flg == "all")
         $("." + fix).append('<tr><td class="fix">' + Text + '</td></tr>');
     if (flg == "other" || flg == "all") {
+        if (fix.indexOf("other_") != -1) fix = fix.replace("other_", "");
         $(".other_" + fix).append('<tr><td class="fix">' + Text + "</td></tr>");
         if ($(".other_block_" + fix).is(":hidden")) $(".other_" + fix).find(".fix").hide();
-
-        if (fix.indexOf("other") != -1) fix.replace("other_", "")
         if (share_flg) updateList("ADD", fix, Text);
     }
 }

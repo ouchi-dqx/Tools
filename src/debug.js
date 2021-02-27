@@ -166,7 +166,7 @@ function updateList(mode, fix, Text) {
             if (res) {
                 if (res.err) {
                     clearInterval(Timers.updateTime);
-                    alert(res.err);
+                    alert(res.err + "\n" + "接続を切断しました");
                     $(".message").html(
                         "Error:" + res.err + "<br /" +
                         "接続を切断しました"
@@ -731,13 +731,16 @@ function push_fixs(fixObj, fixArea) {
     Fixs.sort((a, b) => {
         a = a.split(" ");
         b = b.split(" ");
-        return (a[3] > b[3] ? 1 : -1);
+        if (a.length == 3 && b.length == 3) return (a[2] > b[2] ? 1 : -1);
+        if (a.length == 3 && b.length == 4) return (a[2] > b[3] ? 1 : -1);
+        if (a.length == 4 && b.length == 4) return (a[3] > b[3] ? 1 : -1);
+        if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
     })
 
     Fixs.forEach(function (Text) {
         push_fix(fixObj, Text, "other");
     })
-    $(".push_fixs").val("");
+    $("." + fixArea).val("");
 }
 
 /*初回設定関連*/
@@ -1207,9 +1210,9 @@ function push_fix(fix, Text, flg) {
     if (flg == "fix" || flg == "all")
         $("." + fix).append('<tr><td class="fix">' + Text + '</td></tr>');
     if (flg == "other" || flg == "all") {
+        if (fix.indexOf("other_") != -1) fix = fix.replace("other_", "");
         $(".other_" + fix).append('<tr><td class="fix">' + Text + "</td></tr>");
         if ($(".other_block_" + fix).is(":hidden")) $(".other_" + fix).find(".fix").hide();
-
         if (share_flg) updateList("ADD", fix, Text);
     }
 }
