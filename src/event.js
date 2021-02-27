@@ -166,7 +166,7 @@ function updateList(mode, fix, Text) {
             if (res) {
                 if (res.err) {
                     clearInterval(Timers.updateTime);
-                    alert(res.err);
+                    alert(res.err + "\n" + "接続を切断しました");
                     $(".message").html(
                         "Error:" + res.err + "<br /" +
                         "接続を切断しました"
