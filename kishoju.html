@@ -69,10 +69,12 @@
                 if ( l_rightFollowFlg === true ){
                     $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_OFF);
                     $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_ON);
+                    $('.side-list-area').css("display","inline");
                     fncFixRedReSize();
                 }else{
                     $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_ON);
                     $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_OFF);
+                    $('.side-list-area').css("display","table");
                 }
             });
             //サイドリスト収納切替
@@ -165,7 +167,6 @@
                 ◆調査するサーバーを自由に設定できるようにしました(要望)<br />
                 ◆ツールのアクセス状況を確認するページを作成しました。
                 <a href="https://ouchi-dqx.github.io/Tools/analytics.html">(リンク)</a>
-                　
             </div>
         </div>
 
@@ -315,67 +316,73 @@
         </table>
 
         <!--サイドリスト-->
-        <div class="side-list-box following-off" style="display: table;">
-            <div class="chk-tgl-box">
-                <label>
-                    <input type="checkbox" id="chk-side-follow" autocomplete="off">
-                    <div class="btn-tgl"><i class="material-icons"
-                            style="top: 4px; font-size: 16px;">push_pin</i>右サイドに固定
+        <div class="side-list-area">
+            <div class="side-list-box following-off" style="display: table;">
+                <div class="chk-tgl-box">
+                    <label>
+                        <input type="checkbox" id="chk-side-follow" autocomplete="off">
+                        <div class="btn-tgl"><i class="material-icons"
+                                style="top: 4px; font-size: 16px;">push_pin</i>右サイドに固定
+                        </div>
+                    </label>
+                </div>
+                <div class="function-btn-box">
+                    <button id="btn-save" onclick="save_Storage()"><i class="material-icons"
+                            style="top: 5px;">save</i>保存</button>
+                    <button id="btn-rollback" onclick="Rollback()"><i class="material-icons"
+                            style="top: 6px;">undo</i>戻す</button>
+                </div>
+
+                <table id="fix-blue" class="fix_blue" style="margin-bottom: 3px;">
+                    <thead class="fix_blue_head">
+                        <tr>
+                            <th>青黄リスト(赤時間)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- tbody -->
+                    </tbody>
+                </table>
+                <div class="block_fix_blue">
+                    <div class="function-btn-box-mini">
+                        <button onclick="setClip('fix_blue')">コピー</button>
+                        <button onclick="Cleaner('fix_blue')">クリア</button>
                     </div>
-                </label>
-            </div>
-            <div class="function-btn-box">
-                <button id="btn-save" onclick="save_Storage()"><i class="material-icons"
-                        style="top: 5px;">save</i>保存</button>
-                <button id="btn-rollback" onclick="Rollback()"><i class="material-icons"
-                        style="top: 6px;">undo</i>戻す</button>
-            </div>
+                </div>
 
-            <table id="fix-blue" class="fix_blue" style="margin-bottom: 3px;">
-                <thead>
-                    <tr>
-                        <th>青黄リスト(赤時間)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- tbody -->
-                </tbody>
-            </table>
-            <div class="function-btn-box-mini">
-                <button onclick="setClip('fix_blue')">コピー</button>
-                <button onclick="Cleaner('fix_blue')">クリア</button>
-            </div>
+                <table id="fix-red" class="fix_red" style="margin-bottom: 3px;">
+                    <thead class="fix_red_head">
+                        <tr>
+                            <th>確定リスト</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- tbody -->
+                    </tbody>
+                </table>
+                <div class="block_fix_red">
+                    <div class="function-btn-box-mini">
+                        <button onclick="setClip('fix_red')">コピー</button>
+                        <button onclick="Cleaner('fix_red')">クリア</button>
+                    </div>
+                </div>
 
-            <table id="fix-red" class="fix_red" style="margin-bottom: 3px;">
-                <thead>
-                    <tr>
-                        <th>確定リスト</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- tbody -->
-                </tbody>
-            </table>
-            <div class="function-btn-box-mini">
-                <button onclick="setClip('fix_red')">コピー</button>
-                <button onclick="Cleaner('fix_red')">クリア</button>
-            </div>
-
-            <div class="side-list-add-box">
-                <span>
-                    鯖 <input type="number" id="Server" min="1" max="40" value="1" style="width: 40px;">
-                </span>
-                <span>
-                    <select id="Point">
-                        <option>ゲル</option>
-                        <option>砂漠</option>
-                        <option>バル</option>
-                    </select>
-                </span>
-                <br />
-                <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;"
-                    placeholder="時:分">
-                <button onclick="push_fix_old()">追加</button>
+                <div class="side-list-add-box">
+                    <span>
+                        鯖 <input type="number" id="Server" min="1" max="40" value="1" style="width: 40px;">
+                    </span>
+                    <span>
+                        <select id="Point">
+                            <option>ゲル</option>
+                            <option>砂漠</option>
+                            <option>バル</option>
+                        </select>
+                    </span>
+                    <br />
+                    <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;"
+                        placeholder="時:分">
+                    <button onclick="push_fix_old()">追加</button>
+                </div>
             </div>
 
             <div class="other_box">
@@ -419,13 +426,12 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
         <!--ハンガーボタン-->
         <div class="side-list-btn following-off">
             <i class="material-icons hung-icon" style="font-size: 50px; font-size: 30px;">exit_to_app</i>
         </div>
-
         <div style="clear: both;"></div>
 
         <div class="slider-title">
@@ -525,6 +531,13 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>
+                    2021/03/01 <br />
+                    ・[右サイドに固定]で右にリストを固定すると外部リストが見えなくなる不具合を修正しました。<br />
+                    ・[青黄リスト]・[確定リスト]をクリックするとリストの表示/非表示を切り替えできるようにしました。(外部リストは以前から)<br />
+                    ・共有機能・調査データのURL化機能にバージョンチェック機能を追加しました。<br />
+                    　可能な限り、最新のバージョンのツールを利用ください。
+                </li>
                 <li>
                     2021/02/28 <br />
                     ・共有表に青黄・確定を追加した時、終了時間で昇順ソートするようにしました。

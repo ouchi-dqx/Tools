@@ -615,6 +615,8 @@ function save_Fix() {
 /*汎用関数*/
 //ajax通信
 function xhrSend(params, resFunc) {
+    params.version = version;
+
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
         async: false,

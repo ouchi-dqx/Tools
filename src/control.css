@@ -306,11 +306,24 @@ button {
     background-color: #fff1ef;
 }
 /************************************************　サイドリスト　************************************************/
+.side-list-area{
+    display: table;
+}
+
+.other_box{
+    clear:both;
+}
+
+.other_box.following-on .function-btn-box-mini{
+    display: block;
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
 .side-list-box.following-off{ display: table; }
-.other_box.following-off{ display: table; }
 
-.other_box.following-on{ display: none; }
 .side-list-box.following-on{
     position: fixed;
     top: 40px;

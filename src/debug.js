@@ -5,8 +5,9 @@ var
     Timers = {},        //タイマーリスト変数
     get_flg = false,    //URL取得モードフラグ
     share_flg = false,  //データ共有フラグ
-    share_ID = "";          //データ共有用パス
+    share_ID = "";      //データ共有用パス
 //var sendFlg = "";     //データ送信フラグ-没
+const version = "1.0";  //バージョン管理変数
 
 //テスト用関数
 function debug() {
@@ -90,6 +91,7 @@ function addShare() {
         xhrSend(params, (res) => {
             if (res) {
                 if (res.err) {
+                    alert(res.err);
                     $(".message").text("Error:" + res.err).show();
                     return 0;
                 }
@@ -131,7 +133,7 @@ function connectShare() {
         xhrSend(params, (res) => {
             if (res) {
                 if (res.err) {
-                    alert(res.err)
+                    alert(res.err);
                     $(".message").text("Error:" + res.err).show();
                     return 0;
                 }
@@ -203,6 +205,12 @@ function LoginCheck() {
         };
 
         xhrSend(params, (res) => {
+            if (res.err) {
+                alert(res.err);
+                $(".message").text("Error:" + res.err).show();
+                return 0;
+            }
+
             if (res.HTMLData) {
                 const script = document.createElement('script');
                 script.src = res.ScriptData;
@@ -271,6 +279,12 @@ function getShortURL() {
 
     $(".message").text("URLを取得中...").show();
     xhrSend(params, (res) => {
+        if (res.err) {
+            alert(res.err);
+            $(".message").text("Error:" + res.err).show();
+            return 0;
+        }
+
         $(".message").hide();
         $(".copyText").val(res.URL);
         $(".copyArea").show();
@@ -711,17 +725,29 @@ function push_fix_old() {
     eTime.val("")
 }
 
-//外部確定リスト表示切替
-$(document).on("click", ".other_fix_blue_head, .other_fix_red_head", function () {
-    if ($(this).attr("class") == "other_fix_blue_head") {
-        $(".other_fix_blue").find(".fix").toggle();
-        $(".other_block_fix_blue").toggle();
+//リスト表示切替
+$(document).on(
+    "click",
+    ".fix_blue_head, .fix_red_head, .other_fix_blue_head, .other_fix_red_head",
+    function () {
+        if ($(this).attr("class") == "fix_blue_head") {
+            $(".fix_blue").find(".fix").toggle();
+            $(".block_fix_blue").toggle();
+        }
+        else if ($(this).attr("class") == "fix_red_head") {
+            $(".fix_red").find(".fix").toggle();
+            $(".block_fix_red").toggle();
+        }
+        else if ($(this).attr("class") == "other_fix_blue_head") {
+            $(".other_fix_blue").find(".fix").toggle();
+            $(".other_block_fix_blue").toggle();
+        }
+        else if ($(this).attr("class") == "other_fix_red_head") {
+            $(".other_fix_red").find(".fix").toggle();
+            $(".other_block_fix_red").toggle();
+        }
     }
-    else if ($(this).attr("class") == "other_fix_red_head") {
-        $(".other_fix_red").find(".fix").toggle();
-        $(".other_block_fix_red").toggle();
-    }
-});
+);
 
 //[外部確定リスト追加]
 function push_fixs(fixObj, fixArea) {
@@ -1360,6 +1386,8 @@ function save_Fix() {
 /*汎用関数*/
 //ajax通信
 function xhrSend(params, resFunc) {
+    params.version = version;
+
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycby0mRAp5wucNNkiM72RdMowNc-JRDQyE5ip46pC7uw/dev",
         async: false,
