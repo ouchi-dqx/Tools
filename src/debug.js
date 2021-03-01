@@ -5,7 +5,8 @@ var
     Timers = {},        //タイマーリスト変数
     get_flg = false,    //URL取得モードフラグ
     share_flg = false,  //データ共有フラグ
-    share_ID = "";      //データ共有用パス
+    share_ID = "",      //データ共有用パス
+    ver_flg = false;    //バージョン管理フラグ
 //var sendFlg = "";     //データ送信フラグ-没
 const version = "1.0";  //バージョン管理変数
 
@@ -90,7 +91,7 @@ function addShare() {
         $(".message").text("共有表を作成中...").show();
         xhrSend(params, (res) => {
             if (res) {
-                if (res.err) {
+                if (res.err && res.err != "古いバージョンです") {
                     alert(res.err);
                     $(".message").text("Error:" + res.err).show();
                     return 0;
@@ -100,9 +101,10 @@ function addShare() {
                 share_ID = res.share_ID;
 
                 $(".message").hide();
+                $(".connectArea").show();
                 $(".disconnect").show();
                 $(".copyText").val(share_ID);
-                $(".copyArea").show()
+                $(".copyArea").show();
                 $(".other_fix_blue").find(".fix").show();
                 $(".other_block_fix_blue").show();
                 $(".other_fix_red").find(".fix").show();
@@ -118,7 +120,7 @@ function addShare() {
 
 //[共通表に参加]
 function connectShare() {
-    share_ID = window.prompt("パスワードを入力してください");
+    share_ID = window.prompt("パスワードを入力してください", share_ID);
     if (share_ID) {
         if (share_ID.indexOf(" ") != -1) {
             alert("パスワードに空白が含まれています");
@@ -133,7 +135,7 @@ function connectShare() {
         $(".message").text("共有表にアクセス中...").show();
         xhrSend(params, (res) => {
             if (res) {
-                if (res.err) {
+                if (res.err && res.err != "古いバージョンです") {
                     alert(res.err);
                     $(".message").text("Error:" + res.err).show();
                     return 0;
@@ -143,6 +145,7 @@ function connectShare() {
                 share_ID = res.share_ID;
 
                 $(".message").html("接続に成功しました<br />リストからデータを取得しています....");
+                $(".connectArea").show();
                 $(".disconnect").show();
                 $(".other_fix_blue").find(".fix").show();
                 $(".other_block_fix_blue").show();
@@ -169,19 +172,50 @@ function updateList(mode, fix, Text) {
         xhrSend(params, (res) => {
             if (res) {
                 if (res.err) {
-                    clearInterval(Timers.updateTime);
-                    alert(res.err + "\n" + "接続を切断しました");
-                    $(".message").html(
-                        "Error:" + res.err + "<br /" +
-                        "接続を切断しました"
-                    ).show();
-                    return 0;
+                    if (res.err == "古いバージョンです") {
+                        if (!ver_flg) {
+                            alert(
+                                res.err + "\n (注)未修正の不具合がある可能性があります"
+                                + "\n 最新のページに更新することを推奨します"
+                            );
+                            ver_flg = true;
+                        }
+                    }
+                    else {
+                        clearInterval(Timers.updateTime);
+
+                        const flg = confirm(
+                            res.err + "\n" +
+                            "接続を切断しました" + "\n" +
+                            "再接続しますか？"
+                        );
+
+                        if (flg) {
+                            connectShare();
+                            updateList(mode, fix, Text);
+                            return 0;
+                        }
+                        else {
+                            share_ID = "";
+
+                            $(".message").html(
+                                "Error:" + res.err + "<br /" +
+                                "接続を切断しました"
+                            ).show();
+                            $(".connectArea").hide();
+                            $(".disconnect").hide();
+
+                            return 0;
+                        }
+                    }
                 }
-                else $(".message").hide();
+
+                $(".message").hide();
+                $(".connectCount").text(res.connectCount).show();
 
                 const
-                    fix_blue = res[0].fix_blue.split(","),
-                    fix_red = res[0].fix_red.split(",");
+                    fix_blue = res.fix_blue.split(","),
+                    fix_red = res.fix_red.split(",");
 
                 $(".other_fix_blue tr").slice(1).remove();
                 $(".other_fix_red tr").slice(1).remove();
@@ -198,11 +232,24 @@ function updateList(mode, fix, Text) {
 }
 
 function disconnect() {
-    clearInterval(Timers.updateTime);
-    $(".message").hide();
-    $(".disconnect").hide();
-    $(".copyArea").text("接続を切断しました").show();
+    if (share_flg) {
+        const params = {
+            mode: "disconnect",
+            share_ID: share_ID,
+        };
 
+        $(".message").text("共有表から切断中...").show();
+        xhrSend(params, (res) => {
+            if (res) {
+                share_ID = "";
+
+                clearInterval(Timers.updateTime);
+                $(".message").text("接続を切断しました").show();
+                $(".connectArea").hide();
+                $(".disconnect").hide();
+            }
+        })
+    }
 }
 
 //[関係者向け]#廃止予定
