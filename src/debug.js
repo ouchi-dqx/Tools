@@ -100,6 +100,7 @@ function addShare() {
                 share_ID = res.share_ID;
 
                 $(".message").hide();
+                $(".disconnect").show();
                 $(".copyText").val(share_ID);
                 $(".copyArea").show()
                 $(".other_fix_blue").find(".fix").show();
@@ -142,6 +143,7 @@ function connectShare() {
                 share_ID = res.share_ID;
 
                 $(".message").html("接続に成功しました<br />リストからデータを取得しています....");
+                $(".disconnect").show();
                 $(".other_fix_blue").find(".fix").show();
                 $(".other_block_fix_blue").show();
                 $(".other_fix_red").find(".fix").show();
@@ -193,6 +195,14 @@ function updateList(mode, fix, Text) {
             }
         })
     }
+}
+
+function disconnect() {
+    clearInterval(Timers.updateTime);
+    $(".message").hide();
+    $(".disconnect").hide();
+    $(".copyArea").text("接続を切断しました").show();
+
 }
 
 //[関係者向け]#廃止予定
