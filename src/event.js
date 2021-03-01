@@ -175,6 +175,7 @@ function updateList(mode, fix, Text) {
                         "Error:" + res.err + "<br /" +
                         "接続を切断しました"
                     ).show();
+                    $(".disconnect").hide();
                     return 0;
                 }
                 else $(".message").hide();
