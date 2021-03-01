@@ -8,7 +8,7 @@ var
     share_ID = "",      //データ共有用パス
     ver_flg = false;    //バージョン管理フラグ
 //var sendFlg = "";     //データ送信フラグ-没
-const version = "1.0";  //バージョン管理変数
+const version = "1.2";  //バージョン管理変数
 
 //テスト用関数
 function debug() {
