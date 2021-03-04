@@ -1446,7 +1446,7 @@ function xhrSend(params, resFunc) {
     params.version = version;
 
     $.ajax({
-        url: "https://script.google.com/macros/s/AKfycby0mRAp5wucNNkiM72RdMowNc-JRDQyE5ip46pC7uw/dev",
+        url: "http://ukagaka.sp.land.to/test.php",
         async: false,
         cache: false,
         type: "GET",
