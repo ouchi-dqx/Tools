@@ -6,9 +6,9 @@ var
     get_flg = false,    //URL取得モードフラグ
     share_flg = false,  //データ共有フラグ
     share_ID = "",      //データ共有用パス
-    ver_flg = false;    //バージョン管理フラグ
+    ver_flg = false;    //バージョンチェックフラグ(初回のみ)
 //var sendFlg = "";     //データ送信フラグ-没
-const version = "1.2";  //バージョン管理変数
+const version = "1.3";  //バージョン管理変数
 
 //テスト用関数
 function debug() {
@@ -84,6 +84,15 @@ window.onload = function () {
 function addShare() {
     const flg = confirm("青黄・確定の共有表を作成しますか？");
     if (flg) {
+        const List = $(".other_fix_blue tr, .other_fix_red tr");
+        if (List.length > 2) {
+            const flg2 = confirm(
+                "外部青黄・確定リストに既に内容が存在しています"
+                + "\n 上書きしますか？"
+            );
+            if (!flg2) return 0;
+        }
+
         const params = {
             mode: "addShare",
         };
@@ -91,9 +100,9 @@ function addShare() {
         $(".message").text("共有表を作成中...").show();
         xhrSend(params, (res) => {
             if (res) {
-                if (res.err && res.err != "古いバージョンです") {
+                if (res.err) {
                     alert(res.err);
-                    $(".message").text("Error:" + res.err).show();
+                    $(".message").text("Error:" + res.err);
                     return 0;
                 }
 
@@ -127,6 +136,15 @@ function connectShare() {
             return 0;
         }
 
+        const List = $(".other_fix_blue tr, .other_fix_red tr");
+        if (List.length > 2) {
+            const flg2 = confirm(
+                "外部青黄・確定リストに既に内容が存在しています"
+                + "\n 上書きしますか？"
+            );
+            if (!flg2) return 0;
+        }
+
         const params = {
             mode: "connectShare",
             share_ID: share_ID,
@@ -135,9 +153,9 @@ function connectShare() {
         $(".message").text("共有表にアクセス中...").show();
         xhrSend(params, (res) => {
             if (res) {
-                if (res.err && res.err != "古いバージョンです") {
+                if (res.err) {
                     alert(res.err);
-                    $(".message").text("Error:" + res.err).show();
+                    $(".message").text("Error:" + res.err);
                     return 0;
                 }
 
@@ -171,39 +189,58 @@ function updateList(mode, fix, Text) {
 
         xhrSend(params, (res) => {
             if (res) {
+                if (res.ver == "古いバージョンです") {
+                    if (!ver_flg) {
+                        alert(
+                            res.err
+                            + "\n (注)未修正の不具合がある可能性があります"
+                            + "\n 最新のページに更新することを推奨します"
+                        );
+                        ver_flg = true;
+                    }
+                }
+
                 if (res.err) {
-                    if (res.err == "古いバージョンです") {
-                        if (!ver_flg) {
-                            alert(
-                                res.err + "\n (注)未修正の不具合がある可能性があります"
-                                + "\n 最新のページに更新することを推奨します"
-                            );
-                            ver_flg = true;
-                        }
+                    if (res.err == "共有表が存在しません") {
+                        clearInterval(Timers.updateTime);
+
+                        alert(res.err + "\n 接続を切断しました");
+                        $(".message").html(
+                            "Error:" + res.err + "<br />" +
+                            "接続を切断しました"
+                        ).show();
+                        $(".connectArea").hide();
+                        $(".disconnect").hide();
+
+                        return 0;
+                    }
+                    else if (res.err == "retry") {
+                        updateList(mode, fix, Text);    //再試行
+                        return 0;
                     }
                     else {
                         clearInterval(Timers.updateTime);
+                        $(".connectArea").hide();
+                        $(".disconnect").hide();
 
                         const flg = confirm(
-                            res.err + "\n" +
-                            "接続を切断しました" + "\n" +
-                            "再接続しますか？"
+                            "不明なエラーです！"
+                            + "\n 接続を切断しました"
+                            + "\n 再接続しますか？"
                         );
 
                         if (flg) {
                             connectShare();
                             updateList(mode, fix, Text);
+
                             return 0;
                         }
                         else {
                             share_ID = "";
-
                             $(".message").html(
-                                "Error:" + res.err + "<br /" +
+                                "Error:" + res.err + "<br />" +
                                 "接続を切断しました"
                             ).show();
-                            $(".connectArea").hide();
-                            $(".disconnect").hide();
 
                             return 0;
                         }
@@ -211,7 +248,7 @@ function updateList(mode, fix, Text) {
                 }
 
                 $(".message").hide();
-                $(".connectCount").text(res.connectCount).show();
+                $(".connectCount").text(res.connectCount);
 
                 const
                     fix_blue = res.fix_blue.split(","),
@@ -244,7 +281,7 @@ function disconnect() {
                 share_ID = "";
 
                 clearInterval(Timers.updateTime);
-                $(".message").text("接続を切断しました").show();
+                $(".message").text("接続を切断しました");
                 $(".connectArea").hide();
                 $(".disconnect").hide();
             }
@@ -811,17 +848,17 @@ function push_fixs(fixObj, fixArea) {
     if (!$("." + fixArea).val()) return 0;
 
     let Fixs = $("." + fixArea).val().split(/\r\n|\r|\n/);
-    Fixs.sort((a, b) => {
-        a = a.split(" ");
-        b = b.split(" ");
-        if (a.length == 3 && b.length == 3) return (a[2] > b[2] ? 1 : -1);
-        if (a.length == 3 && b.length == 4) return (a[2] > b[3] ? 1 : -1);
-        if (a.length == 4 && b.length == 4) return (a[3] > b[3] ? 1 : -1);
-        if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
-    })
+    Fixs = Fixs
+        .sort((a, b) => {
+            a = a.split(" ");
+            b = b.split(" ");
+            if (a.length == 3 && b.length == 3) return (a[2] > b[2] ? 1 : -1);
+            if (a.length == 3 && b.length == 4) return (a[2] > b[3] ? 1 : -1);
+            if (a.length == 4 && b.length == 4) return (a[3] > b[3] ? 1 : -1);
+            if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
+        })
+        .filter(Text => Text !== "");
+    Fixs = Fixs.join(",");
 
-    Fixs.forEach(function (Text) {
-        push_fix(fixObj, Text, "other");
-    })
     $("." + fixArea).val("");
 }
