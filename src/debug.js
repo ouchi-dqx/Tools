@@ -12,6 +12,13 @@ const version = "1.0";  //バージョン管理変数
 
 //テスト用関数
 function debug() {
+    const params = {
+        test: "test"
+    }
+
+    xhrSend(params, (res) => {
+        alert(res)
+    })
 
 }
 
