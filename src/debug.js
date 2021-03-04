@@ -1453,7 +1453,7 @@ function xhrSend(params, resFunc) {
     params.version = version;
 
     $.ajax({
-        url: "http://ukagaka.sp.land.to/test.php",
+        url: "//ukagaka.sp.land.to/test.php",
         async: false,
         cache: false,
         type: "GET",
