@@ -86,6 +86,11 @@ function addShare() {
     if (flg) {
         const List = $(".other_fix_blue tr, .other_fix_red tr");
         if (List.length > 2) {
+            $(".other_fix_blue").find(".fix").show();
+            $(".other_block_fix_blue").show();
+            $(".other_fix_red").find(".fix").show();
+            $(".other_block_fix_red").show();
+
             const flg2 = confirm(
                 "外部青黄・確定リストに既に内容が存在しています"
                 + "\n 上書きしますか？"
@@ -138,6 +143,11 @@ function connectShare() {
 
         const List = $(".other_fix_blue tr, .other_fix_red tr");
         if (List.length > 2) {
+            $(".other_fix_blue").find(".fix").show();
+            $(".other_block_fix_blue").show();
+            $(".other_fix_red").find(".fix").show();
+            $(".other_block_fix_red").show();
+
             const flg2 = confirm(
                 "外部青黄・確定リストに既に内容が存在しています"
                 + "\n 上書きしますか？"
@@ -219,31 +229,17 @@ function updateList(mode, fix, Text) {
                         return 0;
                     }
                     else {
-                        clearInterval(Timers.updateTime);
-                        $(".connectArea").hide();
-                        $(".disconnect").hide();
-
                         const flg = confirm(
                             "不明なエラーです！"
-                            + "\n 接続を切断しました"
-                            + "\n 再接続しますか？"
+                            + "\n " + res.err
+                            + "\n 再試行しますか？"
                         );
 
                         if (flg) {
-                            connectShare();
                             updateList(mode, fix, Text);
-
                             return 0;
                         }
-                        else {
-                            share_ID = "";
-                            $(".message").html(
-                                "Error:" + res.err + "<br />" +
-                                "接続を切断しました"
-                            ).show();
-
-                            return 0;
-                        }
+                        else return 0;
                     }
                 }
 
