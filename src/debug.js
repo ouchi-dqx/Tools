@@ -12,13 +12,6 @@ const version = "1.0";  //バージョン管理変数
 
 //テスト用関数
 function debug() {
-    const params = {
-        test: "test"
-    }
-
-    xhrSend(params, (res) => {
-        alert(res)
-    })
 
 }
 
@@ -1453,7 +1446,7 @@ function xhrSend(params, resFunc) {
     params.version = version;
 
     $.ajax({
-        url: "//ukagaka.sp.land.to/test.php",
+        url: "https://script.google.com/macros/s/AKfycby0mRAp5wucNNkiM72RdMowNc-JRDQyE5ip46pC7uw/dev",
         async: false,
         cache: false,
         type: "GET",
