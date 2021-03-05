@@ -857,6 +857,7 @@ function push_fixs(fixObj, fixArea) {
     fixs.forEach(Text => $("." + fixObj).append('<tr><td class="fix">' + Text + "</td></tr>"))
     fixs = fixs.join(",");
 
-    if (share_flg) updateList("ADD", fixs, Text);
+    fixObj = fixObj.replace("other_", "");
+    if (share_flg) updateList("ADD", fixObj, fixs);
     $("." + fixArea).val("");
 }
