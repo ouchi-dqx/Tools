@@ -843,8 +843,8 @@ $(document).on(
 function push_fixs(fixObj, fixArea) {
     if (!$("." + fixArea).val()) return 0;
 
-    let Fixs = $("." + fixArea).val().split(/\r\n|\r|\n/);
-    Fixs = Fixs
+    let fixs = $("." + fixArea).val().split(/\r\n|\r|\n/);
+    fixs = fixs
         .sort((a, b) => {
             a = a.split(" ");
             b = b.split(" ");
@@ -854,7 +854,9 @@ function push_fixs(fixObj, fixArea) {
             if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
         })
         .filter(Text => Text !== "");
-    Fixs = Fixs.join(",");
+    fixs.forEach(Text => $("." + fixObj).append('<tr><td class="fix">' + Text + "</td></tr>"))
+    fixs = fixs.join(",");
 
+    if (share_flg) updateList("ADD", fixs, Text);
     $("." + fixArea).val("");
 }
