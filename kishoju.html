@@ -87,19 +87,6 @@
                     $(this).next('.slider-box').slideToggle("fast");
                     $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
                 }).click();
-
-                //メモ欄表示モード切替
-                $('#chk-memo2').click(function(){
-                    var bFlg = $('#chk-memo2').prop('checked');
-                    if ( bFlg === true ) {
-                        $('#chk-memo2').next('.btn-tgl').html('メモ欄表示');
-                        $(".memo2").show();
-                    }
-                    else {
-                        $('#chk-memo2').next('.btn-tgl').html('メモ欄非表示');
-                        $(".memo2").hide();
-                    }
-                });
             });
         </script>
     </head>
@@ -410,6 +397,15 @@
                         <button onclick="push_fixs('other_fix_blue', 'push_fixs_blue')">追加</button>
                         <button onclick="setClip('other_fix_blue')">コピー</button>
                         <button onclick="Cleaner('other_fix_blue')">クリア</button>
+                        <div class="toggle_other_fix_blue">
+                            <span class="chk-tgl-span">
+                                <label>
+                                    <input type="checkbox" class="chk-otherBox" value="other_fix_blue"
+                                        autocomplete="off">
+                                    <span class="btn-tgl">全部表示しない</span>
+                                </label>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -430,6 +426,15 @@
                         <button onclick="push_fixs('other_fix_red', 'push_fixs_red')">追加</button>
                         <button onclick="setClip('other_fix_red')">コピー</button>
                         <button onclick="Cleaner('other_fix_red')">クリア</button>
+                        <div class="toggle_other_fix_red">
+                            <span class="chk-tgl-span">
+                                <label>
+                                    <input type="checkbox" class="chk-otherBox" value="other_fix_red"
+                                        autocomplete="off">
+                                    <span class="btn-tgl">全部表示しない</span>
+                                </label>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -551,6 +556,8 @@
                     2021/03/06 <br />
                     ・メモ欄を非表示にしました。<br />
                     　ページ下部の[メモ欄非表示]ボタンで表示切替ができます。
+                    ・外部リストの表をスクロールできるようにしました。<br />
+                    　[全部表示する/しない]でスクロールモードを切替できます。
                 </li>
                 <li>
                     2021/03/04 <br />

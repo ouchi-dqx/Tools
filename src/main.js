@@ -532,7 +532,7 @@ function clear_input() {
                 $(this).prop("disabled", false);
             });
 
-            $(this).find("p").each(function () {
+            $(this).find("p, .memo").each(function () {
                 if ($(this).attr("class") != "time-title") {
                     $(this)
                         .attr("Date", "")

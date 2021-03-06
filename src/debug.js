@@ -6,7 +6,8 @@ var
     get_flg = false,    //URL取得モードフラグ
     share_flg = false,  //データ共有フラグ
     share_ID = "",      //データ共有用パス
-    ver_flg = false;    //バージョンチェックフラグ(初回のみ)
+    ver_flg = false,    //バージョンチェックフラグ(初回のみ)
+    scroll_flg = true;  //外部リストスクロールフラグ
 //var sendFlg = "";     //データ送信フラグ-没
 const version = "1.3";  //バージョン管理変数
 
@@ -14,6 +15,36 @@ const version = "1.3";  //バージョン管理変数
 function debug() {
 
 }
+
+//外部リスト表示モード切替
+$(document).on("click", ".chk-otherBox", function () {
+    const
+        bFlg = $(this).prop('checked'),
+        obj = $(this).val();
+    if (bFlg === true) {
+        scroll_flg = false;
+        $(this).next('.btn-tgl').html('全部表示する');
+        $("." + obj + " tbody").css("display", "")
+    }
+    else {
+        scroll_flg = true;
+        $(this).next('.btn-tgl').html('全部表示しない');
+        $("." + obj + " tbody").css("display", "block")
+    }
+});
+
+//メモ欄表示モード切替
+$(document).on("click", '#chk-memo2', function () {
+    const bFlg = $(this).prop('checked');
+    if (bFlg === true) {
+        $(this).next('.btn-tgl').html('メモ欄表示');
+        $(".memo2").show();
+    }
+    else {
+        $(this).next('.btn-tgl').html('メモ欄非表示');
+        $(".memo2").hide();
+    }
+});
 
 //クラスの実験中
 class Cells {
@@ -403,6 +434,7 @@ $(document).on("click", ".setServers", function () {
 
     $(".ServerList tr").slice(1).remove();   //テーブルの初期化
     $(".ServerList").attr("id", boxName);    //サーバリストID設定
+    $(".toggle_memo2").show();
 
     for (let i = 0; i < 10; i++) {
         const CopyTemp1 = $($("#template1").html()).clone();
@@ -429,7 +461,6 @@ $(document).on("click", ".setServers", function () {
     ) load_Storage();
 
     setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
-    $(".toggle_memo2").show();
 })
 
 //調査サーバー選択式
@@ -441,6 +472,7 @@ $(document).on('change', '.select-mode.PTselect input', function () {
         TMP = []; //初期化
     }
     $(".ServerList").attr("id", "select");      //サーバリストID設定
+    $(".toggle_memo2").show();
 
     if ($(this).prop('checked')) {
         const CopyTemp1 = $($("#template1").html()).clone();
@@ -457,8 +489,6 @@ $(document).on('change', '.select-mode.PTselect input', function () {
             if (Server == num) $(this).remove();
         })
     }
-
-    $(".toggle_memo2").show();
 })
 
 //[標準モード/偶数奇数モード]偶数・奇数モード切替
@@ -863,6 +893,29 @@ function push_fixs(fixObj, fixArea) {
     if (share_flg) updateList("ADD", fixObj, fixs);
     $("." + fixArea).val("");
 }
+
+//外部リスト変更イベント
+$(function () {
+    const
+        observer = new MutationObserver((elem) => {
+            if (elem[0].target.className != "fix") {
+                const
+                    obj = elem[0].target.offsetParent.className,
+                    length = elem[0].target.childElementCount;
+                if (length >= 5 && scroll_flg) $(document).find("." + obj + " tbody").css("display", "block");
+                else $(document).find("." + obj + " tbody").css("display", "");
+            }
+        }),
+        config = {
+            childList: true,
+            attributes: true,
+            characterData: true,
+            subtree: true
+        };
+
+    observer.observe($(".other_fix_blue")[0], config);
+    observer.observe($(".other_fix_red")[0], config);
+})
 
 /*初回設定関連*/
 //読込時の場所並び替え
@@ -1398,7 +1451,7 @@ function clear_input() {
                 $(this).prop("disabled", false);
             });
 
-            $(this).find("p").each(function () {
+            $(this).find("p, .memo").each(function () {
                 if ($(this).attr("class") != "time-title") {
                     $(this)
                         .attr("Date", "")

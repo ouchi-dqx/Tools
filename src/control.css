@@ -308,18 +308,19 @@ button {
 
 .memo2{
     display: none;
+
 }
 /************************************************　サイドリスト　************************************************/
-.side-list-area{
-    display: table;
-}
+.side-list-area{ display: table; }
 
-.other_box{
-    clear:both;
-}
+.other_box{ clear:both; }
 
-.other_block_fix_blue, .other_block_fix_red{
-    display: none;
+.other_block_fix_blue, .other_block_fix_red{ display: none; }
+
+.other_fix_blue tbody, .other_fix_red tbody{
+    height: 120px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .other_box.following-on .function-btn-box-mini{
