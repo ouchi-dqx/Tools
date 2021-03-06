@@ -305,6 +305,10 @@ button {
     border: 1px solid #e06651;
     background-color: #fff1ef;
 }
+
+.memo2{
+    display: none;
+}
 /************************************************　サイドリスト　************************************************/
 .side-list-area{
     display: table;
@@ -312,6 +316,10 @@ button {
 
 .other_box{
     clear:both;
+}
+
+.other_block_fix_blue, .other_block_fix_red{
+    display: none;
 }
 
 .other_box.following-on .function-btn-box-mini{

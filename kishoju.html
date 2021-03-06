@@ -36,75 +36,71 @@
         </script>
 
         <script type="text/Javascript">
-        var objWd = $(window);              //ウィンドウ
-        var l_rightFollowFlg = false;       //追随中フラグ
+            var objWd = $(window);              //ウィンドウ
+            var l_rightFollowFlg = false;       //追随中フラグ
 
-        //ウィンドウ - リサイズ／最大化
-        objWd.on('resize maximize', function(){
-            //サイドリストの高さ調整
-            fncFixRedReSize();
-        });
-        //サイドリスト（右側固定時）の高さ設定
-        function fncFixRedReSize(){
-            if ( l_rightFollowFlg === true ){
-                //高さ設定
-                var h = objWd.height() - 470;
-                //20以下には縮めない
-                if ( h <= 20 ){ h = 20; }
-                $('#fix-red').children('tbody').height(h);
-            }
-        }
-        //jqイベント
-        $(function(){
-            //分散モード変更
-            $('.setting-box .mode-change-box input[name=opt-tgl]').change(function(){
-                modeChange();
+            //ウィンドウ - リサイズ／最大化
+            objWd.on('resize maximize', function(){
+                //サイドリストの高さ調整
+                fncFixRedReSize();
             });
-            //サイドリスト追随モード切替
-            $('#chk-side-follow').click(function(){
-                const MODE_ON = 'following-on';    //ついてくるClass名
-                const MODE_OFF = 'following-off';  //ついてこないClass名
-                //追随切替
-                l_rightFollowFlg = $('#chk-side-follow').prop('checked');
+            //サイドリスト（右側固定時）の高さ設定
+            function fncFixRedReSize(){
                 if ( l_rightFollowFlg === true ){
-                    $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_OFF);
-                    $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_ON);
-                    $('.side-list-area').css("display","inline");
-                    fncFixRedReSize();
-                }else{
-                    $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_ON);
-                    $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_OFF);
-                    $('.side-list-area').css("display","table");
+                    //高さ設定
+                    var h = objWd.height() - 470;
+                    //20以下には縮めない
+                    if ( h <= 20 ){ h = 20; }
+                    $('#fix-red').children('tbody').height(h);
                 }
-            });
-            //サイドリスト収納切替
-            $('.side-list-btn').click(function(){
-                $('.side-list-box').animate( { width: 'toggle' },'fast' );
-                $(this).find('.hung-icon').toggleClass('rev');      //アイコン反転
-            });
-            //スライドBOX（使い方／更新履歴）開閉
-            $('.slider-title').click(function(){
-                $(this).next('.slider-box').slideToggle("fast");
-                $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
-            }).click();
-
-            /*
-                //情報提供モード切替
-                $('#chk-send-info').click(function(){
-                    var bFlg = $('#chk-send-info').prop('checked');
-                    if ( bFlg === true ){
-                        var msg = confirm("情報提供モードをONにすると「虹」「虹(赤)→黄」の遷移時間が「サーバー情報(虹黄)」ページに公開されます。ONにしてもよろしいですか？");
-                        if( msg === false ){ return false; }
-                        $('#chk-send-info').next('.btn-tgl').html('提供 ON');
-                        localStorage.setItem("sendMode", "ON")
-                    } else {
-                        $('#chk-send-info').next('.btn-tgl').html('提供OFF');
-                        localStorage.setItem("sendMode", "OFF")
-                    }
-                    setSendFlg(bFlg);
+            }
+            //jqイベント
+            $(function(){
+                //分散モード変更
+                $('.setting-box .mode-change-box input[name=opt-tgl]').change(function(){
+                    modeChange();
                 });
-            */
-        });
+                //サイドリスト追随モード切替
+                $('#chk-side-follow').click(function(){
+                    const MODE_ON = 'following-on';    //ついてくるClass名
+                    const MODE_OFF = 'following-off';  //ついてこないClass名
+                    //追随切替
+                    l_rightFollowFlg = $('#chk-side-follow').prop('checked');
+                    if ( l_rightFollowFlg === true ){
+                        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_OFF);
+                        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_ON);
+                        $('.side-list-area').css("display","inline");
+                        fncFixRedReSize();
+                    }else{
+                        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_ON);
+                        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_OFF);
+                        $('.side-list-area').css("display","table");
+                    }
+                });
+                //サイドリスト収納切替
+                $('.side-list-btn').click(function(){
+                    $('.side-list-box').animate( { width: 'toggle' },'fast' );
+                    $(this).find('.hung-icon').toggleClass('rev');      //アイコン反転
+                });
+                //スライドBOX（使い方／更新履歴）開閉
+                $('.slider-title').click(function(){
+                    $(this).next('.slider-box').slideToggle("fast");
+                    $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
+                }).click();
+
+                //メモ欄表示モード切替
+                $('#chk-memo2').click(function(){
+                    var bFlg = $('#chk-memo2').prop('checked');
+                    if ( bFlg === true ) {
+                        $('#chk-memo2').next('.btn-tgl').html('メモ欄表示');
+                        $(".memo2").show();
+                    }
+                    else {
+                        $('#chk-memo2').next('.btn-tgl').html('メモ欄非表示');
+                        $(".memo2").hide();
+                    }
+                });
+            });
         </script>
     </head>
 
@@ -175,13 +171,9 @@
             <div class="ouchi-msg">
                 ◆鯖全体の現在時間を更新するボタンを追加しました。
                 <a href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a><br />
-                ◆青黄・確定をPTで共有する機能を追加しました。詳細は下部の[使い方]を確認ください。<br />
-                ◆調査するサーバーを自由に設定できるようにしました(要望)<br />
-                ◆ツールのアクセス状況を確認するページを作成しました。
-                <a href="https://ouchi-dqx.github.io/Tools/analytics.html">(リンク)</a><br />
-                ◆<a href="https://twitter.com/ouchi_dqx/status/1366410278141788163">
-                    [障害連絡]03/01 23時50分頃の共有機能の障害について
-                </a>
+                ◆青黄・確定をPTで共有する機能を追加しました。<br />
+                ◆<a href="https://ouchi-dqx.github.io/Tools/analytics.html">ツールのアクセス状況を確認するページ</a>を作成しました。<br />
+                ◆<a href="https://twitter.com/ouchi_dqx/status/1366410278141788163">[障害連絡]03/01 23時50分頃の共有機能の障害について</a>
             </div>
         </div>
 
@@ -275,8 +267,8 @@
             <div class="setting-btn-box">
                 <button class="even_odd">標準モード</button>
                 <button onclick="load_Storage()">前回の続きから</button>
-                <button onclick="Cleaner('all')">すべて最初から</button>
-                <button onclick="Cleaner('input')">今のリストを最初から</button>
+                <button onclick="Cleaner('all')">全リセット</button>
+                <button onclick="Cleaner('input')">入力リセット</button>
             </div>
         </div>
 
@@ -449,6 +441,15 @@
         </div>
         <div style="clear: both;"></div>
 
+        <div class="toggle_memo2" style="display:none">
+            <span class="chk-tgl-span">
+                <label>
+                    <input type="checkbox" id="chk-memo2" autocomplete="off">
+                    <span class="btn-tgl">メモ欄非表示</span>
+                </label>
+            </span>
+        </div>
+
         <div class="slider-title">
             使い方<i class="material-icons slider-icon">publish</i>
         </div>
@@ -457,8 +458,8 @@
                 <li><b>【Step1】[調査サーバー選択]で担当するサーバーグループを選択します。</b></li>
                 <li><b>【Step2】[調査状態の設定]でデータの復旧／クリアを行います。</b><br />
                     　<span class="text-btn" style="padding: 1px 5px;">前回の続きから</span>：保存された入力状態を復元します<br />
-                    　<span class="text-btn" style="padding: 1px 5px;">すべて最初から</span>：保存されている情報をすべてクリアします<br />
-                    　<span class="text-btn" style="padding: 1px 5px;">今のリストを最初から</span>：表示中のチェックリストだけをクリアします<br />
+                    　<span class="text-btn" style="padding: 1px 5px;">全リセット</span>：保存されている情報をすべてクリアします<br />
+                    　<span class="text-btn" style="padding: 1px 5px;">入力リセット</span>：表示中のチェックリストだけをクリアします<br />
                 </li>
                 <li>
                     <b>【Step3】チェックリスト ヘッダの</b>
@@ -546,6 +547,11 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>
+                    2021/03/06 <br />
+                    ・メモ欄を非表示にしました。<br />
+                    　ページ下部の[メモ欄非表示]ボタンで表示切替ができます。
+                </li>
                 <li>
                     2021/03/04 <br />
                     ・共有機能関連のエラー処理を変更しました。<br />
@@ -641,7 +647,7 @@
                     <p class="nowTime" color="" Date="" style="background-color: transparent;"></p>
                 </div>
                 <div class="memo-box">
-                    <p class="memo" color="" Date=""></p>
+                    <span class="memo" color="" Date=""></span>
                 </div>
                 <input type="text" class="memo2" placeholder="メモ欄">
             </div>

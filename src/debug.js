@@ -56,7 +56,6 @@ window.onload = function () {
     modeChange();           //4PT/8PT切替(デフォルト4PT)
     setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
-    $(".other_block_fix_blue, .other_block_fix_red").hide();
 
     if (location.search.substring(1)) getURLData(location.search.substring(1));
     else sortPoint();
@@ -430,6 +429,7 @@ $(document).on("click", ".setServers", function () {
     ) load_Storage();
 
     setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
+    $(".toggle_memo2").show();
 })
 
 //調査サーバー選択式
@@ -457,6 +457,8 @@ $(document).on('change', '.select-mode.PTselect input', function () {
             if (Server == num) $(this).remove();
         })
     }
+
+    $(".toggle_memo2").show();
 })
 
 //[標準モード/偶数奇数モード]偶数・奇数モード切替
