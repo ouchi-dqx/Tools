@@ -6,8 +6,7 @@ var
     get_flg = false,    //URL取得モードフラグ
     share_flg = false,  //データ共有フラグ
     share_ID = "",      //データ共有用パス
-    ver_flg = false,    //バージョンチェックフラグ(初回のみ)
-    scroll_flg = true;  //外部リストスクロールフラグ
+    ver_flg = false;    //バージョンチェックフラグ(初回のみ)
 //var sendFlg = "";     //データ送信フラグ-没
 const version = "1.3";  //バージョン管理変数
 
@@ -22,12 +21,10 @@ $(document).on("click", ".chk-otherBox", function () {
         bFlg = $(this).prop('checked'),
         obj = $(this).val();
     if (bFlg === true) {
-        scroll_flg = false;
         $(this).next('.btn-tgl').html('全部表示する');
         $("." + obj + " tbody").css("display", "")
     }
     else {
-        scroll_flg = true;
         $(this).next('.btn-tgl').html('全部表示しない');
         $("." + obj + " tbody").css("display", "block")
     }
@@ -900,10 +897,13 @@ $(function () {
         observer = new MutationObserver((elem) => {
             if (elem[0].target.className != "fix") {
                 const
-                    obj = elem[0].target.offsetParent.className,
+                    obj_tbody = elem[0].target.offsetParent.className,
+                    obj_block = elem[0].target.offsetParent.className.replace("other_", "other_block_"),
+                    scroll_flg = $("." + obj_block).find(".chk-otherBox").prop("checked"),
                     length = elem[0].target.childElementCount;
-                if (length >= 5 && scroll_flg) $(document).find("." + obj + " tbody").css("display", "block");
-                else $(document).find("." + obj + " tbody").css("display", "");
+
+                if (length >= 5 && !scroll_flg) $(document).find("." + obj_tbody + " tbody").css("display", "block");
+                else $(document).find("." + obj_tbody + " tbody").css("display", "");
             }
         }),
         config = {
