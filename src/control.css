@@ -317,11 +317,23 @@ button {
 
 .other_block_fix_blue, .other_block_fix_red{ display: none; }
 
-.other_fix_blue tbody, .other_fix_red tbody{
+.other_box tbody{
     height: 120px;
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
+.other_box tbody::-webkit-scrollbar {
+    width: 5px;
+    height: auto;
+    border-radius: 0px;
+    background-color: dimgray;
+}
+.other_box tbody::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #ccc;
+}
+
 
 .other_box.following-on .function-btn-box-mini{
     display: block;
