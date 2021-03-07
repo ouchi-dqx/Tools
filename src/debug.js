@@ -15,34 +15,6 @@ function debug() {
 
 }
 
-//外部リスト表示モード切替
-$(document).on("click", ".chk-otherBox", function () {
-    const
-        bFlg = $(this).prop('checked'),
-        obj = $(this).val();
-    if (bFlg === true) {
-        $(this).next('.btn-tgl').html('全部表示する');
-        $("." + obj + " tbody").css("display", "")
-    }
-    else {
-        $(this).next('.btn-tgl').html('全部表示しない');
-        $("." + obj + " tbody").css("display", "block")
-    }
-});
-
-//メモ欄表示モード切替
-$(document).on("click", '#chk-memo2', function () {
-    const bFlg = $(this).prop('checked');
-    if (bFlg === true) {
-        $(this).next('.btn-tgl').html('メモ欄表示');
-        $(".memo2").show();
-    }
-    else {
-        $(this).next('.btn-tgl').html('メモ欄非表示');
-        $(".memo2").hide();
-    }
-});
-
 //クラスの実験中
 class Cells {
     constructor(objBox, newColor) {
@@ -84,6 +56,7 @@ window.onload = function () {
     modeChange();           //4PT/8PT切替(デフォルト4PT)
     setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
+    setScrollSettings();   //スクロール機能設定
 
     if (location.search.substring(1)) getURLData(location.search.substring(1));
     else sortPoint();
@@ -106,7 +79,7 @@ window.onload = function () {
 }
 
 
-/*ヘッダ部機能(リンク)*/
+/********************ヘッダ部機能(リンク)********************/
 //[共有表を作成]
 function addShare() {
     const flg = confirm("青黄・確定の共有表を作成しますか？");
@@ -409,7 +382,7 @@ function getShortURL() {
 }
 
 
-/*ヘッダ部機能(ボタン)*/
+/********************ヘッダ部機能(ボタン)********************/
 //[4人分散/8人分散]#PTモード変更
 function modeChange() {
     //【NaL】モード切替スイッチ追加に伴う変更
@@ -594,7 +567,7 @@ function load_Storage(getData) {
 }
 
 
-/*メインテーブル画面機能*/
+/********************メインテーブル画面機能********************/
 //[← →]#ポイント移動
 $(document).on("click", ".left, .right", function () {
     let
@@ -654,7 +627,7 @@ $(document).on("click", ".btn", function () {
 })
 
 
-/*サイド画面*/
+/********************サイド画面********************/
 //[保存]
 function save_Storage() {
     if (ptMODE == "PTselect") return 0;
@@ -754,7 +727,7 @@ function Rollback() {
 }
 
 
-/*青木・確定リスト*/
+/********************青木・確定リスト********************/
 //(確定/青木）テーブルクリックイベント#コピー/削除
 $(document).on("click", ".fix", function () {
     let flg = confirm("コピーor削除を行いますか？\nOK=コピー キャンセル=削除");
@@ -860,10 +833,19 @@ $(document).on(
         else if ($(this).attr("class") == "other_fix_blue_head") {
             $(".other_fix_blue").find(".fix").toggle();
             $(".other_block_fix_blue").toggle();
+            if ($(".other_block_fix_blue").is(":visible"))
+                $(".other_fix_blue tbody").css("overflow-y", "scroll");
+            else
+                $(".other_fix_blue tbody").css("overflow-y", "hidden");
+
         }
         else if ($(this).attr("class") == "other_fix_red_head") {
             $(".other_fix_red").find(".fix").toggle();
             $(".other_block_fix_red").toggle();
+            if ($(".other_block_fix_red").is(":visible"))
+                $(".other_fix_red tbody").css("overflow-y", "scroll");
+            else
+                $(".other_fix_red tbody").css("overflow-y", "hidden");
         }
     }
 );
@@ -891,6 +873,58 @@ function push_fixs(fixObj, fixArea) {
     $("." + fixArea).val("");
 }
 
+//外部リストスクロール幅変更
+$(document).on("click", ".chk-tgl-span button", function () {
+    const
+        scroll_mode = $(this).attr("class"),
+        obj = $(this).parents(".function-btn-box-mini").attr("value"),
+        maxlength = ($("." + obj + " tr").length - 1) * 24,
+        before_height = Number($("." + obj + " tbody").css("height").replace("px", ""));
+
+    if (scroll_mode == "up") {
+        if (before_height - 24 > 24 * 2) {
+            $("." + obj + " tbody").css("height", before_height - 24 + "px");
+            localStorage.setItem("height_" + obj, JSON.stringify(before_height - 24));
+        }
+        else return 0;
+    }
+    else if (scroll_mode == "down") {
+        if (maxlength - 24 != before_height) {
+            $("." + obj + " tbody").css("height", before_height + 24 + "px");
+            localStorage.setItem("height_" + obj, JSON.stringify(before_height + 24));
+        }
+        else return 0;
+    }
+});
+
+//外部リスト表示モード切替
+$(document).on("click", ".chk-otherBox", function () {
+    const
+        bFlg = $(this).prop("checked"),
+        obj = $(this).val();
+    if (bFlg === true) {
+        $(this).next().html("全部表示する");
+        $("." + obj + " tbody").css("display", "");
+    }
+    else {
+        $(this).next().html("全部表示しない");
+        $("." + obj + " tbody").css("display", "block");
+    }
+});
+
+//メモ欄表示モード切替
+$(document).on("click", "#chk-memo2", function () {
+    const bFlg = $(this).prop("checked");
+    if (bFlg === true) {
+        $(this).next(".btn-tgl").html("メモ欄表示");
+        $(".memo2").show();
+    }
+    else {
+        $(this).next(".btn-tgl").html("メモ欄非表示");
+        $(".memo2").hide();
+    }
+});
+
 //外部リスト変更イベント
 $(function () {
     const
@@ -902,8 +936,14 @@ $(function () {
                     scroll_flg = $("." + obj_block).find(".chk-otherBox").prop("checked"),
                     length = elem[0].target.childElementCount;
 
-                if (length >= 5 && !scroll_flg) $(document).find("." + obj_tbody + " tbody").css("display", "block");
-                else $(document).find("." + obj_tbody + " tbody").css("display", "");
+                if (length >= 6 && !scroll_flg) {
+                    $("." + obj_tbody + " tbody").css("display", "block");
+                    $("." + obj_block).find(".chk-tgl-span button").prop("disabled", false);
+                }
+                else {
+                    $("." + obj_tbody + " tbody").css("display", "");
+                    $("." + obj_block).find(".chk-tgl-span button").prop("disabled", true);
+                }
             }
         }),
         config = {
@@ -916,8 +956,7 @@ $(function () {
     observer.observe($(".other_fix_blue")[0], config);
     observer.observe($(".other_fix_red")[0], config);
 })
-
-/*初回設定関連*/
+/********************初回設定関連********************/
 //読込時の場所並び替え
 function sortPoint() {
     const Sort = JSON.parse(localStorage.getItem("Sort"));
@@ -955,6 +994,20 @@ function setRollbackEnable() {
 
     if (TMP.length > 0) flg = false; //TMPの中身がないときだけ非活性
     $('#btn-rollback').prop('disabled', flg);
+}
+
+//スクロール機能設定
+function setScrollSettings() {
+    //スクロール幅変更ボタン 非活性化
+    $(".chk-tgl-span button").prop("disabled", true);
+
+    //スクロール幅設定
+    const
+        height_other_blue = JSON.parse(localStorage.getItem("height_other_fix_blue")),
+        height_other_red = JSON.parse(localStorage.getItem("height_other_fix_red"));
+
+    if (height_other_blue) $(".other_fix_blue tbody").css("height", height_other_blue + "px");
+    if (height_other_red) $(".other_fix_red tbody").css("height", height_other_red + "px");
 }
 
 //URLパラメータ抽出
@@ -1021,7 +1074,7 @@ function getParam(param, params) {
 }
 
 
-/*ヘッダ部関係*/
+/********************ヘッダ部関係********************/
 //偶数・奇数入替処理
 function tSort(mode) {
     const ServerID = $(".ServerList").attr("id");
@@ -1048,7 +1101,7 @@ function tSort(mode) {
     }
 }
 
-/*メイン機能関係*/
+/********************メイン機能関係********************/
 //ポイント移動処理
 //***************************見直し対象
 function movePoint(befPoint, afterPoint) {
@@ -1373,7 +1426,7 @@ function memoTimer(objBox, Color) {
 }
 
 
-/*サイドバー関連*/
+/********************サイドバー関連********************/
 //入力チェック
 function checkTime(Time) {
     return Time.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9])$/) !== null;
@@ -1392,7 +1445,7 @@ function push_fix(fix, Text, flg) {
 }
 
 
-/*保存・削除関連*/
+/********************保存・削除関連********************/
 //[調査場所の並びを保存]
 function save_Sort() {
     const Sort = [
@@ -1531,7 +1584,7 @@ function save_Fix() {
 }
 
 
-/*汎用関数*/
+/********************汎用関数********************/
 //ajax通信
 function xhrSend(params, resFunc) {
     params.version = version;

@@ -159,7 +159,7 @@
                 <a href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a><br />
                 ◆青黄・確定をPTで共有する機能を追加しました。<br />
                 ◆<a href="https://ouchi-dqx.github.io/Tools/analytics.html">ツールのアクセス状況を確認するページ</a>を作成しました。<br />
-                ◆<a href="https://twitter.com/ouchi_dqx/status/1366410278141788163">[障害連絡]03/01 23時50分頃の共有機能の障害について</a>
+                ◆<a href="https://twitter.com/ouchi_dqx/status/1368183083959119872">リストのスクロール機能についてのアンケート</a>
             </div>
         </div>
 
@@ -309,7 +309,7 @@
         </table>
 
         <!--サイドリスト-->
-        <div class="side-list-area">
+        <div class="side-list-area" style="display: table;">
             <div class="side-list-box following-off" style="display: table;">
                 <div class="chk-tgl-box">
                     <label>
@@ -378,8 +378,8 @@
                 </div>
             </div>
 
-            <div class="other_box">
-                <table id="other_fix_blue" class="other_fix_blue" style="margin-bottom: 3px;">
+            <div class="other_box" style="clear:both;">
+                <table id="other_fix_blue" class="other_fix_blue">
                     <thead class="other_fix_blue_head">
                         <tr>
                             <th>外部青黄リスト</th>
@@ -392,12 +392,18 @@
                 <div class="other_block_fix_blue">
                     <textarea class="push_fixs_blue"></textarea>
 
-                    <div class="function-btn-box-mini">
+                    <div class="function-btn-box-mini" value="other_fix_blue">
                         <button onclick="push_fixs('other_fix_blue', 'push_fixs_blue')">追加</button>
                         <button onclick="setClip('other_fix_blue')">コピー</button>
                         <button onclick="Cleaner('other_fix_blue')">クリア</button>
-                        <div class="toggle_other_fix_blue">
+                        <div class="toggle_other_fix_red" style="margin-top: 5px;">
                             <span class="chk-tgl-span">
+                                <button class="down">
+                                    <i class="material-icons hung-icon arrow">arrow_upward</i>
+                                </button>
+                                <button class="up">
+                                    <i class="material-icons hung-icon arrow">arrow_downward</i>
+                                </button>
                                 <label>
                                     <input type="checkbox" class="chk-otherBox" value="other_fix_blue"
                                         autocomplete="off">
@@ -408,7 +414,7 @@
                     </div>
                 </div>
 
-                <table id="other_fix_red" class="other_fix_red" style="margin-bottom: 3px;">
+                <table id="other_fix_red" class="other_fix_red">
                     <thead class="other_fix_red_head">
                         <tr>
                             <th>外部確定リスト</th>
@@ -421,12 +427,18 @@
                 <div class="other_block_fix_red">
                     <textarea class="push_fixs_red"></textarea>
 
-                    <div class="function-btn-box-mini">
+                    <div class="function-btn-box-mini" value="other_fix_red">
                         <button onclick="push_fixs('other_fix_red', 'push_fixs_red')">追加</button>
                         <button onclick="setClip('other_fix_red')">コピー</button>
                         <button onclick="Cleaner('other_fix_red')">クリア</button>
-                        <div class="toggle_other_fix_red">
+                        <div class="toggle_other_fix_red" style="margin-top: 5px;">
                             <span class="chk-tgl-span">
+                                <button class="up">
+                                    <i class="material-icons hung-icon arrow">arrow_upward</i>
+                                </button>
+                                <button class="down">
+                                    <i class="material-icons hung-icon arrow">arrow_downward</i>
+                                </button>
                                 <label>
                                     <input type="checkbox" class="chk-otherBox" value="other_fix_red"
                                         autocomplete="off">
@@ -551,6 +563,11 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>
+                    2021/03/07 <br />
+                    ・スクロール機能に幅調整ボタンを追加しました。
+                    ・スクロール幅の保存機能を追加しました。(次回以降も設定した幅になる)
+                </li>
                 <li>
                     2021/03/06 <br />
                     ・メモ欄を非表示にしました。<br />

@@ -38,6 +38,20 @@ function setRollbackEnable() {
     $('#btn-rollback').prop('disabled', flg);
 }
 
+//スクロール機能設定
+function setScrollSettings() {
+    //スクロール幅変更ボタン 非活性化
+    $(".chk-tgl-span button").prop("disabled", true);
+
+    //スクロール幅設定
+    const
+        height_other_blue = JSON.parse(localStorage.getItem("height_other_fix_blue")),
+        height_other_red = JSON.parse(localStorage.getItem("height_other_fix_red"));
+
+    if (height_other_blue) $(".other_fix_blue tbody").css("height", height_other_blue + "px");
+    if (height_other_red) $(".other_fix_red tbody").css("height", height_other_red + "px");
+}
+
 //URLパラメータ抽出
 function getURLData(params) {
     try { params = inflate(params) } //URLの復号化
@@ -102,7 +116,7 @@ function getParam(param, params) {
 }
 
 
-/*ヘッダ部関係*/
+/********************ヘッダ部関係********************/
 //偶数・奇数入替処理
 function tSort(mode) {
     const ServerID = $(".ServerList").attr("id");
@@ -129,7 +143,7 @@ function tSort(mode) {
     }
 }
 
-/*メイン機能関係*/
+/********************メイン機能関係********************/
 //ポイント移動処理
 //***************************見直し対象
 function movePoint(befPoint, afterPoint) {
@@ -454,7 +468,7 @@ function memoTimer(objBox, Color) {
 }
 
 
-/*サイドバー関連*/
+/********************サイドバー関連********************/
 //入力チェック
 function checkTime(Time) {
     return Time.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9])$/) !== null;
@@ -473,7 +487,7 @@ function push_fix(fix, Text, flg) {
 }
 
 
-/*保存・削除関連*/
+/********************保存・削除関連********************/
 //[調査場所の並びを保存]
 function save_Sort() {
     const Sort = [
@@ -612,7 +626,7 @@ function save_Fix() {
 }
 
 
-/*汎用関数*/
+/********************汎用関数********************/
 //ajax通信
 function xhrSend(params, resFunc) {
     params.version = version;

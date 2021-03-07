@@ -47,7 +47,7 @@ div{ box-sizing: border-box; }
     border-right: 10px solid dimgray;
 }
 
-/* 情報提供ボタン */
+/* メモ欄表示/非表示ボタン */
 .chk-tgl-span{ display: inline; }
 .chk-tgl-span label { position: relative; }
 .chk-tgl-span [type=checkbox] {
@@ -55,8 +55,6 @@ div{ box-sizing: border-box; }
     -moz-appearance: none;
     outline: none;
     appearance: none;
-    width: 100%;
-    height: 100%;
     margin: 0px;
     padding: 0px;
     position: absolute;
@@ -311,11 +309,10 @@ button {
 
 }
 /************************************************　サイドリスト　************************************************/
-.side-list-area{ display: table; }
-
-.other_box{ clear:both; }
-
-.other_block_fix_blue, .other_block_fix_red{ display: none; }
+.other_block_fix_blue, .other_block_fix_red{
+    display: none;
+    margin-bottom: 3px;
+}
 
 .other_box tbody{
     height: 120px;
@@ -334,6 +331,18 @@ button {
     background: #ccc;
 }
 
+/* スクロール幅変更 矢印ボタン */
+.chk-tgl-span button{
+    width: 30px;
+    height: 25px;
+}
+/* スクロール幅変更 矢印ボタンのアイコン */
+.chk-tgl-span .arrow{
+    font-size: 20px;
+    top: 5px;
+    left:-3px;
+    line-height: 1px;
+}
 
 .other_box.following-on .function-btn-box-mini{
     display: block;
@@ -448,7 +457,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 /* サイドリストテーブル 罫線 */
 .fix_blue, .fix_red, .other_fix_blue, .other_fix_red{
     border-collapse: collapse;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 /* サイドリストテーブル ヘッダ行 */
 .fix_blue th, .fix_red th, .other_fix_blue th, .other_fix_red th{
