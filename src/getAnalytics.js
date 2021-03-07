@@ -27,7 +27,7 @@ function debug() {
                         label: '昨日のユーザー数',
                         backgroundColor: "rgb(10, 150, 190)",
                         borderColor: "rgb(10, 150, 190)",
-                        data: res[0].Data.split(","),
+                        data: res.Data.split(","),
                         lineTension: 0,
                         fill: false,
                     },
