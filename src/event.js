@@ -60,6 +60,7 @@ window.onload = function () {
     setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
     setScrollSettings();   //スクロール機能設定
+    $(".slider-title").click();
 
     if (location.search.substring(1)) getURLData(location.search.substring(1));
     else sortPoint();
