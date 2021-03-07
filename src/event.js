@@ -1,3 +1,4 @@
+const version = "1.3";  //バージョン管理変数
 var
     ptMODE = "",        //PTモード変数
     even_oddMODE = "",  //並びの偶数モード/奇数モード切替フラグ
@@ -8,7 +9,9 @@ var
     share_ID = "",      //データ共有用パス
     ver_flg = false;    //バージョンチェックフラグ(初回のみ)
 //var sendFlg = "";     //データ送信フラグ-没
-const version = "1.3";  //バージョン管理変数
+var
+    objWd = $(window),          //ウィンドウ
+    l_rightFollowFlg = false;   //追随中フラグ
 
 //テスト用関数
 function debug() {
@@ -383,15 +386,11 @@ function getShortURL() {
 
 
 /********************ヘッダ部機能(ボタン)********************/
-//[4人分散/8人分散]#PTモード変更
-function modeChange() {
-    //【NaL】モード切替スイッチ追加に伴う変更
-    ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
-    if (ptMODE == "PT4") $(".even_odd").prop("disabled", false);
-    if (ptMODE == "PT8" || ptMODE == "PTselect") $(".even_odd").prop("disabled", true);
-    $('.select-mode').hide();                    //一旦すべて非表示
-    $('.select-mode' + '.' + ptMODE).show();    //選択モードのみ表示
-}
+
+//分散モード変更
+$('.setting-box .mode-change-box input[name=opt-tgl]').change(function () {
+    modeChange();
+});
 
 //[1 - 10]等#サーバー追加
 $(document).on("click", ".setServers", function () {

@@ -34,61 +34,6 @@
             gtag('js', new Date());
             gtag('config', 'UA-171127523-1');
         </script>
-
-        <script type="text/Javascript">
-            var objWd = $(window);              //ウィンドウ
-            var l_rightFollowFlg = false;       //追随中フラグ
-
-            //ウィンドウ - リサイズ／最大化
-            objWd.on('resize maximize', function(){
-                //サイドリストの高さ調整
-                fncFixRedReSize();
-            });
-            //サイドリスト（右側固定時）の高さ設定
-            function fncFixRedReSize(){
-                if ( l_rightFollowFlg === true ){
-                    //高さ設定
-                    var h = objWd.height() - 470;
-                    //20以下には縮めない
-                    if ( h <= 20 ){ h = 20; }
-                    $('#fix-red').children('tbody').height(h);
-                }
-            }
-            //jqイベント
-            $(function(){
-                //分散モード変更
-                $('.setting-box .mode-change-box input[name=opt-tgl]').change(function(){
-                    modeChange();
-                });
-                //サイドリスト追随モード切替
-                $('#chk-side-follow').click(function(){
-                    const MODE_ON = 'following-on';    //ついてくるClass名
-                    const MODE_OFF = 'following-off';  //ついてこないClass名
-                    //追随切替
-                    l_rightFollowFlg = $('#chk-side-follow').prop('checked');
-                    if ( l_rightFollowFlg === true ){
-                        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_OFF);
-                        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_ON);
-                        $('.side-list-area').css("display","inline");
-                        fncFixRedReSize();
-                    }else{
-                        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_ON);
-                        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_OFF);
-                        $('.side-list-area').css("display","table");
-                    }
-                });
-                //サイドリスト収納切替
-                $('.side-list-btn').click(function(){
-                    $('.side-list-box').animate( { width: 'toggle' },'fast' );
-                    $(this).find('.hung-icon').toggleClass('rev');      //アイコン反転
-                });
-                //スライドBOX（使い方／更新履歴）開閉
-                $('.slider-title').click(function(){
-                    $(this).next('.slider-box').slideToggle("fast");
-                    $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
-                }).click();
-            });
-        </script>
     </head>
 
     <body>

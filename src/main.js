@@ -1,4 +1,6 @@
-/*初回設定関連*/
+/********************関数群********************/
+
+/********************初回設定関連********************/
 //読込時の場所並び替え
 function sortPoint() {
     const Sort = JSON.parse(localStorage.getItem("Sort"));
@@ -141,6 +143,16 @@ function tSort(mode) {
             );
         });
     }
+}
+
+//[4人分散/8人分散/選択式分散]#PTモード変更
+function modeChange() {
+    //【NaL】モード切替スイッチ追加に伴う変更
+    ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
+    if (ptMODE == "PT4") $(".even_odd").prop("disabled", false);
+    if (ptMODE == "PT8" || ptMODE == "PTselect") $(".even_odd").prop("disabled", true);
+    $('.select-mode').hide();                    //一旦すべて非表示
+    $('.select-mode' + '.' + ptMODE).show();    //選択モードのみ表示
 }
 
 /********************メイン機能関係********************/
@@ -486,6 +498,50 @@ function push_fix(fix, Text, flg) {
     }
 }
 
+//ウィンドウ - リサイズ／最大化
+objWd.on('resize maximize', function () {
+    //サイドリストの高さ調整
+    fncFixRedReSize();
+});
+
+//サイドリスト（右側固定時）の高さ設定
+function fncFixRedReSize() {
+    if (l_rightFollowFlg === true) {
+        //高さ設定
+        var h = objWd.height() - 470;
+        //20以下には縮めない
+        if (h <= 20) { h = 20; }
+        $('#fix-red').children('tbody').height(h);
+    }
+}
+
+//サイドリスト追随モード切替
+$(document).on("click", "#chk-side-follow", function () {
+    const
+        MODE_ON = 'following-on',    //ついてくるClass名
+        MODE_OFF = 'following-off';  //ついてこないClass名
+
+    //追随切替
+    l_rightFollowFlg = $('#chk-side-follow').prop('checked');
+    if (l_rightFollowFlg === true) {
+        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_OFF);
+        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_ON);
+        $('.side-list-area').css("display", "inline");
+        fncFixRedReSize();
+    }
+    else {
+        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_ON);
+        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_OFF);
+        $('.side-list-area').css("display", "table");
+    }
+});
+
+//サイドリスト収納切替
+$(document).on("click", ".side-list-btn", function () {
+    $('.side-list-box').animate({ width: 'toggle' }, 'fast');
+    $(this).find('.hung-icon').toggleClass('rev');      //アイコン反転
+});
+
 
 /********************保存・削除関連********************/
 //[調査場所の並びを保存]
@@ -624,6 +680,14 @@ function save_Fix() {
     localStorage.setItem("fix_blue", JSON.stringify(fix_blue));
     localStorage.setItem("fix_red", JSON.stringify(fix_red));
 }
+
+
+/********************スライドBOX********************/
+//スライドBOX（使い方／更新履歴）開閉
+$(document).on("click", ".slider-title", function () {
+    $(this).next('.slider-box').slideToggle("fast");
+    $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
+})
 
 
 /********************汎用関数********************/
