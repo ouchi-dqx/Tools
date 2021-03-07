@@ -9,9 +9,6 @@ var
     share_ID = "",      //データ共有用パス
     ver_flg = false;    //バージョンチェックフラグ(初回のみ)
 //var sendFlg = "";     //データ送信フラグ-没
-var
-    objWd = $(window),          //ウィンドウ
-    l_rightFollowFlg = false;   //追随中フラグ
 
 //テスト用関数
 function debug() {

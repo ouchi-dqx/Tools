@@ -499,6 +499,9 @@ function push_fix(fix, Text, flg) {
 }
 
 //ウィンドウ - リサイズ／最大化
+var
+    objWd = $(window),          //ウィンドウ
+    l_rightFollowFlg = false;   //追随中フラグ
 objWd.on('resize maximize', function () {
     //サイドリストの高さ調整
     fncFixRedReSize();
