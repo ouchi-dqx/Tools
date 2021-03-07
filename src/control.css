@@ -242,6 +242,7 @@ button {
     width: 31px;
     height: 25px;
     font-size: 13px;
+    padding: 0px;
 }
 /* 4色ボタン フォーカス時の外枠を消す */
 .template2-box .btn:focus { outline: 0; }
@@ -304,53 +305,8 @@ button {
     background-color: #fff1ef;
 }
 
-.memo2{
-    display: none;
-
-}
+.memo2{ display: none; }
 /************************************************　サイドリスト　************************************************/
-.other_block_fix_blue, .other_block_fix_red{
-    display: none;
-    margin-bottom: 3px;
-}
-
-.other_box tbody{
-    height: 120px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-}
-
-.other_box tbody::-webkit-scrollbar {
-    width: 5px;
-    height: auto;
-    border-radius: 0px;
-    background-color: dimgray;
-}
-.other_box tbody::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background: #ccc;
-}
-
-/* スクロール幅変更 矢印ボタン */
-.chk-tgl-span button{
-    width: 30px;
-    height: 25px;
-}
-/* スクロール幅変更 矢印ボタンのアイコン */
-.chk-tgl-span .arrow{
-    font-size: 20px;
-    top: 5px;
-    left:-3px;
-    line-height: 1px;
-}
-
-.other_box.following-on .function-btn-box-mini{
-    display: block;
-    text-align: left;
-    font-size: 13px;
-    margin-bottom: 10px;
-}
-
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
 .side-list-box.following-off{ display: table; }
 
@@ -519,12 +475,55 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
     margin-bottom: 10px;
 }
 
+/* 外部リスト表示設定 */
+.other_block_fix_blue, .other_block_fix_red{
+    display: none;
+    margin-bottom: 3px;
+}
+
+/* 外部リスト サイドバーON時表示設定 */
+.other_box.following-on .function-btn-box-mini{
+    display: block;
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+/* 外部リスト スクロールバー設定 */
+.other_box tbody{
+    height: 120px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.other_box tbody::-webkit-scrollbar {
+    width: 5px;
+    height: auto;
+    border-radius: 0px;
+    background-color: dimgray;
+}
+.other_box tbody::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #ccc;
+}
+
+/* スクロール幅変更 矢印ボタン */
+.chk-tgl-span button{
+    width: 30px;
+    height: 25px;
+}
+/* スクロール幅変更 矢印ボタンのアイコン */
+.chk-tgl-span .arrow{
+    font-size: 20px;
+    top: 5px;
+    left:-3px;
+    line-height: 1px;
+}
+
+/* テキストエリア表示幅設定 */
 textarea{ width:160px }
 
 /* iOSクリックイベント用 */
-.fix{
-    cursor: pointer;
-}
+.fix{ cursor: pointer; }
 
 /************************************************　使い方／更新履歴　************************************************/
 /* 開閉スライダー */
