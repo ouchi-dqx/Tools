@@ -388,7 +388,7 @@ function getShortURL() {
 /********************ヘッダ部機能(ボタン)********************/
 
 //分散モード変更
-$('.setting-box .mode-change-box input[name=opt-tgl]').change(function () {
+$(document).on("change", ".setting-box .mode-change-box input[name=opt-tgl]", function () {
     modeChange();
 });
 
