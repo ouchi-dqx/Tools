@@ -11,8 +11,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="src/js-deflate/rawdeflate.js"></script>
         <script src="src/js-deflate/rawinflate.js"></script>
-        <script src="src/main.js"></script>
-        <script src="src/event.js"></script>
+        <script src="src/kishoju.js"></script>
         <link rel="manifest" href="manifest.json">
         <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
         <link rel="apple-touch-icon-precomposed" href="icon.png" size="152x152">
@@ -199,7 +198,6 @@
                 <span>調査状態の設定</span><span class="material-icons">play_arrow</span>
             </div>
             <div class="setting-btn-box">
-                <button class="even_odd">標準モード</button>
                 <button onclick="load_Storage()">前回の続きから</button>
                 <button onclick="Cleaner('all')">全リセット</button>
                 <button onclick="Cleaner('input')">入力リセット</button>
@@ -313,7 +311,7 @@
                         鯖 <input type="number" id="Server" min="1" max="40" value="1" style="width: 40px;">
                     </span>
                     <span>
-                        <select id="Point">
+                        <select id="Point" style="width: 40px;">
                             <option>ゲル</option>
                             <option>砂漠</option>
                             <option>バル</option>
@@ -346,10 +344,10 @@
                         <button onclick="Cleaner('other_fix_blue')">クリア</button>
                         <div class="toggle_other_fix_red" style="margin-top: 5px;">
                             <span class="chk-tgl-span">
-                                <button class="down">
+                                <button class="up">
                                     <i class="material-icons hung-icon arrow">arrow_upward</i>
                                 </button>
-                                <button class="up">
+                                <button class="down">
                                     <i class="material-icons hung-icon arrow">arrow_downward</i>
                                 </button>
                                 <label>
@@ -405,13 +403,46 @@
         </div>
         <div style="clear: both;"></div>
 
-        <div class="toggle_memo2" style="display:none">
-            <span class="chk-tgl-span">
-                <label>
-                    <input type="checkbox" id="chk-memo2" autocomplete="off">
-                    <span class="btn-tgl">メモ欄非表示</span>
-                </label>
-            </span>
+        <div class="slider-title">
+            オプション設定<i class="material-icons slider-icon">publish</i>
+        </div>
+        <div class="slider-box">
+            <ul class="box-list">
+                <li>
+                    <div class="toggle_switch">
+                        偶数奇数モード:
+                        <input type="checkbox" id="cb_toggle_switch1" class="even_odd">
+                        <label for="cb_toggle_switch1"></label>
+                    </div>
+                </li>
+                <li>
+                    <div class="toggle_switch">
+                        メモ欄2表示モード:
+                        <input type="checkbox" id="cb_toggle_switch2" class="tgl_memo2">
+                        <label for="cb_toggle_switch2"></label>
+                    </div>
+                </li>
+                <li>
+                    <div class="toggle_switch">
+                        自動更新モード<br />
+                        虹青自動更新モード:
+                        <input type="checkbox" id="cb_toggle_switch3" class="auto red_blue" value="red_blue">
+                        <label for="cb_toggle_switch3"></label>
+                        　[虹青→青黄に自動更新](実験中)<br />
+
+                        虹黄自動更新モード:
+                        <input type="checkbox" id="cb_toggle_switch4" class="auto red_yellow" value="red_yellow">
+                        <label for="cb_toggle_switch4"></label>
+                        　[虹黄→黄黄に自動更新](実験中)<br />
+
+                        青黄自動更新モード:
+                        <input type="checkbox" id="cb_toggle_switch5" class="auto blue_yellow" value="blue_yellow">
+                        <label for="cb_toggle_switch5"></label>
+                        　[青黄→黄黄に自動更新](実験中)<br />
+                    </div>
+                </li>
+
+            </ul>
         </div>
 
         <div class="slider-title">
@@ -618,7 +649,7 @@
                     <p class="nowTime" color="" Date="" style="background-color: transparent;"></p>
                 </div>
                 <div class="memo-box">
-                    <span class="memo" color="" Date=""></span>
+                    <span class="memo" color="" Date="" style="background-color: transparent;"></span>
                 </div>
                 <input type="text" class="memo2" placeholder="メモ欄">
             </div>

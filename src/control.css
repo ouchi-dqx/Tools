@@ -306,6 +306,10 @@ button {
 }
 
 .memo2{ display: none; }
+/*
+.memo2.show{ display: inline-block; }
+.memo2.hide{ display: none; }
+*/
 /************************************************　サイドリスト　************************************************/
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
 .side-list-box.following-off{ display: table; }
@@ -454,6 +458,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 .side-list-add-box select{
     height: 24px;
+    width: 55px;
 }
 /* サイドリスト　機能ボタンBOX（大） */
 .function-btn-box{
@@ -590,3 +595,39 @@ textarea{ width:160px }
 }
 .box-list Span.text-ylist{ background-color: #fec; }
 .box-list Span.text-rlist{ background-color: #fcc; }
+
+
+
+/************************************************　チェックボックス(トグル式)　************************************************/
+.toggle_switch > input {
+    display: none;
+}
+
+.toggle_switch > label {
+    display: inline-block;
+    position: relative;
+    width: 2.0em;
+    height: 1em;
+    font-size: 18px;
+    margin-bottom: -4px;
+    border-radius: 1em;
+    background-color: #2b2a2f;
+    cursor: pointer;
+}
+.toggle_switch > input:checked + label {
+    background-color: #2dcb45;
+}
+.toggle_switch > label::before {
+    position: absolute;
+    top: 0.05em;
+    left: 0.05em;
+    width: calc(1em - 0.1em);
+    height: calc(1em - 0.1em);
+    border-radius: calc(1em - 0.1em);
+    background-color: #fff;
+    transition: 0.5s;
+    content: "";
+}
+.toggle_switch > input:checked + label::before {
+    left: calc(100% - 1em + 0.05em);
+}

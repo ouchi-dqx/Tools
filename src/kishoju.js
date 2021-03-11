@@ -1703,7 +1703,7 @@ function xhrSend(params, resFunc) {
     params.version = version;
 
     $.ajax({
-        url: "https://script.google.com/macros/s/AKfycby0mRAp5wucNNkiM72RdMowNc-JRDQyE5ip46pC7uw/dev",
+        url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
         async: false,
         cache: false,
         type: "GET",
