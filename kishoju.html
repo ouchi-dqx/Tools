@@ -33,8 +33,6 @@
             gtag('js', new Date());
             gtag('config', 'UA-171127523-1');
         </script>
-        <script data-ad-client="ca-pub-6102016814573876" async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     </head>
 
     <body>
@@ -110,7 +108,6 @@
             </div>
         </div>
 
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <!-- バナー広告 -->
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6102016814573876"
             data-ad-slot="9015592466" data-ad-format="horizontal" data-full-width-responsive="false"></ins>
@@ -618,7 +615,6 @@
         </div>
 
         <div style="margin-top: 20px;">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- スクエア広告 -->
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6102016814573876"
                 data-ad-slot="5015997079" data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -674,6 +670,49 @@
                 <input type="text" class="memo2" placeholder="メモ欄">
             </div>
         </template>
+
+        <script type="application/javascript">
+            //GoogleAds遅延読込用
+            (function (window, document) {
+                function main() {
+                    // GoogleAdSense読込み
+                    var ad = document.createElement('script');
+                    ad.type = 'text/javascript';
+                    ad.async = true;
+                    ad.dataset.adClient = 'ca-pub-6102016814573876';
+                    ad.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+                    var sc = document.getElementsByTagName('script')[0];
+                    sc.parentNode.insertBefore(ad, sc);
+                }
+
+                // 遅延読込み
+                var lazyLoad = false;
+                function onLazyLoad() {
+                    if (lazyLoad === false) {
+                        // 複数呼び出し回避 + イベント解除
+                        lazyLoad = true;
+                        window.removeEventListener('scroll', onLazyLoad);
+                        window.removeEventListener('mousemove', onLazyLoad);
+                        window.removeEventListener('mousedown', onLazyLoad);
+                        window.removeEventListener('touchstart', onLazyLoad);
+                        window.removeEventListener('keydown', onLazyLoad);
+
+                        main();
+                    }
+                }
+                window.addEventListener('scroll', onLazyLoad);
+                window.addEventListener('mousemove', onLazyLoad);
+                window.addEventListener('mousedown', onLazyLoad);
+                window.addEventListener('touchstart', onLazyLoad);
+                window.addEventListener('keydown', onLazyLoad);
+                window.addEventListener('load', function () {
+                    // ドキュメント途中（更新時 or ページ内リンク）
+                    if (window.pageYOffset) {
+                        onLazyLoad();
+                    }
+                });
+            })(window, document);
+        </script>
     </body>
 
 </html>
