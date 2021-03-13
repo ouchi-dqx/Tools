@@ -1,5 +1,5 @@
 //定数
-const version = "1.3";  //バージョン管理変数
+const version = "1.4";  //バージョン管理変数
 
 //グローバル変数
 var
@@ -96,7 +96,14 @@ function addShare() {
         $(".message").text("共有表を作成中...").show();
         xhrSend(params, (res) => {
             if (res) {
-                if (res.err) {
+                if (res.err && res.err == "retry") {
+                    alert(
+                        "サーバー側で処理がタイムアウトしました" + "\n"
+                        + "もう一度実行してください"
+                    )
+                    return 0;
+                }
+                else if (res.err) {
                     alert(res.err);
                     $(".message").text("Error:" + res.err);
                     return 0;
@@ -154,7 +161,14 @@ function connectShare() {
         $(".message").text("共有表にアクセス中...").show();
         xhrSend(params, (res) => {
             if (res) {
-                if (res.err) {
+                if (res.err && res.err == "retry") {
+                    alert(
+                        "サーバー側で処理がタイムアウトしました" + "\n"
+                        + "もう一度実行してください"
+                    )
+                    return 0;
+                }
+                else if (res.err) {
                     alert(res.err);
                     $(".message").text("Error:" + res.err);
                     return 0;
@@ -244,12 +258,14 @@ function updateList(mode, fix, Text) {
                 $(".other_fix_blue tr").slice(1).remove();
                 $(".other_fix_red tr").slice(1).remove();
 
-                fix_blue.forEach((Text) =>
-                    $(".other_fix_blue").append('<tr><td class="fix">' + Text + "</td></tr>")
-                )
-                fix_red.forEach((Text) =>
-                    $(".other_fix_red").append('<tr><td class="fix">' + Text + "</td></tr>")
-                )
+                fix_blue.forEach(Text => {
+                    Text = Text.split("#");
+                    $(".other_fix_blue").append('<tr><td class="fix">' + Text[0] + "</td></tr>");
+                })
+                fix_red.forEach(Text => {
+                    Text = Text.split("#");
+                    $(".other_fix_red").append('<tr><td class="fix">' + Text[0] + "</td></tr>");
+                })
             }
         })
     }
@@ -1237,7 +1253,8 @@ function timeStamp(objBox, Data) {
                 clear_fix("fix_blue", Data.Server + Data.Point);
                 Text = Data.Server + Data.Point + " "
                     + TimePlus(Data.nowDate, "03:00:00").Time.slice(0, -3) + " - "
-                    + TimePlus(Data.newDate, "03:00:00").Time.slice(0, -3);
+                    + TimePlus(Data.newDate, "03:00:00").Time.slice(0, -3)
+                    + "#" + TimePlus(Data.newDate, "03:00:00").Date;
 
                 push_fix("fix_blue", Text, "all");
 
@@ -1265,38 +1282,44 @@ function timeStamp(objBox, Data) {
                     if (Data.newDate > TimePlus(Data.befDate, "04:00:00").Date) { //青黄時間より先の時間の場合
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
-                            + TimePlus(Data.nowDate, "04:00:00").Time.slice(0, -3);
+                            + TimePlus(Data.nowDate, "04:00:00").Time.slice(0, -3)
+                            + "#" + TimePlus(Data.nowDate, "04:00:00").Date;
                     }
                     else {
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
-                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3);
+                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                            + "#" + TimePlus(Data.newDate, "01:00:00").Date;
                     }
                 }
                 else { //前回黄判定
                     if (Data.memo.slice(5) == "までに赤変化") {
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
-                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3);
+                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                            + "#" + TimePlus(Data.newDate, "01:00:00").Date;
                     }
                     else if (Data.newDate - Data.nowDate > 3600000) { //前回時間から1時間経過した場合
                         Data.nowDate = "";
                         Data.nowTime = "";
                         Data.nowColor = "transparent";
                         Text = Data.Server + Data.Point + " - "
-                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3);
+                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                            + "#" + TimePlus(Data.newDate, "01:00:00").Date;
                     }
                     else {
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
-                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3);
+                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                            + "#" + TimePlus(Data.newDate, "01:00:00").Date;
                     }
                 }
             }
             else {
                 //黄→赤以外
                 Text = Data.Server + Data.Point + " - "
-                    + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3);
+                    + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                    + "#" + TimePlus(Data.newDate, "01:00:00").Date;
             }
 
             push_fix("fix_red", Text, "all");
@@ -1433,7 +1456,8 @@ function memoTimer(objBox, Color) {
         case "red_blue":
             Text = Server + Point + " "
                 + TimePlus(nowDate, "03:00:00").Time.slice(0, -3) + " - "
-                + TimePlus(newDate, "03:00:00").Time.slice(0, -3);
+                + TimePlus(newDate, "03:00:00").Time.slice(0, -3)
+                + "#" + TimePlus(newDate, "03:00:00").Date;
 
             push_fix("fix_blue", Text, "all");
 
@@ -1494,13 +1518,18 @@ function checkTime(Time) {
 
 //(確定/青木リスト)挿入
 function push_fix(fix, Text, flg) {
+    Text = Text.split("#");
+
     if (flg == "fix" || flg == "all")
-        $("." + fix).append('<tr><td class="fix">' + Text + '</td></tr>');
+        $("." + fix).append('<tr><td class="fix">' + Text[0] + '</td></tr>');
     if (flg == "other" || flg == "all") {
         if (fix.indexOf("other_") != -1) fix = fix.replace("other_", "");
-        $(".other_" + fix).append('<tr><td class="fix">' + Text + "</td></tr>");
+        $(".other_" + fix).append('<tr><td class="fix">' + Text[0] + "</td></tr>");
         if ($(".other_block_" + fix).is(":hidden")) $(".other_" + fix).find(".fix").hide();
-        if (share_flg) updateList("ADD", fix, Text);
+        if (share_flg) {
+            Text = Text.join("#");
+            updateList("ADD", fix, Text);
+        }
     }
 }
 
