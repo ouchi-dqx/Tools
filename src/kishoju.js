@@ -805,19 +805,37 @@ $(document).on(
         else if ($(this).attr("class") == "other_fix_blue_head") {
             $(".other_fix_blue").find(".fix").toggle();
             $(".other_block_fix_blue").toggle();
-            if ($(".other_block_fix_blue").is(":visible"))
-                $(".other_fix_blue tbody").css("overflow-y", "scroll");
-            else
+            if ($(".other_block_fix_blue").is(":visible")) {
+                $(".other_fix_blue tbody").css("display", "block");
+
+                if ($(".other_fix_blue .fix").length >= 6)
+                    $(".other_fix_blue tbody").css("display", "block");
+                else
+                    $(".other_fix_blue tbody").css("display", "");
+
+            }
+            else {
+                $(".other_fix_blue tbody").css("display", "");
                 $(".other_fix_blue tbody").css("overflow-y", "hidden");
+            }
 
         }
         else if ($(this).attr("class") == "other_fix_red_head") {
             $(".other_fix_red").find(".fix").toggle();
             $(".other_block_fix_red").toggle();
-            if ($(".other_block_fix_red").is(":visible"))
+            if ($(".other_block_fix_red").is(":visible")) {
                 $(".other_fix_red tbody").css("overflow-y", "scroll");
-            else
+
+                if ($(".other_fix_red .fix").length >= 6)
+                    $(".other_fix_red tbody").css("display", "block");
+                else
+                    $(".other_fix_red tbody").css("display", "");
+            }
+            else {
                 $(".other_fix_red tbody").css("overflow-y", "hidden");
+                $(".other_fix_red tbody").css("display", "");
+
+            }
         }
     }
 );
@@ -895,9 +913,10 @@ $(function () {
                     obj_tbody = elem[0].target.offsetParent.className,
                     obj_block = elem[0].target.offsetParent.className.replace("other_", "other_block_"),
                     scroll_flg = $("." + obj_block).find(".chk-otherBox").prop("checked"),
-                    length = elem[0].target.childElementCount;
+                    length = elem[0].target.childElementCount,
+                    visible = $("." + obj_block).is(":visible");
 
-                if (length >= 6 && !scroll_flg) {
+                if (length >= 6 && !scroll_flg && visible) {
                     $("." + obj_tbody + " tbody").css("display", "block");
                     $("." + obj_block).find(".chk-tgl-span button").prop("disabled", false);
                 }
