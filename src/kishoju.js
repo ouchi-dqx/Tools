@@ -1244,7 +1244,7 @@ function timeStamp(objBox, Data) {
                             + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3);
                     }
                 }
-                else if (Data.befColor == "yellow") { //前回黄判定
+                else { //前回黄判定
                     if (Data.memo.slice(5) == "までに赤変化") {
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
