@@ -207,7 +207,7 @@ function updateList(mode, fix, Text) {
                 if (res.ver == "古いバージョンです") {
                     if (!ver_flg) {
                         alert(
-                            res.err
+                            res.ver
                             + "\n (注)未修正の不具合がある可能性があります"
                             + "\n 最新のページに更新することを推奨します"
                         );
