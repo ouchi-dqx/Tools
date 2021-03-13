@@ -1537,7 +1537,13 @@ $(document).on("click", "#chk-side-follow", function () {
         $('.side-list-box, .side-list-area').addClass(MODE_ON);
         $(".hung-icon_other").hide();
 
-        if (sidelist_value == "fix_box" || sidelist_value == "default") {
+        if (sidelist_value == "default") {
+            $('.side-list-box').hide();
+            $(".side-list-area").css("height", "80px");
+            $(".side-list-area").find('.hung-icon').toggleClass('rev');     //アイコン反転
+            $(".side-list-area").find('.hung-icon_other').show();
+        }
+        else if (sidelist_value == "fix_box") {
             $(".fix_box").show();
             $(".other_fix_box").hide();
         }
