@@ -105,7 +105,8 @@
                 ◆青黄・確定をPTで共有する機能を追加しました。<br />
                 ◆<a href="https://ouchi-dqx.github.io/Tools/analytics.html">ツールのアクセス状況を確認するページ</a>を作成しました。<br />
                 ◆[オプション設定]のスライドを追加しました。詳細は更新履歴まで。<br />
-                ◆確定リストに「undefined」が表示される場合がある不具合を修正しました。
+                ◆確定リストに「undefined」が表示される場合がある不具合を修正しました。<br />
+                ◆外部リストを右サイドに固定できるようにしました。
             </div>
         </div>
 
@@ -261,8 +262,8 @@
         </table>
 
         <!--サイドリスト-->
-        <div class="side-list-area" style="display: table;">
-            <div class="side-list-box following-off" style="display: table;">
+        <div class="side-list-box following-off" style="display: table;">
+            <div class="side-list-header">
                 <div class="chk-tgl-box">
                     <label>
                         <input type="checkbox" id="chk-side-follow" autocomplete="off">
@@ -277,7 +278,9 @@
                     <button id="btn-rollback" onclick="Rollback()"><i class="material-icons"
                             style="top: 6px;">undo</i>戻す</button>
                 </div>
+            </div>
 
+            <div class="fix_box">
                 <table id="fix-blue" class="fix_blue" style="margin-bottom: 3px;">
                     <thead class="fix_blue_head">
                         <tr>
@@ -288,10 +291,22 @@
                         <!-- tbody -->
                     </tbody>
                 </table>
-                <div class="block_fix_blue">
-                    <div class="function-btn-box-mini">
-                        <button onclick="setClip('fix_blue')">コピー</button>
-                        <button onclick="Cleaner('fix_blue')">クリア</button>
+                <div class="function-btn-box-mini" target="fix_blue">
+                    <button onclick="setClip('fix_blue')">コピー</button>
+                    <button onclick="Cleaner('fix_blue')">クリア</button>
+                    <div class="scroll_fix_blue follow_ifhide" style="margin-top: 5px;">
+                        <span class="chk-tgl-span">
+                            <button class="up">
+                                <i class="material-icons hung-icon arrow">arrow_upward</i>
+                            </button>
+                            <button class="down">
+                                <i class="material-icons hung-icon arrow">arrow_downward</i>
+                            </button>
+                            <label>
+                                <input type="checkbox" class="chk-Box" value="fix_blue" autocomplete="off">
+                                <span class="btn-tgl">全部表示しない</span>
+                            </label>
+                        </span>
                     </div>
                 </div>
 
@@ -305,32 +320,27 @@
                         <!-- tbody -->
                     </tbody>
                 </table>
-                <div class="block_fix_red">
-                    <div class="function-btn-box-mini">
-                        <button onclick="setClip('fix_red')">コピー</button>
-                        <button onclick="Cleaner('fix_red')">クリア</button>
+                <div class="function-btn-box-mini" target="fix_red">
+                    <button onclick="setClip('fix_red')">コピー</button>
+                    <button onclick="Cleaner('fix_red')">クリア</button>
+                    <div class="scroll_fix_red follow_ifhide" style="margin-top: 5px;">
+                        <span class="chk-tgl-span">
+                            <button class="up">
+                                <i class="material-icons hung-icon arrow">arrow_upward</i>
+                            </button>
+                            <button class="down">
+                                <i class="material-icons hung-icon arrow">arrow_downward</i>
+                            </button>
+                            <label>
+                                <input type="checkbox" class="chk-Box" value="fix_red" autocomplete="off">
+                                <span class="btn-tgl">全部表示しない</span>
+                            </label>
+                        </span>
                     </div>
-                </div>
-
-                <div class="side-list-add-box">
-                    <span>
-                        鯖 <input type="number" id="Server" min="1" max="40" value="1" style="width: 40px;">
-                    </span>
-                    <span>
-                        <select id="Point" style="width: 40px;">
-                            <option>ゲル</option>
-                            <option>砂漠</option>
-                            <option>バル</option>
-                        </select>
-                    </span>
-                    <br />
-                    <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;"
-                        placeholder="時:分">
-                    <button onclick="push_fix_old()">追加</button>
                 </div>
             </div>
 
-            <div class="other_box" style="clear:both;">
+            <div class="other_fix_box">
                 <table id="other_fix_blue" class="other_fix_blue">
                     <thead class="other_fix_blue_head">
                         <tr>
@@ -342,13 +352,13 @@
                     </tbody>
                 </table>
                 <div class="other_block_fix_blue">
-                    <textarea class="push_fixs_blue"></textarea>
+                    <textarea class="follow_ifhide"></textarea>
 
-                    <div class="function-btn-box-mini" value="other_fix_blue">
-                        <button onclick="push_fixs('other_fix_blue', 'push_fixs_blue')">追加</button>
+                    <div class="function-btn-box-mini" target="other_fix_blue">
+                        <button class="push_fixs follow_ifhide">追加</button>
                         <button onclick="setClip('other_fix_blue')">コピー</button>
                         <button onclick="Cleaner('other_fix_blue')">クリア</button>
-                        <div class="toggle_other_fix_red" style="margin-top: 5px;">
+                        <div class="scroll_other_fix_blue follow_ifhide" style="margin-top: 5px;">
                             <span class="chk-tgl-span">
                                 <button class="up">
                                     <i class="material-icons hung-icon arrow">arrow_upward</i>
@@ -377,13 +387,13 @@
                     </tbody>
                 </table>
                 <div class="other_block_fix_red">
-                    <textarea class="push_fixs_red"></textarea>
+                    <textarea class="follow_ifhide"></textarea>
 
-                    <div class="function-btn-box-mini" value="other_fix_red">
-                        <button onclick="push_fixs('other_fix_red', 'push_fixs_red')">追加</button>
+                    <div class="function-btn-box-mini" target="other_fix_red">
+                        <button class="push_fixs follow_ifhide">追加</button>
                         <button onclick="setClip('other_fix_red')">コピー</button>
                         <button onclick="Cleaner('other_fix_red')">クリア</button>
-                        <div class="toggle_other_fix_red" style="margin-top: 5px;">
+                        <div class="scroll_other_fix_red follow_ifhide" style="margin-top: 5px;">
                             <span class="chk-tgl-span">
                                 <button class="up">
                                     <i class="material-icons hung-icon arrow">arrow_upward</i>
@@ -401,14 +411,37 @@
                     </div>
                 </div>
             </div>
+
+            <div class="side-list-add-box">
+                <span>
+                    鯖 <input type="number" id="Server" min="1" max="40" value="1" style="width: 40px;">
+                </span>
+                <span>
+                    <select id="Point" style="width: 55px;">
+                        <option>ゲル</option>
+                        <option>砂漠</option>
+                        <option>バル</option>
+                    </select>
+                </span>
+                <br />
+                <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;"
+                    placeholder="時:分">
+                <button onclick="push_fix_old()">追加</button>
+            </div>
         </div>
 
         <!--ハンガーボタン-->
-        <div class="side-list-btn following-off">
-            <i class="material-icons hung-icon" style="font-size: 50px; font-size: 30px;">exit_to_app</i>
+        <div class="side-list-area following-off">
+            <div class="side-list-btn" target="fix_box">
+                <i class="material-icons hung-icon" style="font-size: 30px;">exit_to_app</i>
+            </div>
+            <div class="side-list-btn" target="other">
+                <i class="material-icons hung-icon_other" style="font-size: 30px;">exit_to_app</i>
+            </div>
         </div>
         <div style="clear: both;"></div>
 
+        <!--スライドボックス-->
         <div class="slider-title">
             オプション設定<i class="material-icons slider-icon">publish</i>
         </div>
@@ -551,7 +584,10 @@
                     2021/03/13 <br />
                     ・(不具合修正)<br />
                     　前回時間が空白　かつ　現在時間が黄色<br />
-                    　の時に赤を押すと確定リストに「undefined」が入る不具合を修正
+                    　の時に赤を押すと確定リストに「undefined」が入る不具合を修正。<br />
+                    ・青黄確定リストに外部リストと同じスクロール機能を追加しました。<br />
+                    ・外部リストを右サイドに固定できるようにしました。<br />
+                    　青黄確定リストと切替が可能です。
                 </li>
                 <li>
                     2021/03/11 <br />

@@ -327,6 +327,10 @@ button {
     overflow-y: hidden;
 }
 
+.side-list-box.following-on .follow_ifhide{ display: none; }
+
+.side-list-box.following-on [class*="other_block_fix"]{ display: block; }
+
 /* 追随ON時のテーブルbodyスクロール設定 */
 .side-list-box.following-on tbody{
     display: block;
@@ -335,20 +339,30 @@ button {
     overflow-y: scroll;
 }
 .side-list-box.following-on .fix_blue tbody{ height: 120px; }
+.side-list-box.following-on .other_fix_blue tbody{ height: 120px; }
 .side-list-box.following-on .fix_red tbody{ height: 220px; }
-.side-list-box.following-on tbody::-webkit-scrollbar {
+.side-list-box.following-on .other_fix_red tbody{ height: 220px; }
+
+.side-list-box.following-off tbody{
+    height: 120px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.side-list-box tbody::-webkit-scrollbar {
     width: 5px;
     height: auto;
     border-radius: 0px;
     background-color: dimgray;
 }
-.side-list-box.following-on tbody::-webkit-scrollbar-thumb {
+.side-list-box tbody::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background: #ccc;
 }
+
 /* サイドリストBOX - ハンガーボタン */
-.side-list-btn.following-off{ display: none; }
-.side-list-btn.following-on{
+.side-list-area.following-off{ display: none; }
+.side-list-area.following-on{
     position: fixed;
     top: 0px;
     right: 0px;
@@ -362,7 +376,8 @@ button {
     opacity: 0.95;
     cursor: pointer;
 }
-.hung-icon.rev{ transform: rotate(180deg); }
+.hung-icon.rev{ transform: rotate(180deg); }    /*クリック時*/
+.hung-icon_other{ transform: rotate(180deg); }
 
 /* サイドリストBOX - 右側固定スイッチ */
 .chk-tgl-box{
@@ -415,33 +430,30 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 
 /* サイドリストテーブル 罫線 */
-.fix_blue, .fix_red, .other_fix_blue, .other_fix_red{
+.side-list-box table{
     border-collapse: collapse;
     margin-bottom: 5px;
 }
 /* サイドリストテーブル ヘッダ行 */
-.fix_blue th, .fix_red th, .other_fix_blue th, .other_fix_red th{
+.side-list-box th{
     width: 170px;
     color: #333;
     font-weight: bold;
     background-color: dimgray;
     border: solid 1px #999;
 }
-.fix_blue th{ background-color: #fec; }
-.fix_red th{ background-color: #fcc; }
-.other_fix_blue th{ background-color: #fec; }
-.other_fix_red th{ background-color: #fcc; }
+.fix_blue th, .other_fix_blue th{ background-color: #fec; }
+.fix_red th, .other_fix_red th{ background-color: #fcc; }
+
 /* サイドリストテーブル セル */
-.fix_blue td, .fix_red td, .other_fix_blue td, .other_fix_red td{
+.side-list-box td{
     width: 165px;
     text-align: center;
     background-color: #fff;
     border: solid 1px #999;
 }
-.fix_blue td:hover{ background-color: yellow; cursor: pointer; }
-.fix_red td:hover{ background-color: red; cursor: pointer; }
-.other_fix_blue td:hover{ background-color: yellow; cursor: pointer; }
-.other_fix_red td:hover{ background-color: red; cursor: pointer; }
+.fix_blue td:hover, .other_fix_blue td:hover{ background-color: yellow; cursor: pointer; }
+.fix_red td:hover, .other_fix_red td:hover{ background-color: red; cursor: pointer; }
 
 /* サイドリスト　確定リストの追加確定フォーム */
 .side-list-add-box{
@@ -481,35 +493,7 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 
 /* 外部リスト表示設定 */
-.other_block_fix_blue, .other_block_fix_red{
-    display: none;
-    margin-bottom: 3px;
-}
-
-/* 外部リスト サイドバーON時表示設定 */
-.other_box.following-on .function-btn-box-mini{
-    display: block;
-    text-align: left;
-    font-size: 13px;
-    margin-bottom: 10px;
-}
-
-/* 外部リスト スクロールバー設定 */
-.other_box tbody{
-    height: 120px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-}
-.other_box tbody::-webkit-scrollbar {
-    width: 5px;
-    height: auto;
-    border-radius: 0px;
-    background-color: dimgray;
-}
-.other_box tbody::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background: #ccc;
-}
+[class*="other_block_fix_"]{ display: none; }
 
 /* スクロール幅変更 矢印ボタン */
 .chk-tgl-span button{

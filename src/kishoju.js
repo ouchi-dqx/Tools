@@ -13,7 +13,8 @@ var
     share_flg = false,  //データ共有フラグ
     share_ID = "",      //データ共有用パス
     ver_flg = false,    //バージョンチェックフラグ(初回のみ)
-    settings = {};      //オプション設定保存変数
+    settings = {},      //オプション設定保存変数
+    sidelist_value = "default";
 
 //テスト用関数
 function debug() {
@@ -841,10 +842,13 @@ $(document).on(
 );
 
 //[外部確定リスト追加]
-function push_fixs(fixObj, fixArea) {
-    if (!$("." + fixArea).val()) return 0;
+$(document).on("click", ".push_fixs", function () {
+    const TextObj = $(this).parents("div[class^=other_block_fix_]").find("textarea");
+    let fixObj = $(this).parent("div").attr("target");
 
-    let fixs = $("." + fixArea).val().split(/\r\n|\r|\n/);
+    if (!TextObj.val()) return 0;
+
+    let fixs = TextObj.val().split(/\r\n|\r|\n/);
     fixs = fixs
         .sort((a, b) => {
             a = a.split(" ");
@@ -860,19 +864,19 @@ function push_fixs(fixObj, fixArea) {
 
     fixObj = fixObj.replace("other_", "");
     if (share_flg) updateList("ADD", fixObj, fixs);
-    $("." + fixArea).val("");
-}
+    TextObj.val("");
+})
 
 //外部リストスクロール幅変更
 $(document).on("click", ".chk-tgl-span button", function () {
     const
         scroll_mode = $(this).attr("class"),
-        obj = $(this).parents(".function-btn-box-mini").attr("value"),
+        obj = $(this).parents(".function-btn-box-mini").attr("target"),
         maxlength = ($("." + obj + " tr").length - 1) * 24,
         before_height = Number($("." + obj + " tbody").css("height").replace("px", ""));
 
     if (scroll_mode == "up") {
-        if (before_height - 24 > 24 * 2) {
+        if (before_height - 24 >= 24 * 3) {
             $("." + obj + " tbody").css("height", before_height - 24 + "px");
             settings.scrollHeight[obj] = before_height - 24;
             localStorage.setItem("settings", JSON.stringify(settings));
@@ -880,7 +884,7 @@ $(document).on("click", ".chk-tgl-span button", function () {
         else return 0;
     }
     else if (scroll_mode == "down") {
-        if (maxlength - 24 != before_height) {
+        if (maxlength - 24 > before_height) {
             $("." + obj + " tbody").css("height", before_height + 24 + "px");
             settings.scrollHeight[obj] = before_height + 24;
             localStorage.setItem("settings", JSON.stringify(settings));
@@ -890,7 +894,7 @@ $(document).on("click", ".chk-tgl-span button", function () {
 });
 
 //外部リスト表示モード切替
-$(document).on("click", ".chk-otherBox", function () {
+$(document).on("click", ".chk-Box, .chk-otherBox", function () {
     const
         bFlg = $(this).prop("checked"),
         obj = $(this).val();
@@ -908,23 +912,27 @@ $(document).on("click", ".chk-otherBox", function () {
 $(function () {
     const
         observer = new MutationObserver((elem) => {
-            if (elem[0].target.className != "fix") {
-                const
-                    obj_tbody = elem[0].target.offsetParent.className,
-                    obj_block = elem[0].target.offsetParent.className.replace("other_", "other_block_"),
-                    scroll_flg = $("." + obj_block).find(".chk-otherBox").prop("checked"),
-                    length = elem[0].target.childElementCount,
-                    visible = $("." + obj_block).is(":visible");
+            elem.forEach(elem => {
+                if (elem.type == "childList") {
+                    if (elem.target.className != "fix") {
+                        const
+                            obj_tbody = elem.target.offsetParent.className,
+                            obj_block = "scroll_" + obj_tbody,
+                            scroll_flg = $("." + obj_block).find(".chk-otherBox").prop("checked"),
+                            length = elem.target.childElementCount,
+                            visible = $("." + obj_block).is(":visible");
 
-                if (length >= 6 && !scroll_flg && visible) {
-                    $("." + obj_tbody + " tbody").css("display", "block");
-                    $("." + obj_block).find(".chk-tgl-span button").prop("disabled", false);
+                        if (length >= 6 && !scroll_flg && visible) {
+                            $("." + obj_tbody + " tbody").css("display", "block");
+                            $("." + obj_block).find(".chk-tgl-span button").prop("disabled", false);
+                        }
+                        else {
+                            $("." + obj_tbody + " tbody").css("display", "");
+                            $("." + obj_block).find(".chk-tgl-span button").prop("disabled", true);
+                        }
+                    }
                 }
-                else {
-                    $("." + obj_tbody + " tbody").css("display", "");
-                    $("." + obj_block).find(".chk-tgl-span button").prop("disabled", true);
-                }
-            }
+            })
         }),
         config = {
             childList: true,
@@ -933,8 +941,10 @@ $(function () {
             subtree: true
         };
 
-    observer.observe($(".other_fix_blue")[0], config);
-    observer.observe($(".other_fix_red")[0], config);
+    observer.observe($(".fix_blue tbody")[0], config);
+    observer.observe($(".fix_red tbody")[0], config);
+    observer.observe($(".other_fix_blue tbody")[0], config);
+    observer.observe($(".other_fix_red tbody")[0], config);
 })
 
 
@@ -1076,15 +1086,15 @@ function load_settings() {
             $(document).find(".tgl_memo2").prop("checked", true);
 
         //スクロール幅設定
+        const objList = ["fix_blue", "fix_red", "other_fix_blue", "other_fix_red"];
         $(".chk-tgl-span button").prop("disabled", true);   //スクロール幅変更ボタン 非活性化
-        if (["scrollHeight"] in settings && ["other_blue"] in settings["scrollHeight"]) {
-            if (settings.scrollHeight.other_blue)
-                $(".other_fix_blue tbody").css("height", settings.scrollHeight.other_blue + "px");
-        }
-        if (["scrollHeight"] in settings && ["other_red"] in settings["scrollHeight"]) {
-            if (settings.scrollHeight.other_red)
-                $(".other_fix_red tbody").css("height", settings.scrollHeight.other_red + "px");
-        }
+
+        objList.forEach(obj => {
+            if (["scrollHeight"] in settings && [obj] in settings["scrollHeight"]) {
+                if (settings.scrollHeight[obj])
+                    $("." + obj + " tbody").css("height", settings.scrollHeight[obj] + "px");
+            }
+        })
     }
     else settings = {
         even_oddMODE: "",
@@ -1510,7 +1520,7 @@ function fncFixRedReSize() {
         var h = objWd.height() - 470;
         //20以下には縮めない
         if (h <= 20) { h = 20; }
-        $('#fix-red').children('tbody').height(h);
+        $('#fix-red, #other_fix_red').children('tbody').height(h);
     }
 }
 
@@ -1523,22 +1533,59 @@ $(document).on("click", "#chk-side-follow", function () {
     //追随切替
     l_rightFollowFlg = $('#chk-side-follow').prop('checked');
     if (l_rightFollowFlg === true) {
-        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_OFF);
-        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_ON);
-        $('.side-list-area').css("display", "inline");
+        $('.side-list-box, .side-list-area').removeClass(MODE_OFF);
+        $('.side-list-box, .side-list-area').addClass(MODE_ON);
+        $(".hung-icon_other").hide();
+
+        if (sidelist_value == "fix_box" || sidelist_value == "default") {
+            $(".fix_box").show();
+            $(".other_fix_box").hide();
+        }
+        else {
+            $(".fix_box").hide();
+            $(".other_fix_box").show();
+            $(".other_block_fix_blue, .other_block_fix_red").show();
+        }
+
         fncFixRedReSize();
     }
     else {
-        $('.side-list-box,.side-list-btn,.other_box').removeClass(MODE_ON);
-        $('.side-list-box,.side-list-btn,.other_box').addClass(MODE_OFF);
-        $('.side-list-area').css("display", "table");
+        $('.side-list-box, .side-list-area').removeClass(MODE_ON);
+        $('.side-list-box, .side-list-area').addClass(MODE_OFF);
+        $(".fix_box, .other_fix_box").show();
+        $(".fix_blue tbody, .fix_red tbody, .other_fix_blue tbody, .other_fix_red tbody").css("height", "");
     }
 });
 
 //サイドリスト収納切替
 $(document).on("click", ".side-list-btn", function () {
-    $('.side-list-box').animate({ width: 'toggle' }, 'fast');
-    $(this).find('.hung-icon').toggleClass('rev');      //アイコン反転
+    const target = $(this).attr("target");
+
+    $('.side-list-box').animate({ width: 'toggle' }, 'fast', function () {
+        const visible = $('.side-list-box').is(":visible");
+
+        if (target == "fix_box") {
+            sidelist_value = "fix_box";
+            $(".fix_box").show();
+            $(".other_fix_box").hide();
+        }
+        else {
+            sidelist_value = "other_box";
+            $(".fix_box").hide();
+            $(".other_fix_box").show();
+        }
+
+        if (visible) {
+            $(".side-list-area").css("height", "40px");
+            $(".side-list-area").find('.hung-icon_other').hide();
+        }
+        else {
+            $(".side-list-area").css("height", "80px");
+            $(".side-list-area").find('.hung-icon_other').show();
+        }
+    });
+
+    $(".side-list-area").find('.hung-icon').toggleClass('rev');     //アイコン反転
 });
 
 
