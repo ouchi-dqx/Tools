@@ -1473,7 +1473,7 @@ function memoTimer(objBox, Color) {
 
             break;
         case "red_yellow":
-            TimeObj = TimePlus(newDate, "01:30:00");
+            //TimeObj = TimePlus(newDate, "01:30:00");
             //memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
             memoDate = "";
             memo = "";
@@ -1481,7 +1481,7 @@ function memoTimer(objBox, Color) {
 
             break;
         case "blue_yellow":
-            TimeObj = TimePlus(newDate, "01:00:00");
+            //TimeObj = TimePlus(newDate, "01:00:00");
             //memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
             memoDate = "skyblue(old)";
             memo = "";
