@@ -1513,6 +1513,13 @@ function memoTimer(objBox, Color) {
             .css("background-color", memoColor)
             .attr("color", memoColor);
     }
+    else {
+        objBox.find(".memo")
+            .attr("Date", memoDate)
+            .text(memo)
+            .css("background-color", memoColor)
+            .attr("color", memoColor);
+    }
 }
 
 
