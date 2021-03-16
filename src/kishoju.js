@@ -1293,7 +1293,7 @@ function timeStamp(objBox, Data) {
                     }
                 }
                 else { //前回黄判定
-                    if (Data.memo.slice(5) == "までに赤変化") {
+                    if (Data.memoDate == "skyblue(old)") {
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
                             + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
@@ -1450,7 +1450,7 @@ function memoTimer(objBox, Color) {
         nowDate = objBox.find(".nowTime").attr("Date"),
         nowTime = objBox.find(".nowTime").text(),
         nowColor = objBox.find(".nowTime").attr("color");
-    let TimeObj, Text, memo, memoColor, diffDate
+    let TimeObj, Text, memoDate, memo, memoColor, diffDate;
 
     switch (Color) {
         case "red_blue":
@@ -1462,6 +1462,7 @@ function memoTimer(objBox, Color) {
             push_fix("fix_blue", Text, "all");
 
             TimeObj = TimePlus(nowDate, "03:00:00");
+            memoDate = TimeObj.Date;
             memo = TimeObj.Time.slice(0, -3) + "まで変化無し";
             memoColor = "skyblue";
 
@@ -1473,14 +1474,18 @@ function memoTimer(objBox, Color) {
             break;
         case "red_yellow":
             TimeObj = TimePlus(newDate, "01:30:00");
-            memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
+            //memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
+            memoDate = "";
+            memo = "";
             memoColor = "transparent";
 
             break;
         case "blue_yellow":
             TimeObj = TimePlus(newDate, "01:00:00");
-            memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
-            memoColor = "skyblue";
+            //memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
+            memoDate = "skyblue(old)";
+            memo = "";
+            memoColor = "transparent";
 
             break;
     }
@@ -1503,6 +1508,7 @@ function memoTimer(objBox, Color) {
             .attr("color", "yellow");
 
         objBox.find(".memo")
+            .attr("Date", memoDate)
             .text(memo)
             .css("background-color", memoColor)
             .attr("color", memoColor);
