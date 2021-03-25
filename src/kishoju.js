@@ -64,7 +64,6 @@ window.onload = function () {
     setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
     load_settings();
 
-
     if (location.search.substring(1)) getURLData(location.search.substring(1));
     else sortPoint();
 }
@@ -921,14 +920,14 @@ $(document).on("click", ".chk-Box", function () {
 
     if (bFlg === true) {
         $(this).next().html("全部表示する");
-        settings.ListSetting[obj].showUndoBtn = "ON";
+        settings.ListSetting[obj].scrollMode = "ON";
 
         if (List.length > 2)
             $("." + obj + " tbody").css("display", "");
     }
     else {
         $(this).next().html("全部表示しない");
-        settings.ListSetting[obj].showUndoBtn = "OFF";
+        settings.ListSetting[obj].scrollMode = "OFF";
 
         if (List.length > 2)
             $("." + obj + " tbody").css("display", "block");
@@ -1118,7 +1117,7 @@ function load_settings() {
                         $("." + obj + " tbody").css("height", settings.ListSetting[obj].scrollHeight + "px");
 
                     //全部表示する/しない設定
-                    if (settings.ListSetting[obj].showUndoBtn == "ON")
+                    if (settings.ListSetting[obj].scrollMode == "ON")
                         $(document).find(".scroll_" + obj + " input").click();
                 }
             })
@@ -1132,17 +1131,20 @@ function load_settings() {
             };
             localStorage.setItem("settings", JSON.stringify(settings));
         }
+
+        //[戻す]ボタン表示モードフラグ
+        if (settings.showUndoBtn && settings.showUndoBtn == "ON")
+            $(document).find(".showUndoBtn").click();
     }
     else {
         settings = {
-            even_oddMODE: "",
+            auto: {},
             ListSetting: {
                 fix_blue: {},
                 fix_red: {},
                 other_fix_blue: {},
                 other_fix_red: {},
             },
-            auto: {},
         };
 
         localStorage.setItem("settings", JSON.stringify(settings));
@@ -1667,7 +1669,7 @@ $(document).on("click", ".side-list-btn", function () {
 });
 
 //機能リスト-[戻す]
-$(document).on("click", ".func-list-btn", function () { Rollback(); });
+$(document).on("click", ".func-list-area", function () { Rollback(); });
 
 
 /********************保存・削除関連********************/
