@@ -334,6 +334,9 @@ function omikuji() {
 
 //[調査データをURL化]
 function getShortURL() {
+    alert("メンテナンス中です。。。");
+    return 0;
+
     if ($(".ServerList").find('.Servers').length < 1) {
         alert("先に調査サーバーを選択してください。");
         return 0;
