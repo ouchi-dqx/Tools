@@ -37,10 +37,10 @@
 
     <body>
         <!--<button onclick="debug()">debug</button>-->
-        <!--ヘッダ-->
-        <div style="display: block; margin-bottom: 15px; width: 100%;">
+        <!--ヘッダ 機能一覧-->
+        <div class="header-function">
             <div>
-                <span style="font-size: 14px; font-weight: bold; text-decoration: underline dotted;">
+                <span class="title">
                     DQX - 輝晶獣分散支援ツール
                 </span>
                 <span class="connectArea" style="display: none;">
@@ -84,34 +84,30 @@
                 <a href="javascript:omikuji();">調査鯖おみくじ</a>
                 <span class="omikuji"></span>
             </span>
-        </div>
 
-        <div class="messageArea">
-            <div class="message"></div>
-            <div class="copyArea">
-                <input type="text" class="copyText">
-                <button onclick="TextCopy($('.copyText').val())">コピー</button>
+            <div class="messageArea">
+                <div class="message"></div>
+                <div class="copyArea">
+                    <input type="text" class="copyText">
+                    <button onclick="TextCopy($('.copyText').val())">コピー</button>
+                </div>
             </div>
         </div>
 
-        <div style="display: table; width: 100%; margin-bottom: 20px;">
-            <div style="display: table-cell; width: 40px; text-align: left; vertical-align: top; color: dimgray;">
-                <!--i class="material-icons" style="top: 3px;">house</i-->
+        <!--ヘッダ お知らせ欄-->
+        <div class="header-notice">
+            <div class="iconArea">
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆鯖全体の現在時間を更新するボタンを追加しました。
-                <a href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a><br />
-                ◆青黄・確定をPTで共有する機能を追加しました。<br />
-                ◆<a href="https://ouchi-dqx.github.io/Tools/analytics.html">ツールのアクセス状況を確認するページ</a>を作成しました。<br />
                 ◆[オプション設定]のスライドを追加しました。詳細は更新履歴まで。<br />
                 ◆外部リストを右サイドに固定できるようにしました。<br />
-                ◆オプション設定を設定していない時に、「〇〇時まで変化なし」の表示が消えない不具合を修正しました。
+                ◆[オプション設定]に[戻す]ボタンを<br />　右サイドに固定するオプションを追加しました。(スマホ向け)
             </div>
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <!-- バナー広告 -->
+        <!-- バナー広告 -->
+        <div style="margin-bottom: 10px;">
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6102016814573876"
                 data-ad-slot="9015592466" data-ad-format="horizontal" data-full-width-responsive="false"></ins>
             <script> (adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -212,57 +208,108 @@
         </div>
 
         <!--サーバー一覧-->
-        <table class="ServerList" id="" align="left" style="margin-right:10px;">
-            <thead>
-                <tr id="server-list-hd">
-                    <td align="center" id="server-no-hd">
-                        <div class="server-list-hd-text" style="width: 40px;">鯖</div>
-                    </td>
-                    <td align="center" class="ゲル">
-                        <div class="server-list-hd-text" style="font-size: 12px;">ゲルヘナ</div>
-                        <span class="server-list-hd-text">幻野</span>
-                        <span style="float:left">
-                            <button class="left">
-                                <i class="material-icons arrow">skip_previous</i>
-                            </button>
-                        </span>
-                        <span style="float:right">
-                            <button class="right">
-                                <i class="material-icons arrow">skip_next</i>
-                            </button>
-                        </span>
-                    </td>
-                    <td align="center" class="砂漠">
-                        <div class="server-list-hd-text" style="font-size: 12px;">ジャリムバハ</div>
-                        <span class="server-list-hd-text">砂漠</span>
-                        <span style="float:left">
-                            <button class="left">
-                                <i class="material-icons arrow">skip_previous</i>
-                            </button>
-                        </span>
-                        <span style="float:right"><button class="right"><i
-                                    class="material-icons arrow">skip_next</i></button></span>
-                    </td>
-                    <td align="center" class="バル">
-                        <div class="server-list-hd-text" style="font-size: 12px;">バルディア</div>
-                        <span class="server-list-hd-text">山岳</span>
-                        <span style="float:left">
-                            <button class="left">
-                                <i class="material-icons arrow">skip_previous</i>
-                            </button>
-                        </span>
-                        <span style="float:right"><button class="right">
-                                <i class="material-icons arrow">skip_next</i></button>
-                        </span>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div class="ServerLists">
+            <table class="ServerList" id="">
+                <thead>
+                    <tr id="server-list-hd">
+                        <td align="center" id="server-no-hd">
+                            <div class="server-list-hd-text" style="width: 40px;">鯖</div>
+                        </td>
+                        <td align="center" class="ゲル">
+                            <div class="server-list-hd-text" style="font-size: 12px;">ゲルヘナ</div>
+                            <span class="server-list-hd-text">幻野</span>
+                            <span style="float:left">
+                                <button class="left">
+                                    <i class="material-icons arrow">skip_previous</i>
+                                </button>
+                            </span>
+                            <span style="float:right">
+                                <button class="right">
+                                    <i class="material-icons arrow">skip_next</i>
+                                </button>
+                            </span>
+                        </td>
+                        <td align="center" class="砂漠">
+                            <div class="server-list-hd-text" style="font-size: 12px;">ジャリムバハ</div>
+                            <span class="server-list-hd-text">砂漠</span>
+                            <span style="float:left">
+                                <button class="left">
+                                    <i class="material-icons arrow">skip_previous</i>
+                                </button>
+                            </span>
+                            <span style="float:right"><button class="right"><i
+                                        class="material-icons arrow">skip_next</i></button></span>
+                        </td>
+                        <td align="center" class="バル">
+                            <div class="server-list-hd-text" style="font-size: 12px;">バルディア</div>
+                            <span class="server-list-hd-text">山岳</span>
+                            <span style="float:left">
+                                <button class="left">
+                                    <i class="material-icons arrow">skip_previous</i>
+                                </button>
+                            </span>
+                            <span style="float:right"><button class="right">
+                                    <i class="material-icons arrow">skip_next</i></button>
+                            </span>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <table class="ServerList2" id="" style="display: none;">
+                <thead>
+                    <tr id="server-list-hd">
+                        <td align="center" id="server-no-hd">
+                            <div class="server-list-hd-text" style="width: 40px;">鯖</div>
+                        </td>
+                        <td align="center" class="ゲル">
+                            <div class="server-list-hd-text" style="font-size: 12px;">ゲルヘナ</div>
+                            <span class="server-list-hd-text">幻野</span>
+                            <span style="float:left">
+                                <button class="left">
+                                    <i class="material-icons arrow">skip_previous</i>
+                                </button>
+                            </span>
+                            <span style="float:right">
+                                <button class="right">
+                                    <i class="material-icons arrow">skip_next</i>
+                                </button>
+                            </span>
+                        </td>
+                        <td align="center" class="砂漠">
+                            <div class="server-list-hd-text" style="font-size: 12px;">ジャリムバハ</div>
+                            <span class="server-list-hd-text">砂漠</span>
+                            <span style="float:left">
+                                <button class="left">
+                                    <i class="material-icons arrow">skip_previous</i>
+                                </button>
+                            </span>
+                            <span style="float:right"><button class="right"><i
+                                        class="material-icons arrow">skip_next</i></button></span>
+                        </td>
+                        <td align="center" class="バル">
+                            <div class="server-list-hd-text" style="font-size: 12px;">バルディア</div>
+                            <span class="server-list-hd-text">山岳</span>
+                            <span style="float:left">
+                                <button class="left">
+                                    <i class="material-icons arrow">skip_previous</i>
+                                </button>
+                            </span>
+                            <span style="float:right"><button class="right">
+                                    <i class="material-icons arrow">skip_next</i></button>
+                            </span>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
 
         <!--サイドリスト-->
-        <div class="side-list-box following-off" style="display: table;">
+        <div class="side-list-box following-off">
             <div class="side-list-header">
                 <div class="chk-tgl-box">
                     <label>
@@ -281,7 +328,7 @@
             </div>
 
             <div class="fix_box">
-                <table id="fix-blue" class="fix_blue" style="margin-bottom: 3px;">
+                <table id="fix-blue" class="fix_blue">
                     <thead class="fix_blue_head">
                         <tr>
                             <th>青黄リスト(赤時間)</th>
@@ -310,7 +357,7 @@
                     </div>
                 </div>
 
-                <table id="fix-red" class="fix_red" style="margin-bottom: 3px;">
+                <table id="fix-red" class="fix_red">
                     <thead class="fix_red_head">
                         <tr>
                             <th>確定リスト</th>
@@ -367,8 +414,7 @@
                                     <i class="material-icons hung-icon arrow">arrow_downward</i>
                                 </button>
                                 <label>
-                                    <input type="checkbox" class="chk-otherBox" value="other_fix_blue"
-                                        autocomplete="off">
+                                    <input type="checkbox" class="chk-Box" value="other_fix_blue" autocomplete="off">
                                     <span class="btn-tgl">全部表示しない</span>
                                 </label>
                             </span>
@@ -402,8 +448,7 @@
                                     <i class="material-icons hung-icon arrow">arrow_downward</i>
                                 </button>
                                 <label>
-                                    <input type="checkbox" class="chk-otherBox" value="other_fix_red"
-                                        autocomplete="off">
+                                    <input type="checkbox" class="chk-Box" value="other_fix_red" autocomplete="off">
                                     <span class="btn-tgl">全部表示しない</span>
                                 </label>
                             </span>
@@ -441,6 +486,11 @@
         </div>
         <div style="clear: both;"></div>
 
+        <div class="func-list-area following-off">
+            <i class="material-icons" style="font-size: 30px;">undo</i>
+        </div>
+        <div style="clear: both;"></div>
+
         <!--スライドボックス-->
         <div class="slider-title">
             オプション設定<i class="material-icons slider-icon">publish</i>
@@ -474,10 +524,17 @@
                         <label for="cb_toggle_switch4"></label>
                         　[虹黄or赤黄→黄黄に自動更新]<br />
 
-                        青黄自動更新モード:
+                        青黄自動更新モード　　　:
                         <input type="checkbox" id="cb_toggle_switch5" class="auto blue_yellow" value="blue_yellow">
                         <label for="cb_toggle_switch5"></label>
                         　[青黄→黄黄に自動更新]<br />
+                    </div>
+                </li>
+                <li>
+                    <div class="toggle_switch">
+                        [戻す]ボタンを右サイドに固定(スマホ用):
+                        <input type="checkbox" id="cb_toggle_switch6" class="showUndoBtn">
+                        <label for="cb_toggle_switch6"></label>
                     </div>
                 </li>
             </ul>
@@ -581,6 +638,15 @@
         <div class="slider-box">
             <ul class="box-list">
                 <li>
+                    2021/03/25 <br />
+                    (不具合修正)<br />
+                    ・調査データの復元時に青黄確定データがあった時、青黄確定リストに何も表示されない不具合を修正しました<br />
+
+                    (更新)<br />
+                    ・[オプション設定]に[戻す]ボタンを常時右サイドに表示するオプションを追加しました。<br />
+                    ・リストの[全部表示する/しない]設定を保存するようにしました。
+                </li>
+                <li>
                     2021/03/16 <br />
                     ・オプション設定を設定していない時に、「〇〇時まで変化なし」の表示が消えない不具合を修正しました。
                 </li>
@@ -667,8 +733,8 @@
             </ul>
         </div>
 
+        <!-- スクエア広告 -->
         <div style="margin-top: 20px;">
-            <!-- スクエア広告 -->
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6102016814573876"
                 data-ad-slot="5015997079" data-ad-format="auto" data-full-width-responsive="true"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>

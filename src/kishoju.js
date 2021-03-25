@@ -894,34 +894,44 @@ $(document).on("click", ".chk-tgl-span button", function () {
     if (scroll_mode == "up") {
         if (before_height - 24 >= 24 * 3) {
             $("." + obj + " tbody").css("height", before_height - 24 + "px");
-            settings.scrollHeight[obj] = before_height - 24;
-            localStorage.setItem("settings", JSON.stringify(settings));
+            settings.ListSetting[obj].scrollHeight = before_height - 24;
         }
         else return 0;
     }
     else if (scroll_mode == "down") {
         if (maxlength - 24 > before_height) {
             $("." + obj + " tbody").css("height", before_height + 24 + "px");
-            settings.scrollHeight[obj] = before_height + 24;
-            localStorage.setItem("settings", JSON.stringify(settings));
+            settings.ListSetting[obj].scrollHeight = before_height + 24;
         }
         else return 0;
     }
+
+    localStorage.setItem("settings", JSON.stringify(settings));
 });
 
 //外部リスト表示モード切替
-$(document).on("click", ".chk-Box, .chk-otherBox", function () {
+$(document).on("click", ".chk-Box", function () {
     const
         bFlg = $(this).prop("checked"),
-        obj = $(this).val();
+        obj = $(this).val(),
+        List = $("." + obj + " tr");
+
     if (bFlg === true) {
         $(this).next().html("全部表示する");
-        $("." + obj + " tbody").css("display", "");
+        settings.ListSetting[obj].showUndoBtn = "ON";
+
+        if (List.length > 2)
+            $("." + obj + " tbody").css("display", "");
     }
     else {
         $(this).next().html("全部表示しない");
-        $("." + obj + " tbody").css("display", "block");
+        settings.ListSetting[obj].showUndoBtn = "OFF";
+
+        if (List.length > 2)
+            $("." + obj + " tbody").css("display", "block");
     }
+
+    localStorage.setItem("settings", JSON.stringify(settings));
 });
 
 //外部リスト変更イベント
@@ -934,7 +944,7 @@ $(function () {
                         const
                             obj_tbody = elem.target.offsetParent.className,
                             obj_block = "scroll_" + obj_tbody,
-                            scroll_flg = $("." + obj_block).find(".chk-otherBox").prop("checked"),
+                            scroll_flg = $("." + obj_block).find(".chk-Box").prop("checked"),
                             length = elem.target.childElementCount,
                             visible = $("." + obj_block).is(":visible");
 
@@ -1069,7 +1079,11 @@ function getParam(param, params) {
     return results[2].replace(/\+/g, " ");
 }
 
+//オプション設定読込み
 function load_settings() {
+    const
+        objList = ["fix_blue", "fix_red", "other_fix_blue", "other_fix_red"],
+        Mode = ["red_blue", "red_yellow", "blue_yellow"];
     settings = JSON.parse(localStorage.getItem("settings"));
 
     if (settings) {
@@ -1079,44 +1093,57 @@ function load_settings() {
                 $(document).find(".even_odd").prop("checked", true);
         }
 
-        //虹青自動更新モードモードフラグ
-        if (["auto"] in settings && ["red_blue"] in settings["auto"]) {
-            if (settings.auto.red_blue == "ON")
-                $(document).find(".auto.red_blue").prop("checked", true);
-        }
-
-        //虹黄自動更新モードモードフラグ
-        if (["auto"] in settings && ["red_yellow"] in settings["auto"]) {
-            if (settings.auto.red_yellow == "ON")
-                $(document).find(".auto.red_yellow").prop("checked", true);
-        }
-
-        //青黄自動更新モードモードフラグ
-        if (["auto"] in settings && ["blue_yellow"] in settings["auto"]) {
-            if (settings.auto.blue_yellow == "ON")
-                $(document).find(".auto.blue_yellow").prop("checked", true);
-        }
-
-        //メモ欄2表示モードモードフラグ
+        //メモ欄2表示モードフラグ
         if (settings.memo2_display && settings.memo2_display == "show")
             $(document).find(".tgl_memo2").prop("checked", true);
 
-        //スクロール幅設定
-        const objList = ["fix_blue", "fix_red", "other_fix_blue", "other_fix_red"];
-        $(".chk-tgl-span button").prop("disabled", true);   //スクロール幅変更ボタン 非活性化
-
-        objList.forEach(obj => {
-            if (["scrollHeight"] in settings && [obj] in settings["scrollHeight"]) {
-                if (settings.scrollHeight[obj])
-                    $("." + obj + " tbody").css("height", settings.scrollHeight[obj] + "px");
+        //自動更新モードフラグ
+        Mode.forEach(Mode => {
+            if (["auto"] in settings && [Mode] in settings["auto"]) {
+                if (settings.auto[Mode] == "ON")
+                    $(document).find(".auto." + Mode).prop("checked", true);
             }
         })
+
+        //青黄確定リストモードフラグ
+        $(".chk-tgl-span button").prop("disabled", true);   //スクロール幅変更ボタン 非活性化
+        if (["ListSetting"] in settings) {
+            objList.forEach(obj => {
+                if ([obj] in settings["ListSetting"]) {
+                    //スクロール幅設定
+                    if (settings.ListSetting[obj].scrollHeight)
+                        $("." + obj + " tbody").css("height", settings.ListSetting[obj].scrollHeight + "px");
+
+                    //全部表示する/しない設定
+                    if (settings.ListSetting[obj].showUndoBtn == "ON")
+                        $(document).find(".scroll_" + obj + " input").click();
+                }
+            })
+        }
+        else {
+            settings.ListSetting = {
+                fix_blue: {},
+                fix_red: {},
+                other_fix_blue: {},
+                other_fix_red: {},
+            };
+            localStorage.setItem("settings", JSON.stringify(settings));
+        }
     }
-    else settings = {
-        even_oddMODE: "",
-        scrollHeight: {},
-        auto: {},
-    };
+    else {
+        settings = {
+            even_oddMODE: "",
+            ListSetting: {
+                fix_blue: {},
+                fix_red: {},
+                other_fix_blue: {},
+                other_fix_red: {},
+            },
+            auto: {},
+        };
+
+        localStorage.setItem("settings", JSON.stringify(settings));
+    }
 }
 
 
@@ -1531,7 +1558,7 @@ function checkTime(Time) {
 
 //(確定/青木リスト)挿入
 function push_fix(fix, Text, flg) {
-    Text = Text.split("#");
+    if (Text.indexOf("#") != -1) Text = Text.split("#");
 
     if (flg == "fix" || flg == "all")
         $("." + fix).append('<tr><td class="fix">' + Text[0] + '</td></tr>');
@@ -1635,6 +1662,9 @@ $(document).on("click", ".side-list-btn", function () {
 
     $(".side-list-area").find('.hung-icon').toggleClass('rev');     //アイコン反転
 });
+
+//機能リスト-[戻す]
+$(document).on("click", ".func-list-btn", function () { Rollback(); });
 
 
 /********************保存・削除関連********************/
@@ -1791,18 +1821,6 @@ $(document).on("click", ".even_odd", function () {
     }
 })
 
-//自動更新モード切替
-$(document).on("click", ".toggle_switch .auto", function () {
-    if ($(this).prop('checked')) {
-        settings.auto[$(this).val()] = "ON";
-        localStorage.setItem("settings", JSON.stringify(settings));
-    }
-    else {
-        settings.auto[$(this).val()] = "OFF";
-        localStorage.setItem("settings", JSON.stringify(settings));
-    }
-})
-
 //メモ欄表示モード切替
 $(document).on("click", ".tgl_memo2", function () {
     if ($(this).prop('checked')) {
@@ -1816,6 +1834,38 @@ $(document).on("click", ".tgl_memo2", function () {
         localStorage.setItem("settings", JSON.stringify(settings));
     }
 });
+
+//自動更新モード切替
+$(document).on("click", ".toggle_switch .auto", function () {
+    if ($(this).prop('checked')) {
+        settings.auto[$(this).val()] = "ON";
+        localStorage.setItem("settings", JSON.stringify(settings));
+    }
+    else {
+        settings.auto[$(this).val()] = "OFF";
+        localStorage.setItem("settings", JSON.stringify(settings));
+    }
+})
+
+//[戻す]ボタン表示切替
+$(document).on("click", ".showUndoBtn", function () {
+    const
+        MODE_ON = 'following-on',
+        MODE_OFF = 'following-off';
+
+    if ($(this).prop('checked')) {
+        $('.func-list-area').removeClass(MODE_OFF);
+        $('.func-list-area').addClass(MODE_ON);
+        settings.showUndoBtn = "ON";
+        localStorage.setItem("settings", JSON.stringify(settings));
+    }
+    else {
+        $('.func-list-area').removeClass(MODE_ON);
+        $('.func-list-area').addClass(MODE_OFF);
+        settings.showUndoBtn = "OFF";
+        localStorage.setItem("settings", JSON.stringify(settings));
+    }
+})
 
 
 /********************スライドBOX********************/

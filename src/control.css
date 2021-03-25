@@ -17,11 +17,36 @@ div{ box-sizing: border-box; }
 .material-icons{ position: relative; }
 
 /************************************************　ヘッダ　************************************************/
+.header-function{
+    display: block;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.title{
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: underline dotted;
+}
 
 .message, .copyArea{
     display: none;
     margin-bottom: 15px;
     font-size: 15px;
+}
+
+.header-notice{
+    display: table;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.iconArea{
+    display: table-cell;
+    width: 40px;
+    text-align: left;
+    vertical-align: top;
+    color: dimgray;
 }
 
 /* フキダシ-メッセージ部分 */
@@ -168,11 +193,14 @@ button {
 
 /************************************************　鯖テーブル　************************************************/
 /* テーブルの罫線 */
-.ServerList{
+.ServerLists table{
     border-collapse: collapse;
     margin-bottom: 10px;
+    margin-right: 10px;
+    float: left;
 }
-.ServerList td{
+
+.ServerLists td{
     border: solid 1px #999;
 }
 /* テーブルのヘッダ行 */
@@ -207,11 +235,11 @@ button {
     line-height: 1px;
 }
 /* テーブル行　しましま設定 奇数trのtd */
-.ServerList tr:nth-child(even) {
+.ServerLists tr:nth-child(even) {
     background-color: #fff;
 }
 /* テーブル行　しましま設定 偶数trのtd */
-.ServerList tr:nth-child(odd) {
+.ServerLists tr:nth-child(odd) {
     background-color: #ddd;
 }
 /* テーブル行　1カラム目 鯖No*/
@@ -506,6 +534,23 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
     top: 5px;
     left:-3px;
     line-height: 1px;
+}
+
+/* 機能BOX - ハンガーボタン */
+.func-list-area.following-off{ display: none; }
+.func-list-area.following-on{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 40px;
+    height: 40px;
+    z-index: 99;
+    padding: 5px;
+
+    color: #fff;
+    background-color: #333;
+    opacity: 0.95;
+    cursor: pointer;
 }
 
 /* テキストエリア表示幅設定 */
