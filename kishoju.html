@@ -100,9 +100,9 @@
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆[オプション設定]のスライドを追加しました。詳細は更新履歴まで。<br />
                 ◆外部リストを右サイドに固定できるようにしました。<br />
-                ◆[オプション設定]に[戻す]ボタンを<br />　右サイドに固定するオプションを追加しました。(スマホ向け)
+                ◆[オプション設定]に[戻す]ボタンを<br />　右サイドに固定するオプションを追加しました。(スマホ向け)<br />
+                ◆[オプション設定]に[分割モード]オプションを追加しました。(PC向け) 詳細は更新履歴まで。
             </div>
         </div>
 
@@ -499,42 +499,49 @@
             <ul class="box-list">
                 <li>
                     <div class="toggle_switch">
+                        分割モード:
+                        <input type="checkbox" id="split" class="split">
+                        <label for="split"></label>
+                    </div>
+                </li>
+                <li>
+                    <div class="toggle_switch">
                         偶数奇数モード:
-                        <input type="checkbox" id="cb_toggle_switch1" class="even_odd">
-                        <label for="cb_toggle_switch1"></label>
+                        <input type="checkbox" id="even_odd" class="even_odd">
+                        <label for="even_odd"></label>
                     </div>
                 </li>
                 <li>
                     <div class="toggle_switch">
                         メモ欄2表示モード:
-                        <input type="checkbox" id="cb_toggle_switch2" class="tgl_memo2">
-                        <label for="cb_toggle_switch2"></label>
+                        <input type="checkbox" id="tgl_memo2" class="tgl_memo2">
+                        <label for="tgl_memo2"></label>
                     </div>
                 </li>
                 <li>
                     <div class="toggle_switch">
                         自動更新モード(実験中)<br />
                         虹(or赤)青自動更新モード:
-                        <input type="checkbox" id="cb_toggle_switch3" class="auto red_blue" value="red_blue">
-                        <label for="cb_toggle_switch3"></label>
+                        <input type="checkbox" id="auto1" class="auto red_blue" value="red_blue">
+                        <label for="auto1"></label>
                         　[虹青or赤青→青黄に自動更新]<br />
 
                         虹(or赤)黄自動更新モード:
-                        <input type="checkbox" id="cb_toggle_switch4" class="auto red_yellow" value="red_yellow">
-                        <label for="cb_toggle_switch4"></label>
+                        <input type="checkbox" id="auto2" class="auto red_yellow" value="red_yellow">
+                        <label for="auto2"></label>
                         　[虹黄or赤黄→黄黄に自動更新]<br />
 
-                        青黄自動更新モード　　　:
-                        <input type="checkbox" id="cb_toggle_switch5" class="auto blue_yellow" value="blue_yellow">
-                        <label for="cb_toggle_switch5"></label>
+                        青黄自動更新モード:
+                        <input type="checkbox" id="auto3" class="auto blue_yellow" value="blue_yellow">
+                        <label for="auto3"></label>
                         　[青黄→黄黄に自動更新]<br />
                     </div>
                 </li>
                 <li>
                     <div class="toggle_switch">
                         [戻す]ボタンを右サイドに固定(スマホ用):
-                        <input type="checkbox" id="cb_toggle_switch6" class="showUndoBtn">
-                        <label for="cb_toggle_switch6"></label>
+                        <input type="checkbox" id="showUndoBtn" class="showUndoBtn">
+                        <label for="showUndoBtn"></label>
                     </div>
                 </li>
             </ul>
@@ -637,6 +644,11 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>
+                    2021/03/26 <br />
+                    ・[オプション設定]に[分割モード]オプション(PC向け)を追加しました。(要望)<br />
+                    　画面のサイズが広ければ鯖テーブルが2列に分割されるようになります。
+                </li>
                 <li>
                     2021/03/25 <br />
                     (不具合修正)<br />
@@ -785,7 +797,7 @@
                     <p class="nowTime" color="" Date="" style="background-color: transparent;"></p>
                 </div>
                 <div class="memo-box">
-                    <span class="memo" color="" Date="" style="background-color: transparent;"></span>
+                    <span class="memo" color="" Date="" memoflg="" style="background-color: transparent;"></span>
                 </div>
                 <input type="text" class="memo2" placeholder="メモ欄">
             </div>

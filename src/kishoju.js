@@ -3,18 +3,15 @@ const version = "1.4";  //バージョン管理変数
 
 //グローバル変数
 var
-    TMP = [],           //履歴変数
-    Timers = {};        //タイマーリスト変数
-
-//フラグ変数
-var
-    ptMODE = "",        //PTモード変数
-    get_flg = false,    //URL取得モードフラグ
-    share_flg = false,  //データ共有フラグ
-    share_ID = "",      //データ共有用パス
-    ver_flg = false,    //バージョンチェックフラグ(初回のみ)
-    settings = {},      //オプション設定保存変数
-    sidelist_value = "default";
+    settings = {},          //オプション設定フラグ
+    get_flg = false,        //URL取得モードフラグ
+    share_flg = false,      //データ共有フラグ
+    share_ID = "",          //データ共有用パス
+    ver_flg = false,        //バージョンチェックフラグ(初回のみ)
+    ptMODE = "",            //PTモード変数
+    TMP = [],               //履歴変数
+    Timers = {},            //タイマーリスト変数
+    side_mode = "default";  //サイドリストモード変数
 
 //テスト用関数
 function debug() {
@@ -36,6 +33,7 @@ class Cells {
             befColor: objBox.find(".befTime").attr("color"),
             memo: objBox.find(".memo").text(),
             memoColor: objBox.find(".memo").attr("color"),
+            memoflg: objBox.find(".memo").attr("memoflg"),
         }
 
         this.Data = Object.assign({}, this.TMP);    //配列コピー
@@ -400,6 +398,19 @@ $(document).on("change", ".setting-box .mode-change-box input[name=opt-tgl]", fu
 
 //[1 - 10]等#サーバー追加
 $(document).on("click", ".setServers", function () {
+    if (
+        settings.splitMODE == "ON" &&
+        !(
+            $(this).text() == "1 - 10" ||
+            $(this).text() == "11 - 20" ||
+            $(this).text() == "21 - 30" ||
+            $(this).text() == "31 - 40"
+        )
+    ) {
+        alert("分割モード中は使えません");
+        return 0;
+    }
+
     const
         boxName = $(this).attr("boxName"),
         num = $(this).val(),
@@ -407,8 +418,16 @@ $(document).on("click", ".setServers", function () {
         End = $(this).attr("End");
     TMP = [] //初期化
 
-    $(".ServerList tr").slice(1).remove();   //テーブルの初期化
-    $(".ServerList").attr("id", boxName);    //サーバリストID設定
+    //テーブルの初期化・サーバリストID設定
+    if (settings.splitMODE == "OFF") {
+        $(".ServerList tr").slice(1).remove();
+        $(".ServerList").attr("id", boxName);
+    }
+    else if (settings.splitMODE == "ON") {
+        $(".ServerList tr").slice(1).remove();
+        $(".ServerList2 tr").slice(1).remove();
+        $(".ServerList, .ServerList2").attr("id", boxName);
+    }
 
     for (let i = 0; i < 10; i++) {
         const CopyTemp1 = $($("#template1").html()).clone();
@@ -417,16 +436,29 @@ $(document).on("click", ".setServers", function () {
             const CopyTemp2 = $($("#template2").html()).clone();
             $(this).append(CopyTemp2);
         })
-        $(".ServerList tbody").append(CopyTemp1);
+
+        if (settings.splitMODE == "OFF")
+            $(".ServerList tbody").append(CopyTemp1);
+        else if (settings.splitMODE == "ON") {
+            if (i < 5) $(".ServerList tbody").append(CopyTemp1);
+            else $(".ServerList2 tbody").append(CopyTemp1);
+        }
     }
 
-    if ($(this).text() == "9 - 10" || ptMODE == "PT8") {
+    if (
+        $(this).text() == "9 - 10" ||
+        ptMODE == "PT8" ||
+        settings.splitMODE == "OFF"
+    ) {
         $(".Servers").each(function () {
             const Server = Number($(this).find(".ServerID").text());
             if (Server < Start || Server > End) $(this).hide();
         })
     }
-    if (settings.even_oddMODE == "ON") tSort("even_odd");
+    if (
+        settings.even_oddMODE == "ON" &&
+        settings.splitMODE == "OFF"
+    ) tSort("even_odd");
     if (settings.memo2_display == "show") $(".memo2").css("display", "inline-block");
 
     //サーバ切り替え時のデータ保持処理
@@ -440,6 +472,11 @@ $(document).on("click", ".setServers", function () {
 
 //調査サーバー選択式
 $(document).on('change', '.select-mode.PTselect input', function () {
+    if (settings.splitMODE == "ON") {
+        alert("分割モード中は使えません");
+        return 0;
+    }
+
     const num = $(this).val();
 
     if ($(".ServerList").attr("id") != "select") {
@@ -516,34 +553,44 @@ function load_Storage(getData) {
                     objBox = $(Servers).find("." + Points[i]).find(".template2-box"),
                     Data = Datas[Server + Points[i]];
 
-                objBox.find(".nowTime")
-                    .attr("Date", Data.nowDate)
-                    .text(Data.nowTime)
-                    .css("background-color", Data.nowColor)
-                    .attr("color", Data.nowColor);
                 objBox.find(".befTime")
                     .attr("Date", Data.befDate)
                     .text(Data.befTime)
                     .css("background-color", Data.befColor)
                     .attr("color", Data.befColor);
+                objBox.find(".nowTime")
+                    .attr("Date", Data.nowDate)
+                    .text(Data.nowTime)
+                    .css("background-color", Data.nowColor)
+                    .attr("color", Data.nowColor);
                 objBox.find(".memo")
                     .text(Data.memo)
                     .attr("Date", Data.memoDate)
                     .css("background-color", Data.memoColor)
-                    .attr("color", Data.memoColor);
+                    .attr("color", Data.memoColor)
+                    .attr("memoflg", Data.memoflg);
                 objBox.find(".memo2").val(Data.memo2);
 
                 if (Data.nowColor == "red") {
                     objBox.find(".btn[value=red]").prop("disabled", true);
                     Timers[Server + Points[i]] = setInterval(setTimer, 1000, objBox);
-                } else {
-                    //URLからデータ抽出時に青黄の時間がURLを開いた時の時間になる不具合確認用
-                    if (Data.memoDate) {
-                        let diffTime = Data.memoDate - new Date().getTime();
-                        if (Data.befColor == "skyblue") Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "skyblue");
-                        else Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, Data.nowColor);
+                }
+                if (Data.memoflg) {
+                    const diffTime = Data.memoDate - new Date().getTime();
+
+                    if (diffTime > 0) {
+                        switch (Data.memoflg) {
+                            case "red_blue":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "red_blue");
+                                break;
+                            case "red_yellow":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "red_yellow");
+                                break;
+                            case "blue-yellow":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "blue-yellow");
+                                break;
+                        }
                     }
-                    objBox.find(".btn[value=red]").prop("disabled", false);
                 }
             }
             n++;
@@ -705,6 +752,7 @@ function Rollback() {
                         memo: TMP[n].memo,
                         memoColor: TMP[n].memoColor,
                         memoDate: TMP[n].memoDate,
+                        memoflg: TMP[n].memoflg,
                         flg: true,
                     };
 
@@ -1005,9 +1053,12 @@ function sortPoint() {
 
 //【NaL】端っこのボタン押せなくするやつ
 function setInitMoveBtn() {
-    $("#server-list-hd").find(".left, .right").prop("disabled", false);           //全活性
-    $("#server-list-hd").find(".left, .right").first().prop("disabled", true);    //最初のボタンを非活性
-    $("#server-list-hd").find(".left, .right").last().prop("disabled", true);     //最後のボタンを非活性
+    $(".ServerList #server-list-hd").find(".left, .right").prop("disabled", false);           //全活性
+    $(".ServerList #server-list-hd").find(".left, .right").first().prop("disabled", true);    //最初のボタンを非活性
+    $(".ServerList #server-list-hd").find(".left, .right").last().prop("disabled", true);     //最後のボタンを非活性
+    $(".ServerList2 #server-list-hd").find(".left, .right").prop("disabled", false);           //全活性
+    $(".ServerList2 #server-list-hd").find(".left, .right").first().prop("disabled", true);    //最初のボタンを非活性
+    $(".ServerList2 #server-list-hd").find(".left, .right").last().prop("disabled", true);     //最後のボタンを非活性
 }
 
 //【NaL】[戻す]ボタンの活性切替
@@ -1089,11 +1140,13 @@ function load_settings() {
     settings = JSON.parse(localStorage.getItem("settings"));
 
     if (settings) {
+        //分割モードフラグ
+        if (settings.splitMODE && settings.splitMODE == "ON")
+            $(document).find(".split").click();
+
         //偶数奇数モードフラグ
-        if ("even_oddMODE" in settings) {
-            if (settings.even_oddMODE == "ON")
-                $(document).find(".even_odd").prop("checked", true);
-        }
+        if (settings.even_oddMODE && settings.even_oddMODE == "ON")
+            $(document).find(".even_odd").prop("checked", true);
 
         //メモ欄2表示モードフラグ
         if (settings.memo2_display && settings.memo2_display == "show")
@@ -1109,7 +1162,7 @@ function load_settings() {
 
         //青黄確定リストモードフラグ
         $(".chk-tgl-span button").prop("disabled", true);   //スクロール幅変更ボタン 非活性化
-        if (["ListSetting"] in settings) {
+        if (settings.ListSetting) {
             objList.forEach(obj => {
                 if ([obj] in settings["ListSetting"]) {
                     //スクロール幅設定
@@ -1153,6 +1206,71 @@ function load_settings() {
 
 
 /********************ヘッダ部関係********************/
+//[4人分散/8人分散/選択式分散]#PTモード変更
+function modeChange() {
+    //【NaL】モード切替スイッチ追加に伴う変更
+    ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
+    $('.select-mode').hide();                    //一旦すべて非表示
+    $('.select-mode' + '.' + ptMODE).show();    //選択モードのみ表示
+}
+
+/********************メイン機能関係********************/
+//テーブルの分割表示
+function splitTable() {
+    const boxName = $(".ServerList").attr("id");
+
+    if (settings.splitMODE == "ON") {
+        save_Storage();
+        $("body").css("max-width", "1300px");
+        $(".ServerList2").show();
+    }
+    if (settings.splitMODE == "OFF") {
+        save_Storage();
+        $("body").css("max-width", "650px");
+        $(".ServerList2 tr").slice(1).remove();
+        $(".ServerList2").hide();
+    }
+    if (boxName) {
+        $(".setServers").each(function () {
+            if ($(this).text() == boxName)
+                $(this).click(); //調査鯖ボタンクリック
+        })
+    }
+}
+
+//ポイント移動処理
+//***************************見直し対象
+function movePoint(befPoint, afterPoint) {
+    //template内移動処理用変数
+    const
+        befClass = "." + $(befPoint).attr("class"),
+        afterClass = "." + $(afterPoint).attr("class"),
+        tmp1 = document.getElementById("template1").content,
+        tmp1_befPoint = tmp1.querySelectorAll(".Servers >" + befClass),
+        tmp1_afterPoint = tmp1.querySelectorAll(".Servers >" + afterClass),
+        Servers = tmp1.querySelectorAll(".Servers"),
+        parentClass = befPoint.parents("table").attr("class");
+
+    Servers[0].insertBefore(tmp1_befPoint[0], tmp1_afterPoint[0]);
+    befPoint.insertBefore(afterPoint);
+
+    if (parentClass == "ServerList") {
+        const thead = $(".ServerList thead").html()
+        $(".ServerList2 thead").html(thead);
+    }
+    else {
+        const thead = $(".ServerList2 thead").html()
+        $(".ServerList thead").html(thead);
+    }
+
+    for (let i = 0; i < 10; i++) {
+        $(".Servers").find(befClass).eq(i)
+            .insertBefore($(".Servers").find(afterClass).eq(i));
+    }
+
+    setInitMoveBtn();
+}
+
 //偶数・奇数入替処理
 function tSort(mode) {
     const ServerID = $(".ServerList").attr("id");
@@ -1179,36 +1297,6 @@ function tSort(mode) {
     }
 }
 
-//[4人分散/8人分散/選択式分散]#PTモード変更
-function modeChange() {
-    //【NaL】モード切替スイッチ追加に伴う変更
-    ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
-    $('.select-mode').hide();                    //一旦すべて非表示
-    $('.select-mode' + '.' + ptMODE).show();    //選択モードのみ表示
-}
-
-/********************メイン機能関係********************/
-//ポイント移動処理
-//***************************見直し対象
-function movePoint(befPoint, afterPoint) {
-    //template内移動処理用変数
-    const
-        befClass = "." + $(befPoint).attr("class"),
-        afterClass = "." + $(afterPoint).attr("class"),
-        tmp1 = document.getElementById("template1").content,
-        tmp1_befPoint = tmp1.querySelectorAll(".Servers >" + befClass),
-        tmp1_afterPoint = tmp1.querySelectorAll(".Servers >" + afterClass),
-        Servers = tmp1.querySelectorAll(".Servers");
-
-    Servers[0].insertBefore(tmp1_befPoint[0], tmp1_afterPoint[0]);
-    befPoint.insertBefore(afterPoint);
-    for (let i = 0; i < 10; i++) {
-        $(".Servers").find(befClass).eq(i)
-            .insertBefore($(".Servers").find(afterClass).eq(i));
-    }
-
-    setInitMoveBtn();
-}
 
 //タイムスタンプ設定
 //***************************見直し待機
@@ -1247,6 +1335,7 @@ function timeStamp(objBox, Data) {
                 diffDate = memoDate - Data.newDate;
                 clearTimeout(Timers[Data.Server + Data.Point]);
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "red_blue");
+                Data.memoflg = "red_blue";
             }
 
             //黄→青・戻り判定
@@ -1278,6 +1367,7 @@ function timeStamp(objBox, Data) {
                 diffDate = memoDate - Data.newDate;
                 clearTimeout(Timers[Data.Server + Data.Point]);
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "red_yellow");
+                Data.memoflg = "red_yellow";
             }
 
             //青→黄判定
@@ -1298,6 +1388,7 @@ function timeStamp(objBox, Data) {
                 diffDate = memoDate - Data.newDate;
                 clearTimeout(Timers[Data.Server + Data.Point]);
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "blue_yellow");
+                Data.memoflg = "blue_yellow";
             }
 
             break;
@@ -1325,7 +1416,7 @@ function timeStamp(objBox, Data) {
                     }
                 }
                 else { //前回黄判定
-                    if (Data.memoDate == "skyblue(old)") {
+                    if (Data.memoflg == "blue_yellow") {
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
                             + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
@@ -1397,7 +1488,8 @@ function timeStamp(objBox, Data) {
         .attr("Date", memoDate)
         .text(Data.memo)
         .css("background-color", Data.memoColor)
-        .attr("color", Data.memoColor);
+        .attr("color", Data.memoColor)
+        .attr("memoflg", Data.memoflg);
 
     $('.Servers').find('.template2-box').removeClass('sel');
     objBox.addClass('sel');
@@ -1463,7 +1555,8 @@ function setTimer(objBox) {
         objBox.find(".memo")
             .text("経過時間:01:00:00")
             .css("background-color", "transparent")
-            .attr("color", "transparent");
+            .attr("color", "transparent")
+            .attr("memoflg", "");
 
         objBox.find(".btn[value=red]").prop("disabled", false);
         clearInterval(Timers[Server + Point]);
@@ -1515,7 +1608,7 @@ function memoTimer(objBox, Color) {
         case "blue_yellow":
             //TimeObj = TimePlus(newDate, "01:00:00");
             //memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
-            memoDate = "skyblue(old)";
+            memoDate = "";
             memo = "";
             memoColor = "transparent";
 
@@ -1543,14 +1636,16 @@ function memoTimer(objBox, Color) {
             .attr("Date", memoDate)
             .text(memo)
             .css("background-color", memoColor)
-            .attr("color", memoColor);
+            .attr("color", memoColor)
+            .attr("memoflg", Color);
     }
     else {
         objBox.find(".memo")
             .attr("Date", memoDate)
             .text(memo)
             .css("background-color", memoColor)
-            .attr("color", memoColor);
+            .attr("color", memoColor)
+            .attr("memoflg", Color);
     }
 }
 
@@ -1611,13 +1706,13 @@ $(document).on("click", "#chk-side-follow", function () {
         $('.side-list-box, .side-list-area').addClass(MODE_ON);
         $(".hung-icon_other").hide();
 
-        if (sidelist_value == "default") {
+        if (side_mode == "default") {
             $('.side-list-box').hide();
             $(".side-list-area").css("height", "80px");
             $(".side-list-area").find('.hung-icon').toggleClass('rev');     //アイコン反転
             $(".side-list-area").find('.hung-icon_other').show();
         }
-        else if (sidelist_value == "fix_box") {
+        else if (side_mode == "fix_box") {
             $(".fix_box").show();
             $(".other_fix_box").hide();
         }
@@ -1645,12 +1740,12 @@ $(document).on("click", ".side-list-btn", function () {
         const visible = $('.side-list-box').is(":visible");
 
         if (target == "fix_box") {
-            sidelist_value = "fix_box";
+            side_mode = "fix_box";
             $(".fix_box").show();
             $(".other_fix_box").hide();
         }
         else {
-            sidelist_value = "other_box";
+            side_mode = "other_box";
             $(".fix_box").hide();
             $(".other_fix_box").show();
         }
@@ -1737,7 +1832,8 @@ function clear_input() {
                         .attr("Date", "")
                         .text("")
                         .css("background-color", "transparent")
-                        .attr("color", "transparent");
+                        .attr("color", "transparent")
+                        .attr("memoflg", "");
                 }
             });
 
@@ -1812,10 +1908,24 @@ function save_Fix() {
 
 
 /********************オプション設定********************/
-//[標準モード/偶数奇数モード]偶数・奇数モード切替
+//分割モード切替
+$(document).on("click", ".split", function () {
+    if ($(this).prop('checked')) {
+        settings.splitMODE = "ON";
+        localStorage.setItem("settings", JSON.stringify(settings));
+        splitTable();
+    }
+    else {
+        settings.splitMODE = "OFF";
+        localStorage.setItem("settings", JSON.stringify(settings));
+        splitTable();
+    }
+})
+
+//偶数・奇数モード切替
 $(document).on("click", ".even_odd", function () {
     if ($(this).prop('checked')) {
-        settings["even_oddMODE"] = "ON";
+        settings.even_oddMODE = "ON";
         localStorage.setItem("settings", JSON.stringify(settings));
         tSort("even_odd");
     }
