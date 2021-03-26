@@ -419,14 +419,14 @@ $(document).on("click", ".setServers", function () {
     TMP = [] //初期化
 
     //テーブルの初期化・サーバリストID設定
-    if (settings.splitMODE == "OFF") {
-        $(".ServerList tr").slice(1).remove();
-        $(".ServerList").attr("id", boxName);
-    }
-    else if (settings.splitMODE == "ON") {
+    if (settings.splitMODE == "ON") {
         $(".ServerList tr").slice(1).remove();
         $(".ServerList2 tr").slice(1).remove();
         $(".ServerList, .ServerList2").attr("id", boxName);
+    }
+    else {
+        $(".ServerList tr").slice(1).remove();
+        $(".ServerList").attr("id", boxName);
     }
 
     for (let i = 0; i < 10; i++) {
@@ -437,18 +437,17 @@ $(document).on("click", ".setServers", function () {
             $(this).append(CopyTemp2);
         })
 
-        if (settings.splitMODE == "OFF")
-            $(".ServerList tbody").append(CopyTemp1);
-        else if (settings.splitMODE == "ON") {
+        if (settings.splitMODE == "ON") {
             if (i < 5) $(".ServerList tbody").append(CopyTemp1);
             else $(".ServerList2 tbody").append(CopyTemp1);
         }
+        else $(".ServerList tbody").append(CopyTemp1);
     }
 
     if (
         $(this).text() == "9 - 10" ||
         ptMODE == "PT8" ||
-        settings.splitMODE == "OFF"
+        settings.splitMODE != "ON"
     ) {
         $(".Servers").each(function () {
             const Server = Number($(this).find(".ServerID").text());
@@ -457,7 +456,7 @@ $(document).on("click", ".setServers", function () {
     }
     if (
         settings.even_oddMODE == "ON" &&
-        settings.splitMODE == "OFF"
+        settings.splitMODE != "ON"
     ) tSort("even_odd");
     if (settings.memo2_display == "show") $(".memo2").css("display", "inline-block");
 
@@ -1224,7 +1223,7 @@ function splitTable() {
         $("body").css("max-width", "1300px");
         $(".ServerList2").show();
     }
-    if (settings.splitMODE == "OFF") {
+    else {
         save_Storage();
         $("body").css("max-width", "650px");
         $(".ServerList2 tr").slice(1).remove();
