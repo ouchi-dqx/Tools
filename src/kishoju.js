@@ -31,6 +31,7 @@ class Cells {
             befDate: objBox.find(".befTime").attr("Date"),
             befTime: objBox.find(".befTime").text(),
             befColor: objBox.find(".befTime").attr("color"),
+            memoDate: objBox.find(".memo").attr("Date"),
             memo: objBox.find(".memo").text(),
             memoColor: objBox.find(".memo").attr("color"),
             memoflg: objBox.find(".memo").attr("memoflg"),
@@ -545,7 +546,7 @@ function load_Storage(getData) {
             const
                 Datas = Storage[n],
                 Servers = $(this),
-                Server = Servers.find(".ServerID").text();
+                Server = $(this).find(".ServerID").text();
 
             for (let i = 0; i < 3; i++) {
                 const
@@ -585,10 +586,34 @@ function load_Storage(getData) {
                             case "red_yellow":
                                 Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "red_yellow");
                                 break;
-                            case "blue-yellow":
-                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "blue-yellow");
+                            case "blue_yellow":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "blue_yellow");
                                 break;
                         }
+                    }
+                    else {
+                        const
+                            newDate = new Date().getTime() + diffTime,
+                            newTime = TimePlus(newDate, "00:00:00").Time,
+                            newColor = (Data.memoflg == "red_blue") ? "blue" : "yellow";
+
+                        objBox.find(".befTime")
+                            .attr("Date", Data.nowDate)
+                            .text(Data.nowTime)
+                            .css("background-color", Data.nowColor)
+                            .attr("color", Data.nowColor);
+                        objBox.find(".nowTime")
+                            .attr("Date", newDate)
+                            .text(newTime)
+                            .css("background-color", newColor)
+                            .attr("color", newColor);
+                        objBox.find(".memo")
+                            .text("")
+                            .attr("Date", "")
+                            .css("background-color", "transparent")
+                            .attr("color", "transparent")
+                            .attr("memoflg", "");
+                        objBox.find(".memo2").val(Data.memo2);
                     }
                 }
             }
