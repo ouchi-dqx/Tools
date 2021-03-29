@@ -2105,7 +2105,7 @@ function xhrSend(params, resFunc) {
     params.version = version;
 
     $.ajax({
-        url: "https://script.google.com/macros/s/AKfycbwCz56sXENejr9tHKjg8eoG8PdiBcN4HHo7FKf6JetXj3smgBVDR68K/exec",
+        url: "https://script.google.com/macros/s/AKfycbxAAOEdydyuV7p9sy7v4VhA_xEoHv_E3OVe3O_IuUoNI_A2XRZyv5ao9EtVCcd1dB6s/exec",
         async: false,
         cache: false,
         type: "GET",
