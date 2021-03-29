@@ -233,6 +233,11 @@ function updateList(mode, fix, Text) {
                         //updateList(mode, fix, Text);    //再試行
                         return 0;
                     }
+                    else if (res.err == "メンテナンス中") {
+                        alert("メンテナンス中です");
+                        clearInterval(Timers.updateTime);
+                        return 0;
+                    }
                     else {
                         const flg = confirm(
                             "不明なエラーです！"
