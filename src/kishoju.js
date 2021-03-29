@@ -1690,30 +1690,30 @@ function memoTimer(objBox, Color) {
     }
 }
 
-//タイマー不具合チェック処
+//タイマー不具合チェック
 function checkTimer() {
-    /*
-        if (check_flg == false) {
-            setInterval(() => {
-                const Points = ["ゲル", "砂漠", "バル"];
 
-                $(".Servers").each(function () {
-                    for (let i = 0; i < 3; i++) {
-                        const
-                            objBox = $(this).find("." + Points[i]).find(".template2-box"),
-                            Data = new Cells(objBox).Data,
-                            newDate = new Date().getTime();
+    if (check_flg == false) {
+        setInterval(() => {
+            const Points = ["ゲル", "砂漠", "バル"];
 
-                        if (Data.memoDate && Data.memoDate > newDate) {
-                            clearTimeout(Timers[Data.Server + Points[i]]);
-                            Timers[Data.Server + Points[i]] = setTimeout(memoTimer, 1000, objBox, Data.memoflg);
-                        }
+            $(".Servers").each(function () {
+                for (let i = 0; i < 3; i++) {
+                    const
+                        objBox = $(this).find("." + Points[i]).find(".template2-box"),
+                        Data = new Cells(objBox).Data,
+                        newDate = new Date().getTime();
+
+                    if (Data.memoDate && newDate > Data.memoDate) {
+                        clearTimeout(Timers[Data.Server + Points[i]]);
+                        Timers[Data.Server + Points[i]] = setTimeout(memoTimer, 1000, objBox, Data.memoflg);
                     }
-                });
-            }, 60000)
-            check_flg = true;
-        }
-        */
+                }
+            });
+        }, 60000)
+        check_flg = true;
+    }
+
 }
 
 
