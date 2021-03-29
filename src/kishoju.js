@@ -840,8 +840,8 @@ function push_fix_old() {
     if (Server.val() < 1 || Server.val() > 40) return 0;
     if (!checkTime(sTime.val()) || !checkTime(eTime.val())) return 0;
 
-    var Text = Server.val() + Point.val() + " "
-        + sTime.val() + " - " + eTime.val();
+    var Text = [Server.val() + Point.val() + " "
+        + sTime.val() + " - " + eTime.val(), ""];
     if (share_ID) push_fix("fix_red", Text, "all");
     else push_fix("fix_red", Text, "fix");
 
@@ -855,7 +855,7 @@ function push_fix_old() {
     Data.sort((a, b) => a[3] > b[3] ? 1 : -1)
 
     Data.forEach(function (fix) {
-        Text = fix.join(" ")
+        Text = [fix.join(" "), ""];
         push_fix("fix_red", Text, "fix");
     })
 
@@ -1425,7 +1425,7 @@ function timeStamp(objBox, Data) {
 
             //黄→赤判定
             if (Data.nowColor == "yellow") {
-                if (Data.befColor == "skyblue") { //前回青判定
+                if (Data.memoflg == "blue_yellow") { //青黄判定
                     if (Data.newDate > TimePlus(Data.befDate, "04:00:00").Date) { //青黄時間より先の時間の場合
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
@@ -1434,19 +1434,13 @@ function timeStamp(objBox, Data) {
                     }
                     else {
                         Text = Data.Server + Data.Point + " "
-                            + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
+                            + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
                             + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
                             + "#" + TimePlus(Data.newDate, "01:00:00").Date;
                     }
                 }
                 else { //前回黄判定
-                    if (Data.memoflg == "blue_yellow") {
-                        Text = Data.Server + Data.Point + " "
-                            + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
-                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
-                            + "#" + TimePlus(Data.newDate, "01:00:00").Date;
-                    }
-                    else if (Data.newDate - Data.nowDate > 3600000) { //前回時間から1時間経過した場合
+                    if (Data.newDate - Data.nowDate > 3600000) { //前回時間から1時間経過した場合
                         Data.nowDate = "";
                         Data.nowTime = "";
                         Data.nowColor = "transparent";
