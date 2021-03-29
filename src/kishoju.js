@@ -1636,13 +1636,30 @@ function memoTimer(objBox, Color) {
             memo = "";
             memoColor = "transparent";
 
+            if (settings.auto.yellow_red == "ON") {
+                diffDate = TimeObj.Date - newDate;
+                Timers[Server + Point] = setTimeout(memoTimer, diffDate, objBox, "yellow_red");
+                checkTimer();
+            }
+
+
+            break;
+        case "yellow_red":
+            Text = Server + Point + " "
+                + TimePlus(nowDate, "04:00:00").Time.slice(0, -3) + " - "
+                + TimePlus(newDate, "04:00:00").Time.slice(0, -3)
+                + "#" + TimePlus(newDate, "04:00:00").Date;
+
+            push_fix("fix_red", Text, "all");
+
             break;
     }
 
     if (
         (settings.auto.red_blue == "ON" && Color == "red_blue") ||
         (settings.auto.red_yellow == "ON" && Color == "red_yellow") ||
-        (settings.auto.blue_yellow == "ON" && Color == "blue_yellow")
+        (settings.auto.blue_yellow == "ON" && Color == "blue_yellow") ||
+        (settings.auto.yellow_red == "ON" && Color == "yellow_red")
     ) {
         objBox.find(".befTime")
             .attr("Date", nowDate)
@@ -1675,26 +1692,28 @@ function memoTimer(objBox, Color) {
 
 //タイマー不具合チェック処
 function checkTimer() {
-    if (check_flg == false) {
-        setInterval(() => {
-            const Points = ["ゲル", "砂漠", "バル"];
+    /*
+        if (check_flg == false) {
+            setInterval(() => {
+                const Points = ["ゲル", "砂漠", "バル"];
 
-            $(".Servers").each(function () {
-                for (let i = 0; i < 3; i++) {
-                    const
-                        objBox = $(this).find("." + Points[i]).find(".template2-box"),
-                        Data = new Cells(objBox).Data,
-                        newDate = new Date().getTime();
+                $(".Servers").each(function () {
+                    for (let i = 0; i < 3; i++) {
+                        const
+                            objBox = $(this).find("." + Points[i]).find(".template2-box"),
+                            Data = new Cells(objBox).Data,
+                            newDate = new Date().getTime();
 
-                    if (Data.memoDate && Data.memoDate > newDate) {
-                        clearTimeout(Timers[Data.Server + Points[i]]);
-                        Timers[Data.Server + Points[i]] = setTimeout(memoTimer, 1000, objBox, Data.memoflg);
+                        if (Data.memoDate && Data.memoDate > newDate) {
+                            clearTimeout(Timers[Data.Server + Points[i]]);
+                            Timers[Data.Server + Points[i]] = setTimeout(memoTimer, 1000, objBox, Data.memoflg);
+                        }
                     }
-                }
-            });
-        }, 5000)
-        check_flg = true;
-    }
+                });
+            }, 60000)
+            check_flg = true;
+        }
+        */
 }
 
 
