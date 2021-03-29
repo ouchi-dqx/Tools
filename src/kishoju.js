@@ -229,7 +229,8 @@ function updateList(mode, fix, Text) {
                         return 0;
                     }
                     else if (res.err == "retry") {
-                        updateList(mode, fix, Text);    //再試行
+                        setTimeout(updateList, 5000, mode, fix, Text);
+                        //updateList(mode, fix, Text);    //再試行
                         return 0;
                     }
                     else {
@@ -590,6 +591,9 @@ function load_Storage(getData) {
                             case "blue_yellow":
                                 Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "blue_yellow");
                                 break;
+                            case "yellow_red":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "yellow_red");
+                                break;
                         }
                         checkTimer();
                     }
@@ -597,7 +601,9 @@ function load_Storage(getData) {
                         const
                             newDate = new Date().getTime() + diffTime,
                             newTime = TimePlus(newDate, "00:00:00").Time,
-                            newColor = (Data.memoflg == "red_blue") ? "blue" : "yellow";
+                            newColor = (Data.memoflg == "red_blue") ?
+                                "blue" : (Data.memoflg == "yellow_red") ?
+                                    "red" : "yellow";
 
                         objBox.find(".befTime")
                             .attr("Date", Data.nowDate)
@@ -1162,7 +1168,7 @@ function getParam(param, params) {
 function load_settings() {
     const
         objList = ["fix_blue", "fix_red", "other_fix_blue", "other_fix_red"],
-        Mode = ["red_blue", "red_yellow", "blue_yellow"];
+        Mode = ["red_blue", "red_yellow", "blue_yellow", "yellow_red"];
     settings = JSON.parse(localStorage.getItem("settings"));
 
     if (settings) {
@@ -1423,6 +1429,7 @@ function timeStamp(objBox, Data) {
             break;
         case "red":
             objBox.find(".btn[value=red]").prop("disabled", true);
+            Data.memoDate = "";
             Data.memo = "経過時間:" + "00:00:00";
             Data.memoColor = "transparent";
             clearTimeout(Timers[Data.Server + Data.Point]);
@@ -1430,7 +1437,7 @@ function timeStamp(objBox, Data) {
 
             //黄→赤判定
             if (Data.nowColor == "yellow") {
-                if (Data.memoflg == "blue_yellow") { //青黄判定
+                if (Data.memoflg == "blue_yellow" || Data.memoflg == "yellow_red") { //青黄判定
                     if (Data.newDate > TimePlus(Data.befDate, "04:00:00").Date) { //青黄時間より先の時間の場合
                         Text = Data.Server + Data.Point + " "
                             + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
@@ -1470,6 +1477,7 @@ function timeStamp(objBox, Data) {
 
             push_fix("fix_red", Text, "all");
             clear_fix("fix_blue", Data.Server + Data.Point);
+            Data.memoflg = "";
 
             break;
         case "violet":
@@ -1598,10 +1606,11 @@ function memoTimer(objBox, Color) {
         nowDate = objBox.find(".nowTime").attr("Date"),
         nowTime = objBox.find(".nowTime").text(),
         nowColor = objBox.find(".nowTime").attr("color");
-    let TimeObj, Text, memoDate, memo, memoColor, diffDate;
+    let TimeObj, newColor, Text, memoDate, memo, memoColor, memoflg, diffDate;
 
     switch (Color) {
         case "red_blue":
+            newColor = "yellow";
             Text = Server + Point + " "
                 + TimePlus(nowDate, "03:00:00").Time.slice(0, -3) + " - "
                 + TimePlus(newDate, "03:00:00").Time.slice(0, -3)
@@ -1613,44 +1622,61 @@ function memoTimer(objBox, Color) {
             memoDate = TimeObj.Date;
             memo = TimeObj.Time.slice(0, -3) + "まで変化無し";
             memoColor = "skyblue";
+            memoflg = "";
 
             if (settings.auto.blue_yellow == "ON") {
                 diffDate = TimeObj.Date - newDate;
                 Timers[Server + Point] = setTimeout(memoTimer, diffDate, objBox, "blue_yellow");
                 checkTimer();
+                memoflg = "blue_yellow";
             }
 
             break;
         case "red_yellow":
             //TimeObj = TimePlus(newDate, "01:30:00");
             //memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
+            newColor = "yellow";
             memoDate = "";
             memo = "";
             memoColor = "transparent";
+            memoflg = "";
 
             break;
         case "blue_yellow":
             //TimeObj = TimePlus(newDate, "01:00:00");
             //memo = TimeObj.Time.slice(0, -3) + "までに赤変化";
+            newColor = "yellow";
             memoDate = "";
             memo = "";
             memoColor = "transparent";
+            memoflg = "blue_yellow";
 
             if (settings.auto.yellow_red == "ON") {
+                TimeObj = TimePlus(newDate, "01:00:00");
                 diffDate = TimeObj.Date - newDate;
                 Timers[Server + Point] = setTimeout(memoTimer, diffDate, objBox, "yellow_red");
                 checkTimer();
+                memoflg = "yellow_red";
             }
-
 
             break;
         case "yellow_red":
+            newColor = "red";
             Text = Server + Point + " "
-                + TimePlus(nowDate, "04:00:00").Time.slice(0, -3) + " - "
-                + TimePlus(newDate, "04:00:00").Time.slice(0, -3)
-                + "#" + TimePlus(newDate, "04:00:00").Date;
+                + TimePlus(nowDate, "01:00:00").Time.slice(0, -3) + " - "
+                + TimePlus(newDate, "01:00:00").Time.slice(0, -3)
+                + "#" + TimePlus(newDate, "01:00:00").Date;
 
             push_fix("fix_red", Text, "all");
+            clear_fix("fix_blue", Server + Point);
+
+            objBox.find(".btn[value=red]").prop("disabled", true);
+            memoDate = "";
+            memo = "経過時間:" + "00:00:00";
+            memoColor = "transparent";
+            memoflg = "";
+            clearTimeout(Timers[Server + Point]);
+            Timers[Server + Point] = setInterval(setTimer, 1000, objBox);
 
             break;
     }
@@ -1670,15 +1696,15 @@ function memoTimer(objBox, Color) {
         objBox.find(".nowTime")
             .attr("Date", newDate)
             .text(newTime)
-            .css("background-color", "yellow")
-            .attr("color", "yellow");
+            .css("background-color", newColor)
+            .attr("color", newColor);
 
         objBox.find(".memo")
             .attr("Date", memoDate)
             .text(memo)
             .css("background-color", memoColor)
             .attr("color", memoColor)
-            .attr("memoflg", Color);
+            .attr("memoflg", memoflg)
     }
     else {
         objBox.find(".memo")
@@ -1686,7 +1712,7 @@ function memoTimer(objBox, Color) {
             .text(memo)
             .css("background-color", memoColor)
             .attr("color", memoColor)
-            .attr("memoflg", Color);
+            .attr("memoflg", memoflg)
     }
 }
 
@@ -2020,6 +2046,16 @@ $(document).on("click", ".tgl_memo2", function () {
 //自動更新モード切替
 $(document).on("click", ".toggle_switch .auto", function () {
     if ($(this).prop('checked')) {
+        if ($(this).attr("class") == "auto yellow_red") {
+            alert("メンテナンス中です");
+            $(this).prop('checked', false);
+            return 0;
+            if (settings.auto["blue_yellow"] == "OFF") {
+                alert("青黄→黄自動更新モードがONになっていません");
+                $(this).prop('checked', false);
+                return 0;
+            }
+        }
         settings.auto[$(this).val()] = "ON";
         localStorage.setItem("settings", JSON.stringify(settings));
     }
