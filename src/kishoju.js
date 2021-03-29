@@ -11,7 +11,8 @@ var
     ptMODE = "",            //PTモード変数
     TMP = [],               //履歴変数
     Timers = {},            //タイマーリスト変数
-    side_mode = "default";  //サイドリストモード変数
+    side_mode = "default",  //サイドリストモード変数
+    check_flg = false;      //タイマーチェックフラグ
 
 //テスト用関数
 function debug() {
@@ -590,6 +591,7 @@ function load_Storage(getData) {
                                 Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "blue_yellow");
                                 break;
                         }
+                        checkTimer();
                     }
                     else {
                         const
@@ -1360,6 +1362,7 @@ function timeStamp(objBox, Data) {
                 clearTimeout(Timers[Data.Server + Data.Point]);
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "red_blue");
                 Data.memoflg = "red_blue";
+                checkTimer();
             }
 
             //黄→青・戻り判定
@@ -1392,6 +1395,7 @@ function timeStamp(objBox, Data) {
                 clearTimeout(Timers[Data.Server + Data.Point]);
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "red_yellow");
                 Data.memoflg = "red_yellow";
+                checkTimer();
             }
 
             //青→黄判定
@@ -1413,6 +1417,7 @@ function timeStamp(objBox, Data) {
                 clearTimeout(Timers[Data.Server + Data.Point]);
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "blue_yellow");
                 Data.memoflg = "blue_yellow";
+                checkTimer();
             }
 
             break;
@@ -1612,6 +1617,7 @@ function memoTimer(objBox, Color) {
             if (settings.auto.blue_yellow == "ON") {
                 diffDate = TimeObj.Date - newDate;
                 Timers[Server + Point] = setTimeout(memoTimer, diffDate, objBox, "blue_yellow");
+                checkTimer();
             }
 
             break;
@@ -1664,6 +1670,30 @@ function memoTimer(objBox, Color) {
             .css("background-color", memoColor)
             .attr("color", memoColor)
             .attr("memoflg", Color);
+    }
+}
+
+//タイマー不具合チェック処
+function checkTimer() {
+    if (check_flg == false) {
+        setInterval(() => {
+            const Points = ["ゲル", "砂漠", "バル"];
+
+            $(".Servers").each(function () {
+                for (let i = 0; i < 3; i++) {
+                    const
+                        objBox = $(this).find("." + Points[i]).find(".template2-box"),
+                        Data = new Cells(objBox).Data,
+                        newDate = new Date().getTime();
+
+                    if (Data.memoDate && Data.memoDate > newDate) {
+                        clearTimeout(Timers[Data.Server + Points[i]]);
+                        Timers[Data.Server + Points[i]] = setTimeout(memoTimer, 1000, objBox, Data.memoflg);
+                    }
+                }
+            });
+        }, 5000)
+        check_flg = true;
     }
 }
 
