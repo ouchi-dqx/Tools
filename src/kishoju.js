@@ -36,6 +36,7 @@ class Cells {
             memo: objBox.find(".memo").text(),
             memoColor: objBox.find(".memo").attr("color"),
             memoflg: objBox.find(".memo").attr("memoflg"),
+            memofix: objBox.find(".memo").attr("memofix"),
         }
 
         this.Data = Object.assign({}, this.TMP);    //配列コピー
@@ -575,7 +576,8 @@ function load_Storage(getData) {
                     .attr("Date", Data.memoDate)
                     .css("background-color", Data.memoColor)
                     .attr("color", Data.memoColor)
-                    .attr("memoflg", Data.memoflg);
+                    .attr("memoflg", Data.memoflg)
+                    .attr("memofix", Data.memofix);
                 objBox.find(".memo2").val(Data.memo2);
 
                 if (Data.nowColor == "red") {
@@ -790,6 +792,7 @@ function Rollback() {
                         memoColor: TMP[n].memoColor,
                         memoDate: TMP[n].memoDate,
                         memoflg: TMP[n].memoflg,
+                        memofix: TMP[n].memofix,
                         flg: true,
                     };
 
@@ -1428,6 +1431,10 @@ function timeStamp(objBox, Data) {
                 clearTimeout(Timers[Data.Server + Data.Point]);
                 Timers[Data.Server + Data.Point] = setTimeout(memoTimer, diffDate, objBox, "blue_yellow");
                 Data.memoflg = "blue_yellow";
+                Data.memofix = [
+                    TimePlus(Data.nowDate, "03:00:00").Date,
+                    TimePlus(Data.newDate, "03:00:00").Date
+                ];
                 checkTimer();
             }
 
@@ -1443,18 +1450,19 @@ function timeStamp(objBox, Data) {
             //黄→赤判定
             if (Data.nowColor == "yellow") {
                 if (Data.memoflg == "blue_yellow" || Data.memoflg == "yellow_red") { //青黄判定
-                    if (Data.newDate > TimePlus(Data.befDate, "04:00:00").Date) { //青黄時間より先の時間の場合
-                        Text = Data.Server + Data.Point + " "
-                            + TimePlus(Data.befDate, "04:00:00").Time.slice(0, -3) + " - "
-                            + TimePlus(Data.nowDate, "04:00:00").Time.slice(0, -3)
-                            + "#" + TimePlus(Data.nowDate, "04:00:00").Date;
-                    }
-                    else {
-                        Text = Data.Server + Data.Point + " "
-                            + TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
-                            + TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
+                    Text = Data.Server + Data.Point + " ";
+                    Data.memofix = Data.memofix.split(",");
+
+                    if (Data.memofix[0] < Data.nowDate && Data.nowDate < Data.memofix[1])   //開始時間が青黄時間の範囲内
+                        Text += TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
+                    else
+                        Text += TimePlus(Data.memofix[0], "00:00:00").Time.slice(0, -3) + " - "
+                    if (Data.memofix[0] < Data.newDate && Data.newDate < Data.memofix[1])   //終了時間が青黄時間の範囲内
+                        Text += TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
                             + "#" + TimePlus(Data.newDate, "01:00:00").Date;
-                    }
+                    else
+                        Text += TimePlus(Data.memofix[1], "00:00:00").Time.slice(0, -3)
+                            + "#" + TimePlus(Data.memofix[1], "00:00:00").Date;
                 }
                 else { //前回黄判定
                     if (Data.newDate - Data.nowDate > 3600000) { //前回時間から1時間経過した場合
@@ -1483,6 +1491,7 @@ function timeStamp(objBox, Data) {
             push_fix("fix_red", Text, "all");
             clear_fix("fix_blue", Data.Server + Data.Point);
             Data.memoflg = "";
+            Data.memofix = "";
 
             break;
         case "violet":
@@ -1525,7 +1534,8 @@ function timeStamp(objBox, Data) {
         .text(Data.memo)
         .css("background-color", Data.memoColor)
         .attr("color", Data.memoColor)
-        .attr("memoflg", Data.memoflg);
+        .attr("memoflg", Data.memoflg)
+        .attr("memofix", Data.memofix);
 
     $('.Servers').find('.template2-box').removeClass('sel');
     objBox.addClass('sel');
@@ -1592,7 +1602,8 @@ function setTimer(objBox) {
             .text("経過時間:01:00:00")
             .css("background-color", "transparent")
             .attr("color", "transparent")
-            .attr("memoflg", "");
+            .attr("memoflg", "")
+            .attr("memofix", "");
 
         objBox.find(".btn[value=red]").prop("disabled", false);
         clearInterval(Timers[Server + Point]);
@@ -1611,7 +1622,9 @@ function memoTimer(objBox, Color) {
         nowDate = objBox.find(".nowTime").attr("Date"),
         nowTime = objBox.find(".nowTime").text(),
         nowColor = objBox.find(".nowTime").attr("color");
-    let TimeObj, newColor, Text, memoDate, memo, memoColor, memoflg, diffDate;
+    let
+        TimeObj, diffDate, newColor, Text,
+        memoDate, memo, memoColor, memoflg, memofix;
 
     switch (Color) {
         case "red_blue":
@@ -1628,6 +1641,10 @@ function memoTimer(objBox, Color) {
             memo = TimeObj.Time.slice(0, -3) + "まで変化無し";
             memoColor = "skyblue";
             memoflg = "";
+            memofix = [
+                TimePlus(nowDate, "03:00:00").Date,
+                TimePlus(newDate, "03:00:00").Date
+            ];
 
             if (settings.auto.blue_yellow == "ON") {
                 diffDate = TimeObj.Date - newDate;
@@ -1680,6 +1697,7 @@ function memoTimer(objBox, Color) {
             memo = "経過時間:" + "00:00:00";
             memoColor = "transparent";
             memoflg = "";
+            memofix = "";
             clearTimeout(Timers[Server + Point]);
             Timers[Server + Point] = setInterval(setTimer, 1000, objBox);
 
@@ -1710,6 +1728,7 @@ function memoTimer(objBox, Color) {
             .css("background-color", memoColor)
             .attr("color", memoColor)
             .attr("memoflg", memoflg)
+            .attr("memofix", memofix);
     }
     else {
         objBox.find(".memo")
@@ -1718,6 +1737,7 @@ function memoTimer(objBox, Color) {
             .css("background-color", memoColor)
             .attr("color", memoColor)
             .attr("memoflg", memoflg)
+            .attr("memofix", memofix);
     }
 }
 
