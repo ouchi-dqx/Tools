@@ -1456,13 +1456,13 @@ function timeStamp(objBox, Data) {
                     if (Data.memofix[0] < Data.nowDate && Data.nowDate < Data.memofix[1])   //開始時間が青黄時間の範囲内
                         Text += TimePlus(Data.nowDate, "01:00:00").Time.slice(0, -3) + " - "
                     else
-                        Text += TimePlus(Data.memofix[0], "00:00:00").Time.slice(0, -3) + " - "
+                        Text += TimePlus(Data.memofix[0], "01:00:00").Time.slice(0, -3) + " - "
                     if (Data.memofix[0] < Data.newDate && Data.newDate < Data.memofix[1])   //終了時間が青黄時間の範囲内
                         Text += TimePlus(Data.newDate, "01:00:00").Time.slice(0, -3)
                             + "#" + TimePlus(Data.newDate, "01:00:00").Date;
                     else
-                        Text += TimePlus(Data.memofix[1], "00:00:00").Time.slice(0, -3)
-                            + "#" + TimePlus(Data.memofix[1], "00:00:00").Date;
+                        Text += TimePlus(Data.memofix[1], "01:00:00").Time.slice(0, -3)
+                            + "#" + TimePlus(Data.memofix[1], "01:00:00").Date;
                 }
                 else { //前回黄判定
                     if (Data.newDate - Data.nowDate > 3600000) { //前回時間から1時間経過した場合
