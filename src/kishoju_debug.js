@@ -59,6 +59,7 @@ class Cells {
 
 //初回読込時設定
 window.onload = function () {
+    $(".message").text("テスト中。。。").show();
     try {
         $(".slider-title").click();
         modeChange();           //4PT/8PT切替(デフォルト4PT)

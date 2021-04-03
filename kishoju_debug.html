@@ -12,31 +12,10 @@
         <script src="src/js-deflate/rawdeflate.js"></script>
         <script src="src/js-deflate/rawinflate.js"></script>
         <script src="src/kishoju_debug.js"></script>
-        <link rel="manifest" href="manifest.json">
-        <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
-        <link rel="apple-touch-icon-precomposed" href="icon.png" size="152x152">
-        <script type="application/javascript">
-            //Service Workerの読み込み
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker
-                    .register('src/service-worker.js')
-                    .then(function () {
-                        console.log('Service Worker Registered');
-                    });
-            }
-        </script>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171127523-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', 'UA-171127523-1');
-        </script>
     </head>
 
     <body>
-        <!--<button onclick="debug()">debug</button>-->
+        !--<button onclick="debug()">debug</button>-->
         <!--ヘッダ 機能一覧-->
         <div class="header-function">
             <div>
@@ -105,13 +84,6 @@
                 ◆[オプション設定]に[分割モード]オプションを追加しました。(PC向け)<br />
                 　詳細は更新履歴まで。
             </div>
-        </div>
-
-        <!-- バナー広告 -->
-        <div style="margin-bottom: 10px;">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6102016814573876"
-                data-ad-slot="9015592466" data-ad-format="horizontal" data-full-width-responsive="false"></ins>
-            <script> (adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
         <!--サーバーの設定-->
@@ -760,13 +732,6 @@
             </ul>
         </div>
 
-        <!-- スクエア広告 -->
-        <div style="margin-top: 20px;">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6102016814573876"
-                data-ad-slot="5015997079" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
-
         <div style="font-size: 13px; margin-top: 30px;">
             ■ 本ツールは <a href="https://kouseidq10.com/tools/bunsan">輝晶獣分散狩り支援ページ</a> 様の機能を参考に、独自で作成・拡張したものです。<br />
             ■ 輝晶獣分散支援ツールのアクセス状況を確認したい方は
@@ -818,49 +783,6 @@
                 <input type="text" class="memo2" placeholder="メモ欄">
             </div>
         </template>
-
-        <script type="application/javascript">
-            //GoogleAds遅延読込用
-            (function (window, document) {
-                function main() {
-                    // GoogleAdSense読込み
-                    var ad = document.createElement('script');
-                    ad.type = 'text/javascript';
-                    ad.async = true;
-                    ad.dataset.adClient = 'ca-pub-6102016814573876';
-                    ad.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-                    var sc = document.getElementsByTagName('script')[0];
-                    sc.parentNode.insertBefore(ad, sc);
-                }
-
-                // 遅延読込み
-                var lazyLoad = false;
-                function onLazyLoad() {
-                    if (lazyLoad === false) {
-                        // 複数呼び出し回避 + イベント解除
-                        lazyLoad = true;
-                        window.removeEventListener('scroll', onLazyLoad);
-                        window.removeEventListener('mousemove', onLazyLoad);
-                        window.removeEventListener('mousedown', onLazyLoad);
-                        window.removeEventListener('touchstart', onLazyLoad);
-                        window.removeEventListener('keydown', onLazyLoad);
-
-                        main();
-                    }
-                }
-                window.addEventListener('scroll', onLazyLoad);
-                window.addEventListener('mousemove', onLazyLoad);
-                window.addEventListener('mousedown', onLazyLoad);
-                window.addEventListener('touchstart', onLazyLoad);
-                window.addEventListener('keydown', onLazyLoad);
-                window.addEventListener('load', function () {
-                    // ドキュメント途中（更新時 or ページ内リンク）
-                    if (window.pageYOffset) {
-                        onLazyLoad();
-                    }
-                });
-            })(window, document);
-        </script>
     </body>
 
 </html>
