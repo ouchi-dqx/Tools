@@ -16,6 +16,7 @@ var
 
 //テスト用関数
 function debug() {
+    alert("テスト中");
 }
 
 //クラスの実験中
@@ -58,21 +59,21 @@ class Cells {
 }
 
 //初回読込時設定
-window.onload = function () {
-    $(".message").text("テスト中。。。").show();
-    try {
+try {
+    window.onload = function () {
+        $(".message").text("テスト中。。。").show();
         $(".slider-title").click();
         modeChange();           //4PT/8PT切替(デフォルト4PT)
         setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
         setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
         load_settings();
+        setObServer();
 
         if (location.search.substring(1)) getURLData(location.search.substring(1));
         else sortPoint();
     }
-    catch (e) { $(".message").text("Error:" + e.stack).show(); }
 }
-
+catch (e) { $(".message").text("Error:" + e.stack).show(); }
 
 /********************ヘッダ部機能(リンク)********************/
 //[共有表を作成]
@@ -1029,7 +1030,7 @@ $(document).on("click", ".chk-Box", function () {
 });
 
 //外部リスト変更イベント
-$(function () {
+function setObServer() {
     const
         observer = new MutationObserver((elem) => {
             elem.forEach(elem => {
@@ -1065,7 +1066,7 @@ $(function () {
     observer.observe($(".fix_red tbody")[0], config);
     observer.observe($(".other_fix_blue tbody")[0], config);
     observer.observe($(".other_fix_red tbody")[0], config);
-})
+}
 
 
 /********************関数群********************/
