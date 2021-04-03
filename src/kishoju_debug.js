@@ -413,6 +413,7 @@ $(document).on("change", ".setting-box .mode-change-box input[name=opt-tgl]", fu
 
 //[1 - 10]等#サーバー追加
 $(document).on("click", ".setServers", function () {
+    alert("テスト中です");
     if (
         settings.splitMODE == "ON" &&
         !(
