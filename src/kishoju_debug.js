@@ -67,8 +67,8 @@ try {
         modeChange();           //4PT/8PT切替(デフォルト4PT)
         setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
         setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
-        load_settings();
-        setObServer();
+        //load_settings();
+        //setObServer();
 
         //if (location.search.substring(1)) getURLData(location.search.substring(1));
         //else sortPoint();
