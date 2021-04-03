@@ -59,6 +59,7 @@ class Cells {
 }
 
 //初回読込時設定
+alert("テスト中です");
 try {
     window.onload = function () {
         $(".message").text("テスト中。。。").show();
@@ -69,8 +70,8 @@ try {
         load_settings();
         setObServer();
 
-        if (location.search.substring(1)) getURLData(location.search.substring(1));
-        else sortPoint();
+        //if (location.search.substring(1)) getURLData(location.search.substring(1));
+        //else sortPoint();
     }
 }
 catch (e) { $(".message").text("Error:" + e.stack).show(); }
