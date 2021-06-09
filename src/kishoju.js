@@ -612,7 +612,7 @@ function load_Storage(getData) {
                             newDate = new Date().getTime() + diffTime,
                             newTime = TimePlus(newDate, "00:00:00").Time,
                             newColor = (Data.memoflg == "red_blue") ?
-                                "blue" : (Data.memoflg == "yellow_red") ?
+                                "skyblue" : (Data.memoflg == "yellow_red") ?
                                     "red" : "yellow";
 
                         objBox.find(".befTime")
