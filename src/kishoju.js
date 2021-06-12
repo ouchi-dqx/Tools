@@ -88,7 +88,7 @@ function addShare() {
         }
 
         $(".message").text("共有表を作成中...").show();
-        Socket = io();
+        Socket = io("https://ouchi-tools.herokuapp.com/");
         Socket.emit("addShare", (res) => {
             if (res) {
                 if (res.Err) {
@@ -142,7 +142,7 @@ function connectShare() {
         }
 
         $(".message").text("共有表に接続中...").show();
-        Socket = io();
+        Socket = io("https://ouchi-tools.herokuapp.com/");
         Socket.emit("connectShare", share_ID, (res) => {
             if (res) {
                 if (res.Err) {
