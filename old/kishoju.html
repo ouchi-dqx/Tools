@@ -9,7 +9,8 @@
         <link rel="stylesheet" type="text/css" href="src/control.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://ouchi-tools.herokuapp.com/socket.io/socket.io.js"></script>
+        <script src="src/js-deflate/rawdeflate.js"></script>
+        <script src="src/js-deflate/rawinflate.js"></script>
         <script src="src/kishoju.js"></script>
         <link rel="manifest" href="manifest.json">
         <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
@@ -35,7 +36,7 @@
     </head>
 
     <body>
-        !--<button onclick="debug()">debug</button>-->
+        <!--<button onclick="debug()">debug</button>-->
         <!--ヘッダ 機能一覧-->
         <div class="header-function">
             <div>
@@ -47,18 +48,22 @@
                 </span>
             </div>
 
+            <!--
+                <span style="font-size: 14px;">｜</span>
+                <span style="font-size: 12px;">
+                    <a href="https://ouchi-dqx.github.io/Tools/YellowList.html">サーバー情報(虹黄)</a>
+                    <!--情報提供ボタン--
+                    <span class="chk-tgl-span">
+                        <label><input type="checkbox" id="chk-send-info" autocomplete="off"><span class="btn-tgl">提供OFF</span></label>
+                    </span>
+                </span>
+            -->
             <span style="font-size: 12px;">
                 <a href="javascript:addShare();">共有表を作成</a>
             </span>
             <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
                 <a href="javascript:connectShare();">共有表に参加</a>
-            </span>
-            <span class="changeShare" style="display: none;">
-                <span style="font-size: 14px;">｜</span>
-                <span style="font-size: 12px;">
-                    <a href="javascript:changeShare();">共有表を複製</a>
-                </span>
             </span>
             <span class="disconnect" style="display: none;">
                 <span style="font-size: 14px;">｜</span>
@@ -71,12 +76,10 @@
                 <a href="javascript:LoginCheck();">関係者向け</a>
             </span>
             <span style="font-size: 14px;">｜</span>
-            <!--
-                <span style="font-size: 12px;">
-                    <a href="javascript:getShortURL();">調査データをURL化</a>
-                </span>
-                <span style="font-size: 14px;">｜</span>
-            -->
+            <span style="font-size: 12px;">
+                <a href="javascript:getShortURL();">調査データをURL化</a>
+            </span>
+            <span style="font-size: 14px;">｜</span>
             <span style="font-size: 12px;">
                 <a href="javascript:omikuji();">調査鯖おみくじ</a>
                 <span class="omikuji"></span>
@@ -97,12 +100,7 @@
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆<a href=https://twitter.com/ouchi_dqx/status/1402636231129792518>輝晶獣分散支援ツール公開一周年記念プレゼント企画中！</a><br>
-                ◆共有機能の各種処理を再作成しました。<br>
-                　それに合わせて全体的にコード微修正を行いました。<br>
-                　詳細は更新履歴まで(不具合あれば連絡下さい。。。)<br>
-                ※共有機能に不具合があった場合、<a href="https://ouchi-dqx.github.io/Tools/old/kishoju.html">旧ページ</a>で
-                更新前の共有機能をお使いください。
+                ◆<a href=https://twitter.com/ouchi_dqx/status/1402636231129792518>輝晶獣分散支援ツール公開一周年記念プレゼント企画中！</a>
             </div>
         </div>
 
@@ -131,27 +129,68 @@
             </div>
             <div class="setting-btn-box" style="font-size: 15px;">
                 <span class="select-mode PT4">
-                    <button class="setServers" id="1 - 10">1 - 10</button>
-                    <button class="setServers" id="11 - 20">11 - 20</button>
-                    <button class="setServers" id="21 - 30">21 - 30</button>
-                    <button class="setServers" id="31 - 40">31 - 40</button>
-                    <button class="setServers" id="9 - 10">9 - 10</button>
+                    <button class="setServers" value="1" boxName="1 - 10">1 - 10</button>
+                    <button class="setServers" value="11" boxName="11 - 20">11 - 20</button>
+                    <button class="setServers" value="21" boxName="21 - 30">21 - 30</button>
+                    <button class="setServers" value="31" boxName="31 - 40">31 - 40</button>
+                    <button class="setServers" value="1" Start="9" End="10" boxName="1 - 10">9 - 10</button>
                 </span>
                 <span class="select-mode PT8">
-                    <button class="setServers" id="1 - 4">1 - 4</button>
-                    <button class="setServers" id="5 - 8">5 - 8</button>
+                    <button class="setServers" value="1" Start="1" End="4" boxName="1 - 10">1 - 4</button>
+                    <button class="setServers" value="1" Start="5" End="8" boxName="1 - 10">5 - 8</button>
                     <!--
-                        <button class="setServers" id="1 - 5">1 - 5</button>
-                        <button class="setServers" id="6 - 10">6 - 10</button>
+                    <button class="setServers" value="1" Start="1" End="5" boxName="1 - 10">1 - 5</button>
+                    <button class="setServers" value="1" Start="6" End="10" boxName="1 - 10">6 - 10</button>
                     -->
-                    <button class="setServers" id="11 - 15">11 - 15</button>
-                    <button class="setServers" id="16 - 20">16 - 20</button>
-                    <button class="setServers" id="21 - 25">21 - 25</button>
-                    <button class="setServers" id="26 - 30">26 - 30</button>
-                    <button class="setServers" id="31 - 35">31 - 35</button>
-                    <button class="setServers" id="36 - 40">36 - 40</button>
+                    <button class="setServers" value="11" Start="11" End="15" boxName="11 - 20">11 - 15</button>
+                    <button class="setServers" value="11" Start="16" End="20" boxName="11 - 20">16 - 20</button>
+                    <button class="setServers" value="21" Start="21" End="25" boxName="21 - 30">21 - 25</button>
+                    <button class="setServers" value="21" Start="26" End="30" boxName="21 - 30">26 - 30</button>
+                    <button class="setServers" value="31" Start="31" End="35" boxName="31 - 40">31 - 35</button>
+                    <button class="setServers" value="31" Start="36" End="40" boxName="31 - 40">36 - 40</button>
                 </span>
-                <span class="select-mode PTselect"></span>
+                <span class="select-mode PTselect">
+                    01<input type="checkbox" value="1">
+                    02<input type="checkbox" value="2">
+                    03<input type="checkbox" value="3">
+                    04<input type="checkbox" value="4">
+                    05<input type="checkbox" value="5">
+                    06<input type="checkbox" value="6">
+                    07<input type="checkbox" value="7">
+                    08<input type="checkbox" value="8">
+                    09<input type="checkbox" value="9">
+                    10<input type="checkbox" value="10"><br />
+                    11<input type="checkbox" value="11">
+                    12<input type="checkbox" value="12">
+                    13<input type="checkbox" value="13">
+                    14<input type="checkbox" value="14">
+                    15<input type="checkbox" value="15">
+                    16<input type="checkbox" value="16">
+                    17<input type="checkbox" value="17">
+                    18<input type="checkbox" value="18">
+                    19<input type="checkbox" value="19">
+                    20<input type="checkbox" value="20"><br />
+                    21<input type="checkbox" value="21">
+                    22<input type="checkbox" value="22">
+                    23<input type="checkbox" value="23">
+                    24<input type="checkbox" value="24">
+                    25<input type="checkbox" value="25">
+                    26<input type="checkbox" value="26">
+                    27<input type="checkbox" value="27">
+                    28<input type="checkbox" value="28">
+                    29<input type="checkbox" value="29">
+                    30<input type="checkbox" value="30"><br />
+                    31<input type="checkbox" value="31">
+                    32<input type="checkbox" value="32">
+                    33<input type="checkbox" value="33">
+                    34<input type="checkbox" value="34">
+                    35<input type="checkbox" value="35">
+                    36<input type="checkbox" value="36">
+                    37<input type="checkbox" value="37">
+                    38<input type="checkbox" value="38">
+                    39<input type="checkbox" value="39">
+                    40<input type="checkbox" value="40">
+                </span>
             </div>
         </div>
         <!--調査状態の設定-->
@@ -160,14 +199,15 @@
                 <span>調査状態の設定</span><span class="material-icons">play_arrow</span>
             </div>
             <div class="setting-btn-box">
-                <button onclick="Cleaner('input')">表リセット</button>
+                <button onclick="load_Storage()">前回の続きから</button>
                 <button onclick="Cleaner('all')">全リセット</button>
+                <button onclick="Cleaner('input')">入力リセット</button>
             </div>
         </div>
 
         <!--サーバー一覧-->
-        <div class="ServerLists" MODE="">
-            <table class="ServerList">
+        <div class="ServerLists">
+            <table class="ServerList" id="">
                 <thead>
                     <tr id="server-list-hd">
                         <td align="center" id="server-no-hd">
@@ -296,7 +336,7 @@
                         <!-- tbody -->
                     </tbody>
                 </table>
-                <div class="function-btn-box-mini block_fix_blue" target="fix_blue">
+                <div class="function-btn-box-mini" target="fix_blue">
                     <button onclick="setClip('fix_blue')">コピー</button>
                     <button onclick="Cleaner('fix_blue')">クリア</button>
                     <div class="scroll_fix_blue follow_ifhide" style="margin-top: 5px;">
@@ -325,7 +365,7 @@
                         <!-- tbody -->
                     </tbody>
                 </table>
-                <div class="function-btn-box-mini block_fix_red" target="fix_red">
+                <div class="function-btn-box-mini" target="fix_red">
                     <button onclick="setClip('fix_red')">コピー</button>
                     <button onclick="Cleaner('fix_red')">クリア</button>
                     <div class="scroll_fix_red follow_ifhide" style="margin-top: 5px;">
@@ -356,7 +396,7 @@
                         <!-- tbody -->
                     </tbody>
                 </table>
-                <div class="block_other_fix_blue">
+                <div class="other_block_fix_blue">
                     <textarea class="follow_ifhide"></textarea>
 
                     <div class="function-btn-box-mini" target="other_fix_blue">
@@ -390,7 +430,7 @@
                         <!-- tbody -->
                     </tbody>
                 </table>
-                <div class="block_other_fix_red">
+                <div class="other_block_fix_red">
                     <textarea class="follow_ifhide"></textarea>
 
                     <div class="function-btn-box-mini" target="other_fix_red">
@@ -426,7 +466,7 @@
                         <option>バル</option>
                     </select>
                 </span>
-                <br>
+                <br />
                 <input id="sTime" style="width: 40px;" placeholder="時:分">-<input id="eTime" style="width: 40px;"
                     placeholder="時:分">
                 <button onclick="push_fix_old()">追加</button>
@@ -478,26 +518,26 @@
                 </li>
                 <li>
                     <div class="toggle_switch">
-                        自動更新モード(実験中)<br>
+                        自動更新モード(実験中)<br />
                         虹(赤)→青自動更新モード:
                         <input type="checkbox" id="auto1" class="auto red_blue" value="red_blue">
                         <label for="auto1"></label>
-                        　[虹青or赤青→青黄に自動更新]<br>
+                        　[虹青or赤青→青黄に自動更新]<br />
 
                         虹(赤)→黄自動更新モード:
                         <input type="checkbox" id="auto2" class="auto red_yellow" value="red_yellow">
                         <label for="auto2"></label>
-                        　[虹黄or赤黄→黄黄に自動更新]<br>
+                        　[虹黄or赤黄→黄黄に自動更新]<br />
 
                         青黄→黄自動更新モード:　
                         <input type="checkbox" id="auto3" class="auto blue_yellow" value="blue_yellow">
                         <label for="auto3"></label>
-                        　[青黄→黄黄に自動更新]<br>
+                        　[青黄→黄黄に自動更新]<br />
 
                         青黄→赤自動更新モード:　
                         <input type="checkbox" id="auto4" class="auto yellow_red" value="yellow_red">
                         <label for="auto4"></label>
-                        　[青黄→黄黄→赤に自動更新]※実験中<br>
+                        　[青黄→黄黄→赤に自動更新]※実験中<br />
                     </div>
                 </li>
                 <li>
@@ -516,9 +556,10 @@
         <div class="slider-box">
             <ul class="box-list">
                 <li><b>【Step1】[調査サーバー選択]で担当するサーバーグループを選択します。</b></li>
-                <li><b>【Step2】[調査状態の設定]でデータの復旧／クリアを行います。</b><br>
-                    　<span class="text-btn" style="padding: 1px 5px;">表リセット</span>：表示中のチェックリストだけをクリアします<br>
-                    　<span class="text-btn" style="padding: 1px 5px;">全リセット</span>：保存されている情報をすべてクリアします<br>
+                <li><b>【Step2】[調査状態の設定]でデータの復旧／クリアを行います。</b><br />
+                    　<span class="text-btn" style="padding: 1px 5px;">前回の続きから</span>：保存された入力状態を復元します<br />
+                    　<span class="text-btn" style="padding: 1px 5px;">全リセット</span>：保存されている情報をすべてクリアします<br />
+                    　<span class="text-btn" style="padding: 1px 5px;">入力リセット</span>：表示中のチェックリストだけをクリアします<br />
                 </li>
                 <li>
                     <b>【Step3】チェックリスト ヘッダの</b>
@@ -537,33 +578,28 @@
                         <i class="material-icons arrow"
                             style="font-size: 18px; line-height: 12px; top: 5px;">autorenew</i>
                     </span>
-                    ：その鯖のゲル・砂漠・バルの現在時間を更新します。(青黄、赤、前回赤or虹+今回黄を除く)<br>
+                    ：その鯖のゲル・砂漠・バルの現在時間を更新します。(青黄、赤、前回赤or虹+今回黄を除く)<br />
                     　[青]～[虹]のボタンを押すのと同じ処理をゲル・砂漠・バル一括で行います。
                     　<a href="https://twitter.com/ouchi_dqx/status/1341416339643060226">(参考動画)</a>
                 </li>
                 <li>
-                    [共有表を作成]：PTで青黄・確定を共有できるようにします。<br>
-                    共有表にアクセスする為のパスワードを発行し、共有表に接続します。<br>
-                    接続後、共有表にアクセスしたユーザーが[青黄・確定リスト]に追加した時間が<br>
+                    [共有表を作成]：PTで青黄・確定を共有できるようにします。<br />
+                    共有表にアクセスする為のパスワードを発行し、共有表に接続します。<br />
+                    接続後、共有表にアクセスしたユーザーが[青黄・確定リスト]に追加した時間が<br />
                     [外部青黄・確定リスト]に表示されます。(1分毎に更新)
                 </li>
                 <li>
-                    [共有表に参加]：PTで青黄・確定を共有できるようにします。<br>
-                    共有表にアクセスする為のパスワードを入力することで、共有表に接続します。<br>
-                    接続後、共有表にアクセスしたユーザーが[青黄・確定リスト]に追加した時間が<br>
-                    [外部青黄・確定リスト]に表示されます。(リアルタイム)
+                    [共有表を作成]：PTで青黄・確定を共有できるようにします。<br />
+                    共有表にアクセスする為のパスワードを入力することで、共有表に接続します。<br />
+                    接続後、共有表にアクセスしたユーザーが[青黄・確定リスト]に追加した時間が<br />
+                    [外部青黄・確定リスト]に表示されます。(3分毎に更新)
                 </li>
                 <li>
-                    [共有表を複製]：現在の共有表をコピーし、新たな共有表とパスワードを発行します。<br>
-                    コピーした共有表に変更を加えても、コピー前の共有表には変化がなくまります。<br>
-                    <br>
-                </li>
-                <li>
-                    [調査データをURL化]※メンテ中：その鯖の調査データをURL化します。<br>
+                    [調査データをURL化]：その鯖の調査データをURL化します。<br />
                     URLを開く事で作成した時の調査データを他人が利用することができます。
                 </li>
                 <li>
-                    [調査鯖おみくじ]：調査するサーバーをランダムで決定します。<br>
+                    [調査鯖おみくじ]：調査するサーバーをランダムで決定します。<br />
                     PTで調査するサーバーを適当に決める時にお使いください。
                 </li>
                 <li>
@@ -583,14 +619,14 @@
                     <span class="text-ylist">青黄リスト(赤時間)</span>
                     <span class="text-rlist">確定リスト</span>
                     <span class="text-rlist">外部確定リスト</span>
-                    はチェックリスト入力時に自動的に追加されます。<br>
+                    はチェックリスト入力時に自動的に追加されます。<br />
                     <span class="text-rlist">確定リスト</span>
-                    <span class="text-rlist">外部確定リスト</span>は手入力も可能です。<br>
+                    <span class="text-rlist">外部確定リスト</span>は手入力も可能です。<br />
                     <span class="text-rlist">確定リスト</span>：サーバー番号、調査場所、時間を入力して
-                    <span class="text-btn">追加</span>をクリックします。<br>
+                    <span class="text-btn">追加</span>をクリックします。<br />
                     <span class="text-rlist">外部確定リスト</span>：<span class="text-rlist">外部確定リスト</span>
-                    をクリックし表示された入力欄に<br>
-                    　　　　　　　　　本ツールを利用してコピーされたリストを入力して<span class="text-btn">追加</span>をクリックします。<br>
+                    をクリックし表示された入力欄に<br />
+                    　　　　　　　　　本ツールを利用してコピーされたリストを入力して<span class="text-btn">追加</span>をクリックします。<br />
                 </li>
                 <li>
                     <span class="text-btn">コピー</span>：
@@ -611,14 +647,6 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
-                <li>
-                    2021/06/13 <br />
-                    (更新)<br />
-                    ・共有機能の各種処理を再作成しました。<br>
-                    　「共有表の複製」機能の追加<br>
-                    　青黄確定データ追加時の伝達速度の向上<br>
-                    ・全体的にコード微修正を行いました。
-                </li>
                 <li>
                     2021/03/29 <br />
                     (不具合修正)<br />
@@ -737,22 +765,20 @@
         </div>
 
         <div style="font-size: 13px; margin-top: 30px;">
-            ■ 本ツールは <a href="https://kouseidq10.com/tools/bunsan">輝晶獣分散狩り支援ページ</a> 様の機能を参考に、独自で作成・拡張したものです。<br>
+            ■ 本ツールは <a href="https://kouseidq10.com/tools/bunsan">輝晶獣分散狩り支援ページ</a> 様の機能を参考に、独自で作成・拡張したものです。<br />
             ■ 輝晶獣分散支援ツールのアクセス状況を確認したい方は
-            <a href="./analytics.html">こちら</a><br>
-            ■ <a href="./kishoju_phone.html">スマホ版(β)</a><br>
-            ■ 動作ブラウザ：Chrome／FireFox／MS Edge。※IEでは動きません。<br>
-            ■ 要望・不具合報告等は<a href="https://twitter.com/ouchi_dqx">こちら</a>まで。<br>
+            <a href="https://ouchi-dqx.github.io/Tools/analytics.html">こちら</a><br />
+            ■ <a href="https://ouchi-dqx.github.io/Tools/kishoju_phone.html">スマホ版(β)</a><br />
+            ■ 動作ブラウザ：Chrome／FireFox／MS Edge。※IEでは動きません。<br />
+            ■ 要望・不具合報告等は<a href="https://twitter.com/ouchi_dqx">こちら</a>まで。<br />
             ■ <a href="https://github.com/ouchi-dqx/Tools">GitHub</a>
         </div>
 
         <template id="template1">
-            <tr class="Servers" ServerID="">
+            <tr class="Servers">
                 <td class="Server">
-                    <div class="Title">サーバー</div>
-                    <button class="btn_all">
-                        <i class="material-icons" style="font-size: 15px;">autorenew</i>
-                    </button>
+                    <div class="ServerID">サーバー</div>
+                    <button class="btn_all"><i class="material-icons" style="font-size: 15px;">autorenew</i></button>
                 </td>
                 <td class="ゲル">
                     <div class="setTemp"></div>
@@ -786,7 +812,7 @@
                     <span class="memo" color="" Date="" memoflg="" memofix=""
                         style="background-color: transparent;"></span>
                 </div>
-                <input type="text" class="memo2" style="display:none" placeholder="メモ欄">
+                <input type="text" class="memo2" placeholder="メモ欄">
             </div>
         </template>
 

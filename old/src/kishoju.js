@@ -1,27 +1,30 @@
+//定数
+const version = "1.4";  //バージョン管理変数
+
 //グローバル変数
 var
-    settings = {},              //オプション設定フラグ
-    get_flg = false,            //URL取得モードフラグ
-    share_flg = false,          //データ共有フラグ
-    share_ID = "",              //データ共有用パス変数
-    ptMODE = "",                //PTモード変数
-    TMP = [],                   //履歴変数
-    Timers = {},                //タイマーリスト変数
-    side_mode = "default",      //サイドリストモード変数
-    check_flg = false,          //タイマーチェックフラグ
-    l_rightFollowFlg = false,   //サイドリスト追随中フラグ
-    Socket;
+    settings = {},          //オプション設定フラグ
+    get_flg = false,        //URL取得モードフラグ
+    share_flg = false,      //データ共有フラグ
+    share_ID = "",          //データ共有用パス
+    ver_flg = false,        //バージョンチェックフラグ(初回のみ)
+    ptMODE = "",            //PTモード変数
+    TMP = [],               //履歴変数
+    Timers = {},            //タイマーリスト変数
+    side_mode = "default",  //サイドリストモード変数
+    check_flg = false;      //タイマーチェックフラグ
 
 //テスト用関数
-function debug() { }
+function debug() {
+}
 
 //クラスの実験中
-class objManagerClass {
+class Cells {
     constructor(objBox, newColor) {
         this.objBox = objBox;
 
-        this.objTMP = {
-            Server: objBox.closest("tr").attr("ServerID"),
+        this.TMP = {
+            Server: objBox.closest("tr").find(".ServerID").text(),
             Point: objBox.closest("td").attr("class"),
             nowDate: objBox.find(".nowTime").attr("Date"),
             nowTime: objBox.find(".nowTime").text(),
@@ -36,42 +39,39 @@ class objManagerClass {
             memofix: objBox.find(".memo").attr("memofix"),
         }
 
-        this.objData = Object.assign({}, this.objTMP);    //配列コピー
-        this.objData.newDate = new Date().getTime();
-        this.objData.newTime = TimePlus(new Date().getTime(), "00:00:00").Time;
-        this.objData.newColor = newColor;
+        this.Data = Object.assign({}, this.TMP);    //配列コピー
+        this.Data.newDate = new Date().getTime();
+        this.Data.newTime = TimePlus(new Date().getTime(), "00:00:00").Time;
+        this.Data.newColor = newColor;
     }
 
-    objData() { return this.objData; }
+    Data() { return this.Data; }
     TMP() { return this.TMP; }
 
     setTimeStamp(obj, Date, Time, Color) {
         obj = this.objBox.find("." + obj)[0]
-        obj.setAttribute("Date", this.objData[Date]);
-        obj.textContent = this.objData[Time];
-        obj.style.background = this.objData[Color];
-        obj.setAttribute("color", this.objData[Color]);
+        obj.setAttribute("Date", this.Data[Date]);
+        obj.textContent = this.Data[Time];
+        obj.style.background = this.Data[Color];
+        obj.setAttribute("color", this.Data[Color]);
     }
 }
 
 //初回読込時設定
-$(function () {
+window.onload = function () {
     try {
         $(".slider-title").click();
-        const query = location.search.substring(1);
-        if (query) getURLData(query);
-
-        modeChange();           //4PT・8PT切替(デフォルト4PT)
+        modeChange();           //4PT/8PT切替(デフォルト4PT)
         setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
-        sortPoint();            //場所の並び変更
-        setServerLists();       //サーバーリスト読込み
-        load_Storage();       //サーバーデータ読込み
         setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
-        load_settings();        //オプション設定読込み
-        onFixListChangeEvent()  //青黄確定リスト変更イベント設定
+        load_settings();
+
+        if (location.search.substring(1)) getURLData(location.search.substring(1));
+        else sortPoint();
     }
     catch (e) { $(".message").text("Error:" + e.stack).show(); }
-})
+}
+
 
 /********************ヘッダ部機能(リンク)********************/
 //[共有表を作成]
@@ -80,6 +80,11 @@ function addShare() {
     if (flg) {
         const List = $(".other_fix_blue tr, .other_fix_red tr");
         if (List.length > 2) {
+            $(".other_fix_blue").find(".fix").show();
+            $(".other_block_fix_blue").show();
+            $(".other_fix_red").find(".fix").show();
+            $(".other_block_fix_red").show();
+
             const flg2 = confirm(
                 "外部青黄・確定リストに既に内容が存在しています"
                 + "\n 上書きしますか？"
@@ -87,39 +92,44 @@ function addShare() {
             if (!flg2) return 0;
         }
 
+        const params = {
+            mode: "addShare",
+        };
+
         $(".message").text("共有表を作成中...").show();
-        Socket = io();
-        Socket.emit("addShare", (res) => {
+        xhrSend(params, (res) => {
             if (res) {
-                if (res.Err) {
-                    alert("Error:" + res.Err);
-                    $(".message").text("Error:" + res.Err).show();
+                if (res.err && res.err == "retry") {
+                    alert(
+                        "サーバー側で処理がタイムアウトしました" + "\n"
+                        + "もう一度実行してください"
+                    )
+                    return 0;
+                }
+                else if (res.err) {
+                    alert(res.err);
+                    $(".message").text("Error:" + res.err);
                     return 0;
                 }
 
-                share_ID = res;
                 share_flg = true;
+                share_ID = res.share_ID;
 
-                $(".message").text("共有表の作成に成功しました").show();
-                $(".connectArea").find(".connectCount").show();
-                $(".connectCount").text("1");
-                $(".changeShare").show();
+                $(".message").hide();
+                $(".connectArea").show();
                 $(".disconnect").show();
-                $(".copyArea").show();
                 $(".copyText").val(share_ID);
+                $(".copyArea").show();
                 $(".other_fix_blue").find(".fix").show();
+                $(".other_block_fix_blue").show();
                 $(".other_fix_red").find(".fix").show();
-                $(".block_other_fix_red").show();
-                $(".block_other_fix_blue").show();
+                $(".other_block_fix_red").show();
 
                 updateList("GET");
+                clearInterval(Timers.updateTime);
+                Timers.updateTime = setInterval(updateList, 180000, "GET");
             }
-            else {
-                alert("Error:Unknown Error")
-                $(".message").text("Error:Unknown Error").show();
-                return 0;
-            }
-        });
+        })
     }
 }
 
@@ -134,6 +144,11 @@ function connectShare() {
 
         const List = $(".other_fix_blue tr, .other_fix_red tr");
         if (List.length > 2) {
+            $(".other_fix_blue").find(".fix").show();
+            $(".other_block_fix_blue").show();
+            $(".other_fix_red").find(".fix").show();
+            $(".other_block_fix_red").show();
+
             const flg2 = confirm(
                 "外部青黄・確定リストに既に内容が存在しています"
                 + "\n 上書きしますか？"
@@ -141,115 +156,148 @@ function connectShare() {
             if (!flg2) return 0;
         }
 
-        $(".message").text("共有表に接続中...").show();
-        Socket = io();
-        Socket.emit("connectShare", share_ID, (res) => {
+        const params = {
+            mode: "connectShare",
+            share_ID: share_ID,
+        };
+
+        $(".message").text("共有表にアクセス中...").show();
+        xhrSend(params, (res) => {
             if (res) {
-                if (res.Err) {
-                    alert("Error:" + res.Err);
-                    $(".message").text("Error:" + res.Err);
+                if (res.err && res.err == "retry") {
+                    alert(
+                        "サーバー側で処理がタイムアウトしました" + "\n"
+                        + "もう一度実行してください"
+                    )
+                    return 0;
+                }
+                else if (res.err) {
+                    alert(res.err);
+                    $(".message").text("Error:" + res.err);
                     return 0;
                 }
 
                 share_flg = true;
-                $(".message").html("接続に成功しました");
+                share_ID = res.share_ID;
+
+                $(".message").html("接続に成功しました<br />リストからデータを取得しています....");
                 $(".connectArea").show();
-                $(".connectCount").text(res.connectCount)
-                $(".changeShare").show();
                 $(".disconnect").show();
                 $(".other_fix_blue").find(".fix").show();
+                $(".other_block_fix_blue").show();
                 $(".other_fix_red").find(".fix").show();
-                $(".block_other_fix_red").show();
-                $(".block_other_fix_blue").show();
-
-                Object.keys(res.fixs).forEach((fix) => {
-                    $(".other_" + fix + " tr").slice(1).remove();
-
-                    res.fixs[fix].split(",").forEach((Text) => {
-                        if (!Text) return 0;
-                        Text = Text.split("#");
-                        $(".other_" + fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
-                    })
-                })
+                $(".other_block_fix_red").show();
 
                 updateList("GET");
+                clearInterval(Timers.updateTime);
+                Timers.updateTime = setInterval(updateList, 180000, "GET");
             }
-            else {
-                alert("Error:Unknown Error")
-                $(".message").text("Error:Unknown Error").show();
-                return 0;
-            }
-        });
+        })
     }
 }
 
 function updateList(mode, fix, Text) {
     if (share_flg) {
-        if (mode == "GET") {
-            Socket.on("connectEvent", (res) => $(".connectCount").text(res));
+        const params = {
+            mode: mode,
+            share_ID: share_ID,
+            fix: fix,
+            Text: Text,
+        };
 
-            Socket.on("ADD/DEL", (res) => {
-                if (res.mode == "ADD") {
-                    Text = res.Text.split("#");
-                    $(".other_" + res.fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
+        xhrSend(params, (res) => {
+            if (res) {
+                if (res.ver == "古いバージョンです") {
+                    if (!ver_flg) {
+                        alert(
+                            res.ver
+                            + "\n (注)未修正の不具合がある可能性があります"
+                            + "\n 最新のページに更新することを推奨します"
+                        );
+                        ver_flg = true;
+                    }
                 }
-                else if (res.mode == "DEL") {
-                    Text = res.Text.split("#");
-                    $(".other_" + res.fix + " tr").filter((i, obj) => obj.textContent.split(" ")[0] == Text[0]).remove();
+
+                if (res.err) {
+                    if (res.err == "共有表が存在しません") {
+                        clearInterval(Timers.updateTime);
+
+                        alert(res.err + "\n 接続を切断しました");
+                        $(".message").html(
+                            "Error:" + res.err + "<br />" +
+                            "接続を切断しました"
+                        ).show();
+                        $(".connectArea").hide();
+                        $(".disconnect").hide();
+
+                        return 0;
+                    }
+                    else if (res.err == "retry") {
+                        setTimeout(updateList, 5000, mode, fix, Text);
+                        //updateList(mode, fix, Text);    //再試行
+                        return 0;
+                    }
+                    else if (res.err == "メンテナンス中") {
+                        alert("メンテナンス中です");
+                        clearInterval(Timers.updateTime);
+                        return 0;
+                    }
+                    else {
+                        const flg = confirm(
+                            "不明なエラーです！"
+                            + "\n " + res.err
+                            + "\n 再試行しますか？"
+                        );
+
+                        if (flg) {
+                            updateList(mode, fix, Text);
+                            return 0;
+                        }
+                        else return 0;
+                    }
                 }
-            });
-        }
-        else if (mode == "ADD" || mode == "DEL") {
-            const query = {
-                mode: mode,
-                share_ID: share_ID,
-                fix: fix,
-                Text: Text,
-            };
 
-            Socket.emit("ADD/DEL", query, (res) => {
-                if (res.Err) {
-                    alert("Error:" + res.Err);
-                    $(".message").text("Error:" + res.Err);
-                    return 0;
-                }
-            });
-        }
-    }
-}
+                $(".message").hide();
+                $(".connectCount").text(res.connectCount);
 
-function changeShare() {
-    const flg = confirm("共有表を複製しますか？(パスワードが変更されます)");
-    if (flg) {
-        $(".message").text("共有表を作成中...").show();
-        Socket.emit("changeShare", share_ID, (res) => {
-            share_ID = res;
+                const
+                    fix_blue = res.fix_blue.split(","),
+                    fix_red = res.fix_red.split(",");
 
-            $(".message").hide();
-            $(".connectCount").text("1");
-            $(".copyArea").show();
-            $(".copyText").val(share_ID);
-        });
+                $(".other_fix_blue tr").slice(1).remove();
+                $(".other_fix_red tr").slice(1).remove();
+
+                fix_blue.forEach(Text => {
+                    Text = Text.split("#");
+                    $(".other_fix_blue").append('<tr><td class="fix">' + Text[0] + "</td></tr>");
+                })
+                fix_red.forEach(Text => {
+                    Text = Text.split("#");
+                    $(".other_fix_red").append('<tr><td class="fix">' + Text[0] + "</td></tr>");
+                })
+            }
+        })
     }
 }
 
 function disconnect() {
-    const flg = confirm("共有表から切断しますか？");
-    if (flg) {
-        if (share_flg) {
-            Socket.disconnect();
-            Socket = ""
-            share_ID = "";
+    if (share_flg) {
+        const params = {
+            mode: "disconnect",
+            share_ID: share_ID,
+        };
 
-            $(".message").text("接続を切断しました");
-            $(".connectArea").hide();
-            $(".disconnect").hide();
-            $(".changeShare").hide();
-            $(".other_fix_blue").find(".fix").hide();
-            $(".other_fix_red").find(".fix").hide();
-            $(".block_other_fix_red").hide();
-            $(".block_other_fix_blue").hide();
-        }
+        $(".message").text("共有表から切断中...").show();
+        xhrSend(params, (res) => {
+            if (res) {
+                share_ID = "";
+
+                clearInterval(Timers.updateTime);
+                $(".message").text("接続を切断しました");
+                $(".connectArea").hide();
+                $(".disconnect").hide();
+            }
+        })
     }
 }
 
@@ -264,13 +312,13 @@ function LoginCheck() {
 
         xhrSend(params, (res) => {
             if (res.err) {
-                alert("Error:" + res.err);
+                alert(res.err);
                 $(".message").text("Error:" + res.err).show();
                 return 0;
             }
 
             if (res.HTMLData) {
-                const script = document.createElement("script");
+                const script = document.createElement('script');
                 script.src = res.ScriptData;
                 $("head").append(script);
                 $("body").prepend(res.HTMLData);
@@ -286,7 +334,6 @@ function omikuji() {
         omikuji = ["1-10", "11-20", "21-30", "31-40"],
         Text = $(".omikuji").text();
     let rnd;
-
     for (; ;) {
         rnd = Math.floor(Math.random() * omikuji.length);
         if ("サーバー" + omikuji[rnd] !== Text) break;
@@ -294,113 +341,311 @@ function omikuji() {
     $(".omikuji").text("サーバー" + omikuji[rnd]);
 }
 
-//[調査データをURL化] ***************************見直し対象
+//[調査データをURL化]
 function getShortURL() {
-    if ($(".ServerList").find(".Servers").length < 1) {
+    alert("メンテナンス中です。。。");
+    return 0;
+
+    if ($(".ServerList").find('.Servers').length < 1) {
         alert("先に調査サーバーを選択してください。");
         return 0;
     }
-
-    save_Storage();
+    if (ptMODE == "PTselect") {
+        alert("調査サーバー選択が選択モードの時は使用できません。")
+        return 0;
+    }
 
     const
-        Storage = localStorage.getItem("Storage"),
+        boxName = $(".ServerList").attr("id"),
         fix_blue = localStorage.getItem("fix_blue"),
-        fix_red = localStorage.getItem("fix_red");
-    let btnText = $(".ServerLists").attr("mode");
+        fix_red = localStorage.getItem("fix_red"),
+        btnText =
+            $(".ServerID:visible").first().text() + " - "
+            + $(".ServerID:visible").last().text();
+    let
+        Storage = JSON.parse(localStorage.getItem(boxName)),
+        objKeys;
 
-    if (btnText == "PTselect") {
-        btnText = "";
-        $(".select-mode.PTselect input:checked").each(function () {
-            btnText += $(this).val() + ",";
-        });
+    for (let key1 in Storage) {
+        for (let key2 in Storage[key1]) {
+            objKeys = Object.keys(Storage[key1][key2]);
+            Storage[key1][key2] = Object.values(Storage[key1][key2]);
+        }
     }
 
     const params = {
         mode: "shortURL",
-        params: {
-            ptMODE: ptMODE,
-            btnText: btnText,
-            Storage: Storage,
-            fix_blue: fix_blue,
-            fix_red: fix_red,
+        params: deflate(
+            "ptMODE=" + ptMODE
+            + "&btnText=" + btnText
+            + "&boxName=" + boxName
+            + "&objKeys=" + JSON.stringify(objKeys)
+            + "&Storage=" + JSON.stringify(Storage)
+            + "&fix_blue=" + fix_blue
+            + "&fix_red=" + fix_red
+        )
+    };
+
+    $(".message").text("URLを取得中...").show();
+    xhrSend(params, (res) => {
+        if (res.err) {
+            alert(res.err);
+            $(".message").text("Error:" + res.err).show();
+            return 0;
         }
-    }
 
-    /*
-        $(".message").text("URLを取得中...").show();
-        xhrSend(params, (res) => {
-            if (res.err) {
-                alert(res.err);
-                $(".message").text("Error:" + res.err).show();
-                return 0;
-            }
-
-            $(".message").hide();
-            $(".copyText").val(res.URL);
-            $(".copyArea").show();
-        })
-    */
+        $(".message").hide();
+        $(".copyText").val(res.URL);
+        $(".copyArea").show();
+    })
 }
 
 
 /********************ヘッダ部機能(ボタン)********************/
 
 //分散モード変更
-$(document).on("change", ".mode-change-box input[name=opt-tgl]", modeChange);
+$(document).on("change", ".setting-box .mode-change-box input[name=opt-tgl]", function () {
+    modeChange();
+});
 
-//サーバー表示
+//[1 - 10]等#サーバー追加
 $(document).on("click", ".setServers", function () {
     if (
-        settings.splitMODE == "ON" && (
-            $(".mode-change-box input[name=opt-tgl]:checked").val() != "PT4" ||
-            $(this).text() == "9 - 10"
+        settings.splitMODE == "ON" &&
+        !(
+            $(this).text() == "1 - 10" ||
+            $(this).text() == "11 - 20" ||
+            $(this).text() == "21 - 30" ||
+            $(this).text() == "31 - 40"
         )
     ) {
         alert("分割モード中は使えません");
         return 0;
     }
 
-    //初期化
-    $(".select-mode.PTselect input").prop("checked", false);
-    $(".ServerLists").attr("mode", $(this).text());
-    $(".ServerList .Servers").hide();
-    $(".ServerList2 .Servers").hide();
-    TMP = [];
-
     const
-        Start = Number($(this).text().split(" - ")[0]),
-        End = Number($(this).text().split(" - ")[1]);
-    $(".Servers").each(function () {
-        const Server = $(this).attr("ServerID");
-        if (Start <= Server && Server <= End) $(this).show();
-    })
+        boxName = $(this).attr("boxName"),
+        num = $(this).val(),
+        Start = $(this).attr("Start"),
+        End = $(this).attr("End");
+    TMP = [] //初期化
+
+    //テーブルの初期化・サーバリストID設定
+    if (settings.splitMODE == "ON") {
+        $(".ServerList tr").slice(1).remove();
+        $(".ServerList2 tr").slice(1).remove();
+        $(".ServerList, .ServerList2").attr("id", boxName);
+    }
+    else {
+        $(".ServerList tr").slice(1).remove();
+        $(".ServerList").attr("id", boxName);
+    }
+
+    for (let i = 0; i < 10; i++) {
+        const CopyTemp1 = $($("#template1").html()).clone();
+        CopyTemp1.find(".ServerID").text(i + Number(num));
+        CopyTemp1.find(".setTemp").each(function () {
+            const CopyTemp2 = $($("#template2").html()).clone();
+            $(this).append(CopyTemp2);
+        })
+
+        if (settings.splitMODE == "ON") {
+            if (i < 5) $(".ServerList tbody").append(CopyTemp1);
+            else $(".ServerList2 tbody").append(CopyTemp1);
+        }
+        else $(".ServerList tbody").append(CopyTemp1);
+    }
+
+    if (
+        $(this).text() == "9 - 10" ||
+        ptMODE == "PT8" ||
+        settings.splitMODE != "ON"
+    ) {
+        $(".Servers").each(function () {
+            const Server = Number($(this).find(".ServerID").text());
+            if (Server < Start || Server > End) $(this).hide();
+        })
+    }
+    if (
+        settings.even_oddMODE == "ON" &&
+        settings.splitMODE != "ON"
+    ) tSort("even_odd");
+    if (settings.memo2_display == "show") $(".memo2").css("display", "inline-block");
+
+    //サーバ切り替え時のデータ保持処理
+    if (
+        sessionStorage.getItem(boxName) == "true" &&
+        get_flg == false
+    ) load_Storage();
 
     setRollbackEnable();  //【NaL】[戻す]ボタンの活性切替
 })
 
 //調査サーバー選択式
-$(document).on(
-    "change", ".select-mode.PTselect input", function () {
-        if (settings.splitMODE == "ON") {
-            alert("分割モード中は使えません");
-            $(this).prop("checked", false);
-            return 0;
-        }
-
-        const mode = $(".ServerLists").attr("mode");
-        if (mode != "PTselect") {
-            //初期化
-            $(".ServerLists").attr("mode", ptMODE);
-            $(".ServerList .Servers").hide();
-            TMP = [];
-        }
-
-        const num = $(this).val();
-        if ($(this).prop("checked")) $("[ServerID=" + num + "]").show();
-        else $("[ServerID=" + num + "]").hide();
+$(document).on('change', '.select-mode.PTselect input', function () {
+    if (settings.splitMODE == "ON") {
+        alert("分割モード中は使えません");
+        return 0;
     }
-)
+
+    const num = $(this).val();
+
+    if ($(".ServerList").attr("id") != "select") {
+        $(".ServerList tr").slice(1).remove();  //テーブルの初期化
+        TMP = []; //初期化
+    }
+    $(".ServerList").attr("id", "select");      //サーバリストID設定
+
+    if ($(this).prop('checked')) {
+        const CopyTemp1 = $($("#template1").html()).clone();
+        CopyTemp1.find(".ServerID").text(num);
+        CopyTemp1.find(".setTemp").each(function () {
+            const CopyTemp2 = $($("#template2").html()).clone();
+            $(this).append(CopyTemp2);
+        })
+        $(".ServerList tbody").append(CopyTemp1);
+    }
+    else {
+        $(".Servers").each(function () {
+            const Server = $(this).find(".ServerID").text();
+            if (Server == num) $(this).remove();
+        })
+    }
+
+    if (settings.memo2_display == "show")
+        $(".memo2").css("display", "inline-block");
+})
+
+//[前回の続きから]#データ復旧
+//***************************見直し対象
+function load_Storage(getData) {
+    let flg, boxName, Storage, fix_blue, fix_red;
+
+    //サーバー選択・データ読込チェック
+    if ($(".ServerList").find('.Servers').length <= 1) {
+        alert("先に調査サーバーを選択してください。");
+        return 0;
+    }
+    $(".Servers").each(function () {
+        if ($(this).find(".nowTime").text()) {
+            alert("既にデータが復元されています。");
+            flg = true;
+            return false; //break
+        }
+    })
+    if (flg) return 0;
+
+    if (getData) {
+        //URL取得モード
+        boxName = getData.boxName;
+        Storage = getData.Storage;
+        fix_blue = getData.fix_blue;
+        fix_red = getData.fix_red;
+    }
+    else {
+        boxName = $(".ServerList").attr("id");
+        Storage = JSON.parse(localStorage.getItem(boxName));
+        fix_blue = JSON.parse(localStorage.getItem("fix_blue"));
+        fix_red = JSON.parse(localStorage.getItem("fix_red"));
+    }
+
+    let n = 0;
+    if (Storage) {
+        const Points = ["ゲル", "砂漠", "バル"];
+
+        $(".Servers").each(function () {
+            const
+                Datas = Storage[n],
+                Servers = $(this),
+                Server = $(this).find(".ServerID").text();
+
+            for (let i = 0; i < 3; i++) {
+                const
+                    objBox = $(Servers).find("." + Points[i]).find(".template2-box"),
+                    Data = Datas[Server + Points[i]];
+
+                objBox.find(".befTime")
+                    .attr("Date", Data.befDate)
+                    .text(Data.befTime)
+                    .css("background-color", Data.befColor)
+                    .attr("color", Data.befColor);
+                objBox.find(".nowTime")
+                    .attr("Date", Data.nowDate)
+                    .text(Data.nowTime)
+                    .css("background-color", Data.nowColor)
+                    .attr("color", Data.nowColor);
+                objBox.find(".memo")
+                    .text(Data.memo)
+                    .attr("Date", Data.memoDate)
+                    .css("background-color", Data.memoColor)
+                    .attr("color", Data.memoColor)
+                    .attr("memoflg", Data.memoflg)
+                    .attr("memofix", Data.memofix);
+                objBox.find(".memo2").val(Data.memo2);
+
+                if (Data.nowColor == "red") {
+                    objBox.find(".btn[value=red]").prop("disabled", true);
+                    Timers[Server + Points[i]] = setInterval(setTimer, 1000, objBox);
+                }
+                if (Data.memoflg) {
+                    const diffTime = Data.memoDate - new Date().getTime();
+
+                    if (diffTime > 0) {
+                        switch (Data.memoflg) {
+                            case "red_blue":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "red_blue");
+                                break;
+                            case "red_yellow":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "red_yellow");
+                                break;
+                            case "blue_yellow":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "blue_yellow");
+                                break;
+                            case "yellow_red":
+                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "yellow_red");
+                                break;
+                        }
+                        checkTimer();
+                    }
+                    else {
+                        const
+                            newDate = new Date().getTime() + diffTime,
+                            newTime = TimePlus(newDate, "00:00:00").Time,
+                            newColor = (Data.memoflg == "red_blue") ?
+                                "skyblue" : (Data.memoflg == "yellow_red") ?
+                                    "red" : "yellow";
+
+                        objBox.find(".befTime")
+                            .attr("Date", Data.nowDate)
+                            .text(Data.nowTime)
+                            .css("background-color", Data.nowColor)
+                            .attr("color", Data.nowColor);
+                        objBox.find(".nowTime")
+                            .attr("Date", newDate)
+                            .text(newTime)
+                            .css("background-color", newColor)
+                            .attr("color", newColor);
+                        objBox.find(".memo")
+                            .text("")
+                            .attr("Date", "")
+                            .css("background-color", "transparent")
+                            .attr("color", "transparent")
+                            .attr("memoflg", "");
+                        objBox.find(".memo2").val(Data.memo2);
+                    }
+                }
+            }
+            n++;
+        })
+    }
+
+    //リスト初期化・挿入
+    $(".fix_blue tr").slice(1).remove();
+    fix_blue.forEach(function (Text) { push_fix("fix_blue", Text, "fix"); })
+    $(".fix_red tr").slice(1).remove();
+    fix_red.forEach(function (Text) { push_fix("fix_red", Text, "fix"); })
+}
+
 
 /********************メインテーブル画面機能********************/
 //[← →]#ポイント移動
@@ -421,186 +666,118 @@ $(document).on("click", ".left, .right", function () {
     save_Sort();
 })
 
-//[全更新] ***************************見直し対象
+//[全更新]
 $(document).on("click", ".btn_all", function () {
     const Rows = $(this).closest("tr").find(".template2-box")
 
     Rows.each(function () {
         const
-            objManager = new objManagerClass($(this)),
-            objList = objManager.objData;
+            Cell = new Cells($(this)),
+            Data = Cell.Data;
 
         if (
-            objList.nowColor != "" &&
-            objList.nowColor != "transparent" &&
-            objList.nowColor != "red" &&
-            !(objList.befColor == "skyblue" && objList.nowColor == "yellow") &&
-            !(objList.befColor == "red" && objList.nowColor == "yellow") &&
-            !(objList.befColor == "violet" && objList.nowColor == "yellow")
+            Data.nowColor != "" &&
+            Data.nowColor != "transparent" &&
+            Data.nowColor != "red" &&
+            !(Data.befColor == "skyblue" && Data.nowColor == "yellow") &&
+            !(Data.befColor == "red" && Data.nowColor == "yellow") &&
+            !(Data.befColor == "violet" && Data.nowColor == "yellow")
         ) {
-            objList.newColor = objList.nowColor;    //色継承
+            Data.newColor = Data.nowColor       //色継承
 
-            TMP.push(objManager.objTMP)
+            TMP.push(Cell.TMP)
             if (5 < TMP.length) TMP.shift()     //5個以上の保存データは末尾から削除
             setRollbackEnable();                //【NaL】[戻す]ボタンの活性切替
-            timeStamp($(this), objList)
+            timeStamp($(this), Data)
         }
     })
 })
 
-//[青～虹] ***************************見直し対象
+//[青～虹]
 $(document).on("click", ".btn", function () {
     const
         objBox = $(this).parents(".template2-box"),
-        objManager = new objManagerClass(objBox, $(this).val());
+        Cell = new Cells(objBox, $(this).val()),
+        Data = Cell.Data;
 
-    TMP.push(objManager.objTMP)
+    TMP.push(Cell.TMP)
     if (5 < TMP.length) TMP.shift();    //5個以上の保存データは末尾から削除
     setRollbackEnable();                //【NaL】[戻す]ボタンの活性切替
-    timeStamp(objBox, objManager.objData);
+    timeStamp(objBox, Data);
 })
 
 
 /********************サイド画面********************/
 //[保存]
 function save_Storage() {
-    const
-        Points = ["ゲル", "砂漠", "バル"],
-        Storage = {};
+    if (ptMODE == "PTselect") return 0;
+
+    const Points = ["ゲル", "砂漠", "バル"];
+    let
+        boxName = $(".ServerList").attr("id"),
+        Storage = [],
+        fix_blue = [],
+        fix_red = [];
 
     $(".Servers").each(function () {
-        const Server = $(this).attr("ServerID");
-        Storage[Server] = {};
+        const Server = $(this).find(".ServerID").text();
+        let Data = []; //初期化
 
         for (let i = 0; i < 3; i++) {
             const
                 objBox = $(this).find("." + Points[i]).find(".template2-box"),
-                objData = new objManagerClass(objBox).objData;
+                Cell = new Cells(objBox)
 
-            Storage[Server][Points[i]] = objData;
+            Data.push(Cell.TMP);
         }
+
+        Storage.push({
+            [Server + Points[0]]: Data[0],
+            [Server + Points[1]]: Data[1],
+            [Server + Points[2]]: Data[2],
+        });
     })
-    localStorage.setItem("Storage", JSON.stringify(Storage));
-    save_Fix();
-}
 
-//[復元] ***************************見直し対象
-function load_Storage(getData) {
-    let Storage, fix_blue, fix_red;
-
-    if (!get_flg) {
-        Storage = JSON.parse(localStorage.getItem("Storage"));
-        fix_blue = JSON.parse(localStorage.getItem("fix_blue"));
-        fix_red = JSON.parse(localStorage.getItem("fix_red"));
-    }
-    else if (get_flg && getData) {
-        Storage = getData.Storage;
-        fix_blue = getData.fix_blue;
-        fix_red = getData.fix_red;
-    }
-    else if (get_flg && !getData) return 0;
-
-    if (Storage) {
-        const Points = ["ゲル", "砂漠", "バル"];
-
-        $(".Servers").each(function () {
-            const
-                Servers = $(this),
-                Server = $(this).attr("ServerID");
-
-            for (let i = 0; i < 3; i++) {
-                const
-                    objBox = $(Servers).find("." + Points[i]).find(".template2-box"),
-                    objData = Storage[Server][Points[i]];
-
-                objBox.find(".befTime")
-                    .attr("Date", objData.befDate)
-                    .text(objData.befTime)
-                    .css("background-color", objData.befColor)
-                    .attr("color", objData.befColor);
-                objBox.find(".nowTime")
-                    .attr("Date", objData.nowDate)
-                    .text(objData.nowTime)
-                    .css("background-color", objData.nowColor)
-                    .attr("color", objData.nowColor);
-                objBox.find(".memo")
-                    .text(objData.memo)
-                    .attr("Date", objData.memoDate)
-                    .css("background-color", objData.memoColor)
-                    .attr("color", objData.memoColor)
-                    .attr("memoflg", objData.memoflg)
-                    .attr("memofix", objData.memofix);
-                objBox.find(".memo2").val(objData.memo2);
-
-                if (objData.nowColor == "red") {
-                    objBox.find(".btn[value=red]").prop("disabled", true);
-                    Timers[Server + Points[i]] = setInterval(setTimer, 1000, objBox);
-                }
-                if (objData.memoflg) {
-                    const diffTime = objData.memoDate - new Date().getTime();
-
-                    if (diffTime > 0) {
-                        switch (objData.memoflg) {
-                            case "red_blue":
-                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "red_blue");
-                                break;
-                            case "red_yellow":
-                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "red_yellow");
-                                break;
-                            case "blue_yellow":
-                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "blue_yellow");
-                                break;
-                            case "yellow_red":
-                                Timers[Server + Points[i]] = setTimeout(memoTimer, diffTime, objBox, "yellow_red");
-                                break;
-                        }
-                        checkTimer();
-                    }
-                    else {
-                        const
-                            newDate = new Date().getTime() + diffTime,
-                            newTime = TimePlus(newDate, "00:00:00").Time,
-                            newColor = (objData.memoflg == "red_blue") ?
-                                "blue" : (objData.memoflg == "yellow_red") ?
-                                    "red" : "yellow";
-
-                        objBox.find(".befTime")
-                            .attr("Date", objData.nowDate)
-                            .text(objData.nowTime)
-                            .css("background-color", objData.nowColor)
-                            .attr("color", objData.nowColor);
-                        objBox.find(".nowTime")
-                            .attr("Date", newDate)
-                            .text(newTime)
-                            .css("background-color", newColor)
-                            .attr("color", newColor);
-                        objBox.find(".memo")
-                            .text("")
-                            .attr("Date", "")
-                            .css("background-color", "transparent")
-                            .attr("color", "transparent")
-                            .attr("memoflg", "");
-                        objBox.find(".memo2").val(objData.memo2);
-                    }
-                }
+    //偶数奇数モードON時、標準の並びに直す
+    if (settings.even_oddMODE == "ON") {
+        let copyStorage = Storage.concat(); //配列コピー
+        for (let cnt = 0, i = 0, n = 5; cnt < Storage.length - 1; cnt++) {
+            if (cnt % 2 == 0) {
+                Storage[cnt] = copyStorage[i];
+                i++;
             }
-        })
+            else {
+                Storage[cnt] = copyStorage[n];
+                n++;
+            }
+        }
     }
 
-    //リスト初期化・挿入
-    $(".fix_blue tr").slice(1).remove();
-    fix_blue.forEach(function (Text) { push_fix("fix_blue", Text, "fix"); })
-    $(".fix_red tr").slice(1).remove();
-    fix_red.forEach(function (Text) { push_fix("fix_red", Text, "fix"); })
+    $(".fix_blue").find(".fix").each(function () {
+        fix_blue.push([$(this).text()]);
+    })
+    $(".fix_red").find(".fix").each(function () {
+        fix_red.push([$(this).text()]);
+    })
+
+    if (boxName == "1 - 10" || boxName == "9 - 10") {
+        boxName = "1 - 10";
+        sessionStorage.setItem("9 - 10", true);
+    }
+
+    sessionStorage.setItem(boxName, true);
+    localStorage.setItem(boxName, JSON.stringify(Storage));
+    localStorage.setItem("fix_blue", JSON.stringify(fix_blue));
+    localStorage.setItem("fix_red", JSON.stringify(fix_red));
 }
 
-//[戻す]#直前の状態に戻す ***************************見直し対象
+//[戻す]#直前の状態に戻す
 function Rollback() {
     if (TMP.length > 0) {
         const n = TMP.length - 1;
 
-        $(".Servers:visible").each(function () {
-            if (TMP[n].Server == $(this).attr("ServerID")) {
+        $(".Servers").each(function () {
+            if (TMP[n].Server == $(this).find(".ServerID").text()) {
                 const
                     objBox = $(this).find("." + TMP[n].Point).find(".template2-box"),
                     Data = {
@@ -634,121 +811,25 @@ function Rollback() {
 
 
 /********************青木・確定リスト********************/
-//リスト表示切替(HEAD)
-$(document).on(
-    "click",
-    ".fix_blue_head, .fix_red_head, .other_fix_blue_head, .other_fix_red_head",
-    function () {
-        const fix = $(this).attr("class").replace("_head", "");
-        $("." + fix).find(".fix").toggle();
-        $(".block_" + fix).toggle();
-    }
-);
-
-//リスト表示モード切替
-$(document).on("click", ".chk-Box", function () {
-    const
-        bFlg = $(this).prop("checked"),
-        fix = $(this).val();
-
-    if (bFlg === false) {
-        $(this).next().html("全部表示しない");
-        settings.ListSetting[fix].scrollMode = "OFF";
-
-        const
-            maxHeight = settings.ListSetting[fix].scrollHeight,
-            maxLength = maxHeight / 24,
-            nowLength = $("." + fix + " tr").length - 1;
-
-        if (nowLength > maxLength) {
-            $("." + fix + " tbody").css("display", "block");
-            $("." + fix + " tbody").css("height", maxHeight + "px");
-            $(".scroll_" + fix).find(".chk-tgl-span button").prop("disabled", false);
-        }
-    }
-    else {
-        $(this).next().html("全部表示する");
-        settings.ListSetting[fix].scrollMode = "ON";
-
-        $("." + fix + " tbody").css("display", "");
-        $("." + fix + " tbody").css("height", "0px");
-        $(".scroll_" + fix).find(".chk-tgl-span button").prop("disabled", true);
-    }
-
-    localStorage.setItem("settings", JSON.stringify(settings));
-});
-
-//青黄確定リストスクロール幅変更
-$(document).on("click", ".chk-tgl-span button", function () {
-    const
-        scroll_mode = $(this).attr("class"),
-        fix = $(this).parents(".function-btn-box-mini").attr("target"),
-        nowLength = $("." + fix + " tbody").css("height").replace("px", "") / 24;
-
-    if (scroll_mode == "up") {
-        if (nowLength > 3) {
-            $("." + fix + " tbody").css("height", (nowLength - 1) * 24 + "px");
-            settings.ListSetting[fix].scrollHeight = (nowLength - 1) * 24;
-        }
-        else return 0;
-    }
-    else if (scroll_mode == "down") {
-        if (nowLength > 2) {
-            $("." + fix + " tbody").css("height", (nowLength + 1) * 24 + "px");
-            settings.ListSetting[fix].scrollHeight = (nowLength + 1) * 24;
-        }
-        else return 0;
-    }
-
-    localStorage.setItem("settings", JSON.stringify(settings));
-});
-
-//(青黄/確定）テーブルクリックイベント#コピー/削除
+//(確定/青木）テーブルクリックイベント#コピー/削除
 $(document).on("click", ".fix", function () {
     let flg = confirm("コピーor削除を行いますか？\nOK=コピー キャンセル=削除");
 
-    if (flg) TextCopy($(this).text() + "\n");
+    if (flg) TextCopy($(this).text() + "\n")
     else {
         flg = confirm("本当に削除していいですか？");
         if (flg) {
             const
-                fix = $(this).closest("table").attr("class").replace("other_", ""),
+                obj = $(this).closest("table").attr("class").replace("other_", ""),
                 Text = $(this).text().split(" ");
 
-            clear_fix(fix, Text[0]);
+            clear_fix(obj, Text[0]);
         }
     }
-
     save_Fix();
 })
 
-//[外部確定リスト 一括追加]
-$(document).on("click", ".push_fixs", function () {
-    const textArea = $(this).parents("div[class^=block_other_fix_]").find("textarea");
-    let fix = $(this).parent("div").attr("target");
-
-    if (!textArea.val()) return 0;
-
-    let Text = textArea.val().split(/\r\n|\r|\n/);
-    Text = Text
-        .sort((a, b) => {
-            a = a.split(" ");
-            b = b.split(" ");
-            if (a.length == 3 && b.length == 3) return (a[2] > b[2] ? 1 : -1);
-            if (a.length == 3 && b.length == 4) return (a[2] > b[3] ? 1 : -1);
-            if (a.length == 4 && b.length == 4) return (a[3] > b[3] ? 1 : -1);
-            if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
-        })
-        .filter((Text) => Text !== "");
-    Text.forEach((Text) => $("." + fix).append("<tr><td class='fix'>" + Text + "</td></tr>"))
-    Text = Text.join(",");
-
-    fix = fix.replace("other_", "");
-    if (share_flg) updateList("ADD", fix, Text);
-    textArea.val("");
-})
-
-//InputBoxテキストセット ***************************見直し対象
+//InputBoxテキストセット
 $(document).on("click", "#sTime, #eTime", function () {
     if ($(this).attr("id") == "sTime") {
         if ($("#sTime").val() == "") {
@@ -762,7 +843,8 @@ $(document).on("click", "#sTime, #eTime", function () {
         }
 })
 
-//[追加]#確定リスト追加処理 ***************************見直し対象
+//[追加]#確定リスト追加処理
+//******************見直し対象
 function push_fix_old() {
     const
         Server = $("#Server"),
@@ -818,6 +900,173 @@ function push_fix_old() {
     eTime.val("")
 }
 
+//リスト表示切替
+$(document).on(
+    "click",
+    ".fix_blue_head, .fix_red_head, .other_fix_blue_head, .other_fix_red_head",
+    function () {
+        if ($(this).attr("class") == "fix_blue_head") {
+            $(".fix_blue").find(".fix").toggle();
+            $(".block_fix_blue").toggle();
+        }
+        else if ($(this).attr("class") == "fix_red_head") {
+            $(".fix_red").find(".fix").toggle();
+            $(".block_fix_red").toggle();
+        }
+        else if ($(this).attr("class") == "other_fix_blue_head") {
+            $(".other_fix_blue").find(".fix").toggle();
+            $(".other_block_fix_blue").toggle();
+            if ($(".other_block_fix_blue").is(":visible")) {
+                $(".other_fix_blue tbody").css("display", "block");
+
+                if ($(".other_fix_blue .fix").length >= 6)
+                    $(".other_fix_blue tbody").css("display", "block");
+                else
+                    $(".other_fix_blue tbody").css("display", "");
+
+            }
+            else {
+                $(".other_fix_blue tbody").css("display", "");
+                $(".other_fix_blue tbody").css("overflow-y", "hidden");
+            }
+
+        }
+        else if ($(this).attr("class") == "other_fix_red_head") {
+            $(".other_fix_red").find(".fix").toggle();
+            $(".other_block_fix_red").toggle();
+            if ($(".other_block_fix_red").is(":visible")) {
+                $(".other_fix_red tbody").css("overflow-y", "scroll");
+
+                if ($(".other_fix_red .fix").length >= 6)
+                    $(".other_fix_red tbody").css("display", "block");
+                else
+                    $(".other_fix_red tbody").css("display", "");
+            }
+            else {
+                $(".other_fix_red tbody").css("overflow-y", "hidden");
+                $(".other_fix_red tbody").css("display", "");
+
+            }
+        }
+    }
+);
+
+//[外部確定リスト追加]
+$(document).on("click", ".push_fixs", function () {
+    const TextObj = $(this).parents("div[class^=other_block_fix_]").find("textarea");
+    let fixObj = $(this).parent("div").attr("target");
+
+    if (!TextObj.val()) return 0;
+
+    let fixs = TextObj.val().split(/\r\n|\r|\n/);
+    fixs = fixs
+        .sort((a, b) => {
+            a = a.split(" ");
+            b = b.split(" ");
+            if (a.length == 3 && b.length == 3) return (a[2] > b[2] ? 1 : -1);
+            if (a.length == 3 && b.length == 4) return (a[2] > b[3] ? 1 : -1);
+            if (a.length == 4 && b.length == 4) return (a[3] > b[3] ? 1 : -1);
+            if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
+        })
+        .filter(Text => Text !== "");
+    fixs.forEach(Text => $("." + fixObj).append('<tr><td class="fix">' + Text + "</td></tr>"))
+    fixs = fixs.join(",");
+
+    fixObj = fixObj.replace("other_", "");
+    if (share_flg) updateList("ADD", fixObj, fixs);
+    TextObj.val("");
+})
+
+//外部リストスクロール幅変更
+$(document).on("click", ".chk-tgl-span button", function () {
+    const
+        scroll_mode = $(this).attr("class"),
+        obj = $(this).parents(".function-btn-box-mini").attr("target"),
+        maxlength = ($("." + obj + " tr").length - 1) * 24,
+        before_height = Number($("." + obj + " tbody").css("height").replace("px", ""));
+
+    if (scroll_mode == "up") {
+        if (before_height - 24 >= 24 * 3) {
+            $("." + obj + " tbody").css("height", before_height - 24 + "px");
+            settings.ListSetting[obj].scrollHeight = before_height - 24;
+        }
+        else return 0;
+    }
+    else if (scroll_mode == "down") {
+        if (maxlength - 24 > before_height) {
+            $("." + obj + " tbody").css("height", before_height + 24 + "px");
+            settings.ListSetting[obj].scrollHeight = before_height + 24;
+        }
+        else return 0;
+    }
+
+    localStorage.setItem("settings", JSON.stringify(settings));
+});
+
+//外部リスト表示モード切替
+$(document).on("click", ".chk-Box", function () {
+    const
+        bFlg = $(this).prop("checked"),
+        obj = $(this).val(),
+        List = $("." + obj + " tr");
+
+    if (bFlg === true) {
+        $(this).next().html("全部表示する");
+        settings.ListSetting[obj].scrollMode = "ON";
+
+        if (List.length > 2)
+            $("." + obj + " tbody").css("display", "");
+    }
+    else {
+        $(this).next().html("全部表示しない");
+        settings.ListSetting[obj].scrollMode = "OFF";
+
+        if (List.length > 2)
+            $("." + obj + " tbody").css("display", "block");
+    }
+
+    localStorage.setItem("settings", JSON.stringify(settings));
+});
+
+//外部リスト変更イベント
+$(function () {
+    const
+        observer = new MutationObserver((elem) => {
+            elem.forEach(elem => {
+                if (elem.type == "childList") {
+                    if (elem.target.className != "fix") {
+                        const
+                            obj_tbody = elem.target.offsetParent.className,
+                            obj_block = "scroll_" + obj_tbody,
+                            scroll_flg = $("." + obj_block).find(".chk-Box").prop("checked"),
+                            length = elem.target.childElementCount,
+                            visible = $("." + obj_block).is(":visible");
+
+                        if (length >= 6 && !scroll_flg && visible) {
+                            $("." + obj_tbody + " tbody").css("display", "block");
+                            $("." + obj_block).find(".chk-tgl-span button").prop("disabled", false);
+                        }
+                        else {
+                            $("." + obj_tbody + " tbody").css("display", "");
+                            $("." + obj_block).find(".chk-tgl-span button").prop("disabled", true);
+                        }
+                    }
+                }
+            })
+        }),
+        config = {
+            childList: true,
+            attributes: true,
+            characterData: true,
+            subtree: true
+        };
+
+    observer.observe($(".fix_blue tbody")[0], config);
+    observer.observe($(".fix_red tbody")[0], config);
+    observer.observe($(".other_fix_blue tbody")[0], config);
+    observer.observe($(".other_fix_red tbody")[0], config);
+})
+
 
 /********************関数群********************/
 
@@ -858,17 +1107,26 @@ function setInitMoveBtn() {
 
 //【NaL】[戻す]ボタンの活性切替
 function setRollbackEnable() {
-    let flg = true;
+    let flg = true
 
     if (TMP.length > 0) flg = false; //TMPの中身がないときだけ非活性
-    $("#btn-rollback").prop("disabled", flg);
+    $('#btn-rollback').prop('disabled', flg);
 }
 
-//URLパラメータ抽出 ***************************見直し対象
+//URLパラメータ抽出
 function getURLData(params) {
+    try { params = inflate(params) } //URLの復号化
+    catch {
+        $(".message").text("ERROR:不正なURLです").show();
+        return 0;
+    }
+
+    ptMODE = getParam("ptMODE", params);
     const
         btnText = getParam("btnText", params),
         getData = {
+            boxName: getParam("boxName", params),
+            objKeys: JSON.parse(getParam("objKeys", params)),
             Storage: JSON.parse(getParam("Storage", params)),
             fix_blue: JSON.parse(getParam("fix_blue", params)),
             fix_red: JSON.parse(getParam("fix_red", params)),
@@ -876,22 +1134,38 @@ function getURLData(params) {
 
     //パラメータチェック
     if (
-        !ptMODE || !getData.Storage ||
+        !ptMODE || !btnText || !getData.boxName ||
+        !getData.objKeys || !getData.Storage ||
         !getData.fix_blue || !getData.fix_red
     ) {
         $(".message").text("ERROR:不正なURLです").show();
         return 0;
     }
+    if (ptMODE == "PT8") {
+        $('.setting-box .mode-change-box input[value="PT8"]').prop('checked', true);
+        modeChange();
+    }
 
-    get_flg = true;
-    ptMODE = getParam("ptMODE", params);
-    $(".mode-change-box input[value=" + ptMODE + "]").prop("checked", true);
-    $("#" + btnText).click();
+    $(".setServers").each(function () {
+        if ($(this).text() == btnText) {
+            get_flg = true;
+            $(this).click();    //調査鯖ボタンクリック
+        }
+    })
+
+    for (let key1 in getData.Storage) {
+        for (let key2 in getData.Storage[key1]) {
+            getData.objKeys.forEach((key3, i) => {
+                getData.Storage[key1][key2][key3] = getData.Storage[key1][key2][i]
+                delete getData.Storage[key1][key2][i]
+            })
+        }
+    }
 
     load_Storage(getData);
 }
 
-//パラメータ値抽出 ***************************見直し対象
+//パラメータ値抽出
 function getParam(param, params) {
     param = param.replace(/[\[\]]/g, "\\$&");
     const
@@ -911,21 +1185,16 @@ function load_settings() {
 
     if (settings) {
         //分割モードフラグ
-        if (settings.splitMODE && settings.splitMODE == "ON") {
+        if (settings.splitMODE && settings.splitMODE == "ON")
             $(document).find(".split").click();
-        }
 
         //偶数奇数モードフラグ
-        if (settings.even_oddMODE && settings.even_oddMODE == "ON") {
+        if (settings.even_oddMODE && settings.even_oddMODE == "ON")
             $(document).find(".even_odd").prop("checked", true);
-            tSort("even_odd");
-        }
 
         //メモ欄2表示モードフラグ
-        if (settings.memo2_display && settings.memo2_display == "show") {
+        if (settings.memo2_display && settings.memo2_display == "show")
             $(document).find(".tgl_memo2").prop("checked", true);
-            $(".memo2").css("display", "inline-block");
-        }
 
         //自動更新モードフラグ
         Mode.forEach(Mode => {
@@ -936,10 +1205,14 @@ function load_settings() {
         })
 
         //青黄確定リストモードフラグ
-        $(".chk-tgl-span button").prop("disabled", true);
+        $(".chk-tgl-span button").prop("disabled", true);   //スクロール幅変更ボタン 非活性化
         if (settings.ListSetting) {
             objList.forEach(obj => {
                 if ([obj] in settings["ListSetting"]) {
+                    //スクロール幅設定
+                    if (settings.ListSetting[obj].scrollHeight)
+                        $("." + obj + " tbody").css("height", settings.ListSetting[obj].scrollHeight + "px");
+
                     //全部表示する/しない設定
                     if (settings.ListSetting[obj].scrollMode == "ON")
                         $(document).find(".scroll_" + obj + " input").click();
@@ -953,7 +1226,6 @@ function load_settings() {
                 other_fix_blue: {},
                 other_fix_red: {},
             };
-
             localStorage.setItem("settings", JSON.stringify(settings));
         }
 
@@ -976,83 +1248,42 @@ function load_settings() {
     }
 }
 
-//青黄確定リスト変更イベント
-function onFixListChangeEvent() {
-    const
-        observer = new MutationObserver((elem) => {
-            elem.forEach(elem => {
-                const
-                    fix = $(elem.target).parents("table").attr("class"),
-                    scroll_flg = $(".scroll_" + fix).find(".chk-Box").prop("checked"),
-                    visible = $(".scroll_" + fix).is(":visible");
-
-                if (!settings.ListSetting[fix].scrollHeight)
-                    settings.ListSetting[fix].scrollHeight = 24 * 5;
-
-                if (!scroll_flg && visible) {
-                    const
-                        maxHeight = settings.ListSetting[fix].scrollHeight,
-                        maxLength = maxHeight / 24,
-                        nowLength = $("." + fix + " tr").length - 1;
-
-                    if (nowLength > maxLength) {
-                        $("." + fix + " tbody").css("display", "block");
-                        $("." + fix + " tbody").css("height", maxHeight + "px");
-                        $(".scroll_" + fix).find(".chk-tgl-span button").prop("disabled", false);
-                    }
-                }
-                else {
-                    $("." + fix + " tbody").css("display", "");
-                    $("." + fix + " tbody").css("height", "0px");
-                    $(".scroll_" + fix).find(".chk-tgl-span button").prop("disabled", true);
-                }
-            })
-        }),
-        config = {
-            childList: true,
-            attributes: true,
-            characterData: true,
-            subtree: true
-        };
-
-    observer.observe($(".fix_blue")[0], config);
-    observer.observe($(".fix_red")[0], config);
-    observer.observe($(".other_fix_blue")[0], config);
-    observer.observe($(".other_fix_red")[0], config);
-}
 
 /********************ヘッダ部関係********************/
 //[4人分散/8人分散/選択式分散]#PTモード変更
 function modeChange() {
     //【NaL】モード切替スイッチ追加に伴う変更
-    ptMODE = $(".mode-change-box input[name=opt-tgl]:checked").val();
-    $(".select-mode").hide();                    //一旦すべて非表示
-    $(".select-mode" + "." + ptMODE).show();    //選択モードのみ表示
+    ptMODE = $('.mode-change-box input[name=opt-tgl]:checked').val();
+    $('.select-mode').hide();                    //一旦すべて非表示
+    $('.select-mode' + '.' + ptMODE).show();    //選択モードのみ表示
 }
 
 /********************メイン機能関係********************/
-//選択リスト・サーバーリスト読込み
-function setServerLists() {
-    for (let i = 1; i <= 40; i++) {
-        //鯖選択チェックボックス追加
-        $(".select-mode.PTselect").append(i + "<input type='checkbox' value='" + i + "'></input >");
-        if (i % 10 == 0) $(".select-mode.PTselect").append("<br>")
+//テーブルの分割表示
+function splitTable() {
+    const boxName = $(".ServerList").attr("id");
 
-        //鯖リスト読み込み
-        const CopyTemp1 = $($("#template1").html()).clone();
-        CopyTemp1.attr("ServerID", i);
-        CopyTemp1.find(".Title").text(i);
-        CopyTemp1.find(".setTemp").each(function () {
-            const CopyTemp2 = $($("#template2").html()).clone();
-            $(this).append(CopyTemp2);
-        })
-
-        $(".ServerList tbody").append(CopyTemp1);
+    if (settings.splitMODE == "ON") {
+        save_Storage();
+        $("body").css("max-width", "1300px");
+        $(".ServerList2").show();
     }
-    $(".ServerList .Servers").hide();
+    else {
+        save_Storage();
+        $("body").css("max-width", "650px");
+        $(".ServerList2 tr").slice(1).remove();
+        $(".ServerList2").hide();
+    }
+    if (boxName) {
+        $(".setServers").each(function () {
+            if ($(this).text() == boxName)
+                $(this).click(); //調査鯖ボタンクリック
+        })
+    }
 }
 
-//ポイント移動処理 ***************************見直し予定
+//ポイント移動処理
+//***************************見直し対象
 function movePoint(befPoint, afterPoint) {
     //template内移動処理用変数
     const
@@ -1084,69 +1315,35 @@ function movePoint(befPoint, afterPoint) {
     setInitMoveBtn();
 }
 
-//テーブルの分割表示
-function splitTable() {
-    if (settings.splitMODE == "ON") {
-        save_Storage();
-        $("body").css("max-width", "1300px");
-
-        let cnt = 1;
-        for (let i = 1; i <= 40; i++) {
-            if (cnt > 5 && cnt < 11) {
-                $(".ServerList")
-                    .find("[ServerID=" + i + "]")
-                    .appendTo(".ServerList2 tbody");
-                cnt++
-            }
-            else if (cnt > 10) {
-                cnt = 1;
-                i--;
-            }
-            else cnt++;
-        }
-
-        $(".ServerList2").show();
-    }
-    else {
-        save_Storage();
-        $("body").css("max-width", "650px");
-
-        $(".ServerList2 .Servers").each(function () {
-            $(this).appendTo(".ServerList tbody");
-        })
-        $(".ServerList tbody").html(
-            $(".Servers").sort(function (a, b) {
-                a = $(a).attr("ServerID");
-                b = $(b).attr("ServerID");
-                return a - b;
-            })
-        )
-
-        $(".ServerList2").hide();
-    }
-}
-
 //偶数・奇数入替処理
 function tSort(mode) {
-    $(".ServerList tbody").html(
-        $(".Servers").sort((a, b) => {
-            if (mode == "default") {
-                a = $(a).attr("ServerID");
-                b = $(b).attr("ServerID");
-                return a - b;
-            }
-            if (mode == "even_odd") {
-                if (ptMODE == "PT4") {
-                    a = $(a).attr("ServerID") % 2;
-                    b = $(b).attr("ServerID") % 2;
-                    return b - a;
-                }
-            }
-        })
-    );
+    const ServerID = $(".ServerList").attr("id");
+
+    if (ServerID) {
+        $(function () {
+            $('.ServerList tbody').html(
+                $(".Servers").sort(function (a, b) {
+                    if (mode == "default") {
+                        a = $(a).find(".ServerID").text();
+                        b = $(b).find(".ServerID").text();
+                        return a - b;
+                    }
+                    if (mode == "even_odd") {
+                        if (ptMODE == "PT4") {
+                            a = $(a).find(".ServerID").text() % 2;
+                            b = $(b).find(".ServerID").text() % 2;
+                            return b - a;
+                        }
+                    }
+                })
+            );
+        });
+    }
 }
 
-//タイムスタンプ設定 //***************************見直し待機
+
+//タイムスタンプ設定
+//***************************見直し待機
 function timeStamp(objBox, Data) {
     //赤離脱判定
     if (
@@ -1344,13 +1541,13 @@ function timeStamp(objBox, Data) {
         .attr("memoflg", Data.memoflg)
         .attr("memofix", Data.memofix);
 
-    $(".Servers").find(".template2-box").removeClass("sel");
-    objBox.addClass("sel");
+    $('.Servers').find('.template2-box').removeClass('sel');
+    objBox.addClass('sel');
 
     save_Storage(true);
 }
 
-//時間計算 //***************************見直し待機
+//時間計算
 function TimePlus(Time, sumTime) {
     Time = new Date(Number(Time));
     sumTime = sumTime.split(":");
@@ -1366,10 +1563,10 @@ function TimePlus(Time, sumTime) {
     }
 }
 
-//タイマ設置 //***************************見直し待機
+//タイマ設置
 function setTimer(objBox) {
     const
-        Server = objBox.closest("tr").attr("ServerID"),
+        Server = objBox.closest("tr").find(".ServerID").text(),
         Point = objBox.closest("td").attr("class"),
         newDate = new Date().getTime(),
         nowDate = objBox.find(".nowTime").attr("Date"),
@@ -1378,9 +1575,9 @@ function setTimer(objBox) {
         Hour = diffTime / (1000 * 60 * 60),
         Minute = (Hour - Math.floor(Hour)) * 60,
         Second = (Minute - Math.floor(Minute)) * 60,
-        Time = ("00" + Math.floor(Hour)).slice(-2) + ":"
-            + ("00" + Math.floor(Minute)).slice(-2) + ":"
-            + ("00" + Math.round(Second)).slice(-2);
+        Time = ('00' + Math.floor(Hour)).slice(-2) + ':'
+            + ('00' + Math.floor(Minute)).slice(-2) + ':'
+            + ('00' + Math.round(Second)).slice(-2);
 
     if (
         Time == "00:50:00" ||
@@ -1419,10 +1616,10 @@ function setTimer(objBox) {
     else objBox.find(".memo").text("経過時間:" + Time);
 }
 
-//メモ1更新タイマ //***************************見直し待機
+//メモ1更新タイマ
 function memoTimer(objBox, Color) {
     const
-        Server = objBox.closest("tr").attr("ServerID"),
+        Server = objBox.closest("tr").find(".ServerID").text(),
         Point = objBox.closest("td").attr("class"),
         newDate = new Date().getTime(),
         newTime = TimePlus(new Date().getTime(), "00:00:00").Time,
@@ -1548,7 +1745,7 @@ function memoTimer(objBox, Color) {
     }
 }
 
-//タイマー不具合チェック //***************************見直し待機
+//タイマー不具合チェック
 function checkTimer() {
 
     if (check_flg == false) {
@@ -1559,12 +1756,12 @@ function checkTimer() {
                 for (let i = 0; i < 3; i++) {
                     const
                         objBox = $(this).find("." + Points[i]).find(".template2-box"),
-                        objData = new objManagerClass(objBox).Data,
+                        Data = new Cells(objBox).Data,
                         newDate = new Date().getTime();
 
-                    if (objData.memoDate && newDate > objData.memoDate) {
-                        clearTimeout(Timers[objData.Server + Points[i]]);
-                        Timers[objData.Server + Points[i]] = setTimeout(memoTimer, 1000, objBox, objData.memoflg);
+                    if (Data.memoDate && newDate > Data.memoDate) {
+                        clearTimeout(Timers[Data.Server + Points[i]]);
+                        Timers[Data.Server + Points[i]] = setTimeout(memoTimer, 1000, objBox, Data.memoflg);
                     }
                 }
             });
@@ -1585,15 +1782,12 @@ function checkTime(Time) {
 function push_fix(fix, Text, flg) {
     if (Text.indexOf("#") != -1) Text = Text.split("#");
 
-    if (flg == "fix" || flg == "all") {
-        $("." + fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
-        if ($(".block_" + fix).is(":hidden")) $("." + fix).find(".fix").hide();
-    }
+    if (flg == "fix" || flg == "all")
+        $("." + fix).append('<tr><td class="fix">' + Text[0] + '</td></tr>');
     if (flg == "other" || flg == "all") {
         if (fix.indexOf("other_") != -1) fix = fix.replace("other_", "");
-        $(".other_" + fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
-        if ($(".block_other_" + fix).is(":hidden")) $(".other_" + fix).find(".fix").hide();
-
+        $(".other_" + fix).append('<tr><td class="fix">' + Text[0] + "</td></tr>");
+        if ($(".other_block_" + fix).is(":hidden")) $(".other_" + fix).find(".fix").hide();
         if (share_flg) {
             Text = Text.join("#");
             updateList("ADD", fix, Text);
@@ -1601,38 +1795,44 @@ function push_fix(fix, Text, flg) {
     }
 }
 
-//サイドリストの高さ調整
-$(window).on("resize maximize", fncFixRedReSize);
+//ウィンドウ - リサイズ／最大化
+var
+    objWd = $(window),          //ウィンドウ
+    l_rightFollowFlg = false;   //追随中フラグ
+objWd.on('resize maximize', function () {
+    //サイドリストの高さ調整
+    fncFixRedReSize();
+});
 
 //サイドリスト（右側固定時）の高さ設定
 function fncFixRedReSize() {
     if (l_rightFollowFlg === true) {
         //高さ設定
-        let h = $(window).height() - 470;
+        var h = objWd.height() - 470;
         //20以下には縮めない
         if (h <= 20) { h = 20; }
-        $("#fix-red, #other_fix_red").children("tbody").height(h);
+        $('#fix-red, #other_fix_red').children('tbody').height(h);
     }
 }
 
 //サイドリスト追随モード切替
 $(document).on("click", "#chk-side-follow", function () {
     const
-        MODE_ON = "following-on",    //ついてくるClass名
-        MODE_OFF = "following-off";  //ついてこないClass名
+        MODE_ON = 'following-on',    //ついてくるClass名
+        MODE_OFF = 'following-off';  //ついてこないClass名
 
     //追随切替
-    l_rightFollowFlg = $("#chk-side-follow").prop("checked");
+    l_rightFollowFlg = $('#chk-side-follow').prop('checked');
     if (l_rightFollowFlg === true) {
-        $(".side-list-box, .side-list-area").removeClass(MODE_OFF);
-        $(".side-list-box, .side-list-area").addClass(MODE_ON);
+        $('.side-list-box, .side-list-area').removeClass(MODE_OFF);
+        $('.side-list-box, .side-list-area').addClass(MODE_ON);
         $(".hung-icon_other").hide();
 
         if (side_mode == "default") {
-            $(".side-list-box").hide();
+            $('.side-list-box').hide();
             $(".side-list-area").css("height", "80px");
-            $(".side-list-area").find(".hung-icon").toggleClass("rev"); //アイコン反転
-            $(".side-list-area").find(".hung-icon_other").show();
+            $(".side-list-area").find('.hung-icon').toggleClass('rev');     //アイコン反転
+            $(".side-list-area").find('.hung-icon_other').show();
         }
         else if (side_mode == "fix_box") {
             $(".fix_box").show();
@@ -1641,25 +1841,25 @@ $(document).on("click", "#chk-side-follow", function () {
         else {
             $(".fix_box").hide();
             $(".other_fix_box").show();
-            $(".block_other_fix_blue, .block_other_fix_red").show();
+            $(".other_block_fix_blue, .other_block_fix_red").show();
         }
 
         fncFixRedReSize();
     }
     else {
-        $(".side-list-box, .side-list-area").removeClass(MODE_ON);
-        $(".side-list-box, .side-list-area").addClass(MODE_OFF);
+        $('.side-list-box, .side-list-area').removeClass(MODE_ON);
+        $('.side-list-box, .side-list-area').addClass(MODE_OFF);
         $(".fix_box, .other_fix_box").show();
         $(".fix_blue tbody, .fix_red tbody, .other_fix_blue tbody, .other_fix_red tbody").css("height", "");
     }
-})
+});
 
 //サイドリスト収納切替
 $(document).on("click", ".side-list-btn", function () {
     const target = $(this).attr("target");
 
-    $(".side-list-box").animate({ width: "toggle" }, "fast", function () {
-        const visible = $(".side-list-box").is(":visible");
+    $('.side-list-box').animate({ width: 'toggle' }, 'fast', function () {
+        const visible = $('.side-list-box').is(":visible");
 
         if (target == "fix_box") {
             side_mode = "fix_box";
@@ -1674,19 +1874,19 @@ $(document).on("click", ".side-list-btn", function () {
 
         if (visible) {
             $(".side-list-area").css("height", "40px");
-            $(".side-list-area").find(".hung-icon_other").hide();
+            $(".side-list-area").find('.hung-icon_other').hide();
         }
         else {
             $(".side-list-area").css("height", "80px");
-            $(".side-list-area").find(".hung-icon_other").show();
+            $(".side-list-area").find('.hung-icon_other').show();
         }
     });
 
-    $(".side-list-area").find(".hung-icon").toggleClass("rev");     //アイコン反転
-})
+    $(".side-list-area").find('.hung-icon').toggleClass('rev');     //アイコン反転
+});
 
 //機能リスト-[戻す]
-$(document).on("click", ".func-list-area", Rollback);
+$(document).on("click", ".func-list-area", function () { Rollback(); });
 
 
 /********************保存・削除関連********************/
@@ -1701,32 +1901,46 @@ function save_Sort() {
     localStorage.setItem("Sort", JSON.stringify(Sort));
 }
 
+//[調査場所の並びをリセット]
+function clear_Sort() {
+    const Sort = ["ゲルヘナ幻野", "ジャリムバハ砂漠", "バルディスタ要塞"];
+
+    localStorage.setItem("Sort", JSON.stringify(Sort));
+    sortPoint();
+}
+
 //入力情報のクリア
 function Cleaner(target) {
     const flg = confirm("ブラウザ上の入力情報と保存情報がクリアされます。よろしいですか？");
 
     if (flg) {
         if (target == "all") {
-            clear_input();
-            clear_fixs();
+            clear_input()
+            clear_fixs()
+            localStorage.setItem("1 - 10", "")
+            localStorage.setItem("11 - 20", "")
+            localStorage.setItem("21 - 30", "")
+            localStorage.setItem("31 - 40", "")
         }
-        else if (target == "input") clear_input();
-        else clear_fixs(target);
+        else if (target == "input") clear_input()
+        else if (target == "sort") clear_Sort()
+        else clear_fixs(target)
 
-        save_Storage();
+        save_Storage()
+        save_Fix()
     }
 }
 
 //チェックリストのクリア
 function clear_input() {
-    $(".Servers").find(".template2-box").removeClass("sel");
-    clearInterval(Timers);
+    $('.Servers').find('.template2-box').removeClass('sel');
+    clearInterval(Timers.updateTime);
     TMP = [];
     share_flg = false;
 
     $(".Servers").each(function () {
         const
-            Server = $(this).attr("ServerID"),
+            Server = Number($(this).find(".ServerID").text()),
             Points = ["ゲル", "砂漠", "バル"];
 
         if ($(this).is(":visible")) {
@@ -1759,7 +1973,18 @@ function clear_input() {
     setRollbackEnable(); //【NaL】[戻す]ボタンの活性切替
 }
 
-//[(青黄/確定リスト)クリア]
+//[(確定/青木リスト)コピー]
+function setClip(fix) {
+    let Text = "";
+
+    $("." + fix).find(".fix").each(function () {
+        Text += $(this).text() + "\n";
+    });
+
+    TextCopy(Text);
+}
+
+//[(確定/青木リスト)クリア]
 function clear_fixs(fix) {
     if (fix) $("." + fix + " tr").slice(1).remove();
     else {
@@ -1771,35 +1996,24 @@ function clear_fixs(fix) {
     }
 }
 
-//(青黄/確定リスト)選択クリア
+//(確定/青黄リスト)選択クリア
 function clear_fix(fix, Text) {
     $("." + fix).find(".fix").each(function () {
-        let objText = $(this).text().split(" ");
-        if (objText[0] == Text) $(this).closest("tr").remove();
+        let obj = $(this).text().split(" ");
+        if (obj[0] == Text) $(this).closest("tr").remove();
     })
     $(".other_" + fix).find(".fix").each(function () {
-        let objText = $(this).text().split(" ");
-        if (objText[0] == Text) {
+        let obj = $(this).text().split(" ");
+        if (obj[0] == Text) {
             $(this).closest("tr").remove();
             if (share_flg) updateList("DEL", fix, Text);
         }
     })
 }
 
-//[(青黄/確定リスト)コピー]
-function setClip(fix) {
-    let Text = "";
-
-    $("." + fix).find(".fix").each(function () {
-        Text += $(this).text() + "\n";
-    });
-
-    TextCopy(Text);
-}
-
 //(確定/青黄リスト)保存
 function save_Fix() {
-    const
+    let
         fix_blue = [],
         fix_red = [];
 
@@ -1818,13 +2032,7 @@ function save_Fix() {
 /********************オプション設定********************/
 //分割モード切替
 $(document).on("click", ".split", function () {
-    if ($(this).prop("checked")) {
-        if (settings.even_oddMODE == "ON") {
-            alert("偶数奇数モード中は使用できません");
-            $(this).prop("checked", false);
-            return 0;
-        }
-
+    if ($(this).prop('checked')) {
         settings.splitMODE = "ON";
         localStorage.setItem("settings", JSON.stringify(settings));
         splitTable();
@@ -1838,13 +2046,7 @@ $(document).on("click", ".split", function () {
 
 //偶数・奇数モード切替
 $(document).on("click", ".even_odd", function () {
-    if ($(this).prop("checked")) {
-        if (settings.splitMODE == "ON") {
-            alert("分割モード中は使用できません");
-            $(this).prop("checked", false);
-            return 0;
-        }
-
+    if ($(this).prop('checked')) {
         settings.even_oddMODE = "ON";
         localStorage.setItem("settings", JSON.stringify(settings));
         tSort("even_odd");
@@ -1858,7 +2060,7 @@ $(document).on("click", ".even_odd", function () {
 
 //メモ欄表示モード切替
 $(document).on("click", ".tgl_memo2", function () {
-    if ($(this).prop("checked")) {
+    if ($(this).prop('checked')) {
         $(".memo2").css("display", "inline-block");
         settings.memo2_display = "show";
         localStorage.setItem("settings", JSON.stringify(settings));
@@ -1870,16 +2072,16 @@ $(document).on("click", ".tgl_memo2", function () {
     }
 });
 
-//自動更新モード切替 ***************************見直し対象
+//自動更新モード切替
 $(document).on("click", ".toggle_switch .auto", function () {
-    if ($(this).prop("checked")) {
+    if ($(this).prop('checked')) {
         if ($(this).attr("class") == "auto yellow_red") {
             alert("メンテナンス中です");
-            $(this).prop("checked", false);
+            $(this).prop('checked', false);
             return 0;
             if (settings.auto["blue_yellow"] == "OFF") {
                 alert("青黄→黄自動更新モードがONになっていません");
-                $(this).prop("checked", false);
+                $(this).prop('checked', false);
                 return 0;
             }
         }
@@ -1895,18 +2097,18 @@ $(document).on("click", ".toggle_switch .auto", function () {
 //[戻す]ボタン表示切替
 $(document).on("click", ".showUndoBtn", function () {
     const
-        MODE_ON = "following-on",
-        MODE_OFF = "following-off";
+        MODE_ON = 'following-on',
+        MODE_OFF = 'following-off';
 
-    if ($(this).prop("checked")) {
-        $(".func-list-area").removeClass(MODE_OFF);
-        $(".func-list-area").addClass(MODE_ON);
+    if ($(this).prop('checked')) {
+        $('.func-list-area').removeClass(MODE_OFF);
+        $('.func-list-area').addClass(MODE_ON);
         settings.showUndoBtn = "ON";
         localStorage.setItem("settings", JSON.stringify(settings));
     }
     else {
-        $(".func-list-area").removeClass(MODE_ON);
-        $(".func-list-area").addClass(MODE_OFF);
+        $('.func-list-area').removeClass(MODE_ON);
+        $('.func-list-area').addClass(MODE_OFF);
         settings.showUndoBtn = "OFF";
         localStorage.setItem("settings", JSON.stringify(settings));
     }
@@ -1916,28 +2118,29 @@ $(document).on("click", ".showUndoBtn", function () {
 /********************スライドBOX********************/
 //スライドBOX（使い方／更新履歴）開閉
 $(document).on("click", ".slider-title", function () {
-    $(this).next(".slider-box").slideToggle("fast");
-    $(this).find(".slider-icon").toggleClass("rev");    //アイコン反転
+    $(this).next('.slider-box').slideToggle("fast");
+    $(this).find('.slider-icon').toggleClass('rev');    //アイコン反転
 })
 
 
 /********************汎用関数********************/
-//ajax通信 **送信先調整
+//ajax通信
 function xhrSend(params, resFunc) {
+    params.version = version;
+
     $.ajax({
         url: "https://script.google.com/macros/s/AKfycbxAAOEdydyuV7p9sy7v4VhA_xEoHv_E3OVe3O_IuUoNI_A2XRZyv5ao9EtVCcd1dB6s/exec",
         async: false,
         cache: false,
         type: "GET",
-        dataType: "json",
-        contentType: "application/json",
+        dataType: "jsonp",
         data: params,
         beforeSend: XMLHttpRequest => {
             //iPhone周りのエラー対策
-            if (window.navigator.userAgent.toLowerCase().indexOf("safari") != -1)
+            if (window.navigator.userAgent.toLowerCase().indexOf('safari') != -1)
                 XMLHttpRequest.setRequestHeader("If-Modified-Since", new Date().toUTCString())
         },
-        success: (res) => resFunc(res),
+        success: res => resFunc(res),
         error: (XMLHttpRequest, textStatus, errorThrown) => {
             $(".message").html(
                 "ERROR!!<br>" +
@@ -1950,20 +2153,34 @@ function xhrSend(params, resFunc) {
     })
 }
 
+//圧縮
+function deflate(val) {
+    val = encodeURIComponent(val); // UTF16 → UTF8
+    val = RawDeflate.deflate(val); // 圧縮
+    val = btoa(val); // base64エンコード
+    return val;
+}
+
+//復号
+function inflate(val) {
+    val = atob(val); // base64デコード
+    val = RawDeflate.inflate(val); // 復号
+    val = decodeURIComponent(val); // UTF8 → UTF16
+    return val;
+}
+
 //コピー処理
 function TextCopy(Text) {
-    const promise = new Promise((resolve, reject) => {
-        navigator.clipboard.writeText(Text);
-        resolve(Text);
-    });
+    const promise = new Promise((resolve, reject) => resolve());
 
-    promise.then((str) => {
+    promise.then(() => navigator.clipboard.writeText(Text));
+    promise.then(function (str) {
         if (!str || typeof (str) != "string") return "";
 
         //strを含んだtextareaをbodyタグの末尾に設置
         $(document.body).append("<textarea id=\"tmp_copy\" style=\"position:fixed;right:100vw;font-size:16px;\">" + str + "</textarea>");
 
-        let target = document.querySelector("#tmp_copy");
+        let target = document.querySelector('#tmp_copy');
         target.contentEditable = true;
         target.readOnly = false;
         let range = document.createRange();
