@@ -142,7 +142,7 @@ function connectShare() {
         }
 
         $(".message").text("共有表に接続中...").show();
-        Socket = io();
+        Socket = io.connect("https://ouchi-tools.herokuapp.com/");
         Socket.emit("connectShare", share_ID, (res) => {
             if (res) {
                 if (res.Err) {
@@ -155,6 +155,7 @@ function connectShare() {
                 $(".message").html("接続に成功しました");
                 $(".connectArea").show();
                 $(".connectCount").text(res.connectCount)
+                $(".copyArea").hide();
                 $(".changeShare").show();
                 $(".disconnect").show();
                 $(".other_fix_blue").find(".fix").show();
@@ -225,7 +226,7 @@ function changeShare() {
         Socket.emit("changeShare", share_ID, (res) => {
             share_ID = res;
 
-            $(".message").hide();
+            $(".message").text("共有表の作成に成功しました").show();
             $(".connectCount").text("1");
             $(".copyArea").show();
             $(".copyText").val(share_ID);
@@ -241,9 +242,10 @@ function disconnect() {
             Socket = ""
             share_ID = "";
 
-            $(".message").text("接続を切断しました");
+            $(".message").text("接続を切断しました").show();
             $(".connectArea").hide();
             $(".disconnect").hide();
+            $(".copyArea").hide();
             $(".changeShare").hide();
             $(".other_fix_blue").find(".fix").hide();
             $(".other_fix_red").find(".fix").hide();
