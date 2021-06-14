@@ -955,6 +955,9 @@ function load_settings() {
         if (settings.ListSetting) {
             objList.forEach(fix => {
                 if ([fix] in settings["ListSetting"]) {
+                    if (!settings.ListSetting[fix].scrollHeight)
+                        settings.ListSetting[fix].scrollHeight = 6 * 24;
+
                     //全部表示する/しない設定
                     if (settings.ListSetting[fix].scrollMode == "ON")
                         $(document).find(".scroll_" + fix + " input").click();
