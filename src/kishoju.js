@@ -67,11 +67,11 @@ $(function () {
         modeChange();           //4PT・8PT切替(デフォルト4PT)
         setInitMoveBtn();       //【NaL】調査マップ入替ボタンの活性切替
         sortPoint();            //場所の並び変更
+        onFixListChangeEvent()  //青黄確定リスト変更イベント設定
         setServerLists();       //サーバーリスト読込み
         load_Storage();       //サーバーデータ読込み
         setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
         load_settings();        //オプション設定読込み
-        onFixListChangeEvent()  //青黄確定リスト変更イベント設定
     }
     catch (e) { $(".message").text("Error:" + e.stack).show(); }
 })
@@ -644,9 +644,19 @@ $(document).on(
     "click",
     ".fix_blue_head, .fix_red_head, .other_fix_blue_head, .other_fix_red_head",
     function () {
-        const fix = $(this).attr("class").replace("_head", "");
-        $("." + fix).find(".fix").toggle();
-        $(".block_" + fix).toggle();
+        if (!l_rightFollowFlg) {
+            const
+                fix = $(this).attr("class").replace("_head", ""),
+                visible = $("." + fix + " tbody").find(".fix").is(":visible");
+            if (visible) {
+                $("." + fix).find(".fix").hide();
+                $(".block_" + fix).hide();
+            }
+            else {
+                $("." + fix).find(".fix").show();
+                $(".block_" + fix).show();
+            }
+        }
     }
 );
 
@@ -943,11 +953,11 @@ function load_settings() {
         //青黄確定リストモードフラグ
         $(".chk-tgl-span button").prop("disabled", true);
         if (settings.ListSetting) {
-            objList.forEach(obj => {
-                if ([obj] in settings["ListSetting"]) {
+            objList.forEach(fix => {
+                if ([fix] in settings["ListSetting"]) {
                     //全部表示する/しない設定
-                    if (settings.ListSetting[obj].scrollMode == "ON")
-                        $(document).find(".scroll_" + obj + " input").click();
+                    if (settings.ListSetting[fix].scrollMode == "ON")
+                        $(document).find(".scroll_" + fix + " input").click();
                 }
             })
         }
@@ -991,9 +1001,6 @@ function onFixListChangeEvent() {
                     scroll_flg = $(".scroll_" + fix).find(".chk-Box").prop("checked"),
                     visible = $(".scroll_" + fix).is(":visible");
 
-                if (!settings.ListSetting[fix].scrollHeight)
-                    settings.ListSetting[fix].scrollHeight = 24 * 5;
-
                 if (!scroll_flg && visible) {
                     const
                         maxHeight = settings.ListSetting[fix].scrollHeight,
@@ -1006,7 +1013,7 @@ function onFixListChangeEvent() {
                         $(".scroll_" + fix).find(".chk-tgl-span button").prop("disabled", false);
                     }
                 }
-                else {
+                else if (!l_rightFollowFlg) {
                     $("." + fix + " tbody").css("display", "");
                     $("." + fix + " tbody").css("height", "0px");
                     $(".scroll_" + fix).find(".chk-tgl-span button").prop("disabled", true);
@@ -1712,7 +1719,7 @@ function Cleaner(target) {
 
     if (flg) {
         if (target == "all") {
-            clear_input();
+            clear_input("all");
             clear_fixs();
         }
         else if (target == "input") clear_input();
@@ -1723,7 +1730,12 @@ function Cleaner(target) {
 }
 
 //チェックリストのクリア
-function clear_input() {
+function clear_input(MODE) {
+    if (MODE != "all" && !$(".Servers").is(":visible")) {
+        alert("先に調査サーバーを選択してください。");
+        return 0;
+    }
+
     $(".Servers").find(".template2-box").removeClass("sel");
     clearInterval(Timers);
     TMP = [];
@@ -1733,8 +1745,12 @@ function clear_input() {
         const
             Server = $(this).attr("ServerID"),
             Points = ["ゲル", "砂漠", "バル"];
+        let visible;
 
-        if ($(this).is(":visible")) {
+        if (MODE == "all") visible = true;      //全削除
+        else visible = $(this).is(":visible");  //表示中のものだけ選択
+
+        if (visible) {
             $(this).find(".btn[value=red]").each(function () {
                 $(this).prop("disabled", false);
             });
@@ -1757,7 +1773,7 @@ function clear_input() {
             Points.forEach(function (Point) {
                 clear_fix("fix_blue", Server + Point);
                 clear_fix("fix_red", Server + Point);
-                clearInterval(Timers[Server + Point]);  //タイマ初期化
+                clearInterval(Timers[Server + Point]);  //タイマー初期化
             })
         }
     })
