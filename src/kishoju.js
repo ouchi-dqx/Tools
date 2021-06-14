@@ -1566,7 +1566,7 @@ function memoTimer(objBox, Color) {
 //タイマー不具合チェック //***************************見直し待機
 function checkTimer() {
 
-    if (check_flg == false) {
+    if (check_flg) {
         setInterval(() => {
             const Points = ["ゲル", "砂漠", "バル"];
 
@@ -1651,11 +1651,19 @@ $(document).on("click", "#chk-side-follow", function () {
         }
         else if (side_mode == "fix_box") {
             $(".fix_box").show();
+            $(".fix_blue").find(".fix").show();
+            $(".fix_red").find(".fix").show();
+            $(".block_fix_blue").show();
+            $(".block_fix_blue").show();
             $(".other_fix_box").hide();
         }
         else {
             $(".fix_box").hide();
             $(".other_fix_box").show();
+            $(".other_fix_blue").find(".fix").show();
+            $(".other_fix_red").find(".fix").show();
+            $(".block_other_fix_blue").show();
+            $(".block_other_fix_blue").show();
             $(".block_other_fix_blue, .block_other_fix_red").show();
         }
 
@@ -1666,6 +1674,12 @@ $(document).on("click", "#chk-side-follow", function () {
         $(".side-list-box, .side-list-area").addClass(MODE_OFF);
         $(".fix_box, .other_fix_box").show();
         $(".fix_blue tbody, .fix_red tbody, .other_fix_blue tbody, .other_fix_red tbody").css("height", "");
+        if (!share_flg) {
+            $(".other_fix_blue").find(".fix").hide();
+            $(".other_fix_red").find(".fix").hide();
+            $(".block_other_fix_blue").hide();
+            $(".block_other_fix_blue").hide();
+        }
     }
 })
 
@@ -1679,12 +1693,20 @@ $(document).on("click", ".side-list-btn", function () {
         if (target == "fix_box") {
             side_mode = "fix_box";
             $(".fix_box").show();
+            $(".fix_blue").find(".fix").show();
+            $(".fix_red").find(".fix").show();
+            $(".block_fix_blue").show();
+            $(".block_fix_blue").show();
             $(".other_fix_box").hide();
         }
         else {
             side_mode = "other_box";
             $(".fix_box").hide();
             $(".other_fix_box").show();
+            $(".other_fix_blue").find(".fix").show();
+            $(".other_fix_red").find(".fix").show();
+            $(".block_other_fix_blue").show();
+            $(".block_other_fix_blue").show();
         }
 
         if (visible) {
