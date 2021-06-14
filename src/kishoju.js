@@ -12,6 +12,9 @@ var
     l_rightFollowFlg = false,   //サイドリスト追随中フラグ
     Socket;
 
+//Socket.io本体
+const Socket_URL = "https://ouchi-tools.herokuapp.com/";
+
 //テスト用関数
 function debug() { }
 
@@ -88,7 +91,7 @@ function addShare() {
         }
 
         $(".message").text("共有表を作成中...").show();
-        Socket = io.connect("https://ouchi-tools.herokuapp.com/");
+        Socket = io.connect(Socket_URL);
         Socket.emit("addShare", (res) => {
             if (res) {
                 if (res.Err) {
@@ -142,7 +145,7 @@ function connectShare() {
         }
 
         $(".message").text("共有表に接続中...").show();
-        Socket = io.connect("https://ouchi-tools.herokuapp.com/");
+        Socket = io.connect(Socket_URL);
         Socket.emit("connectShare", share_ID, (res) => {
             if (res) {
                 if (res.Err) {
