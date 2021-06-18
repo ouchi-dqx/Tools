@@ -104,8 +104,8 @@ function addShare() {
                 share_flg = true;
 
                 $(".message").text("共有表の作成に成功しました").show();
-                $(".connectArea").find(".connectCount").show();
-                $(".connectCount").text("1");
+                $(".connectArea").show();
+                $(".connectCount").text("1").show();
                 $(".changeShare").show();
                 $(".disconnect").show();
                 $(".copyArea").show();
@@ -157,7 +157,7 @@ function connectShare() {
                 share_flg = true;
                 $(".message").html("接続に成功しました");
                 $(".connectArea").show();
-                $(".connectCount").text(res.connectCount)
+                $(".connectCount").text(res.connectCount).show();
                 $(".copyArea").hide();
                 $(".changeShare").show();
                 $(".disconnect").show();
@@ -194,8 +194,17 @@ function updateList(mode, fix, Text) {
 
             Socket.on("ADD/DEL", (res) => {
                 if (res.mode == "ADD") {
-                    Text = res.Text.split("#");
-                    $(".other_" + res.fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
+                    let
+                        Text = res.Text.split("#"),
+                        flg;
+
+                    $(".other_" + res.fix).each(function () {
+                        let objText = $(this).text();
+                        if (objText == Text[0]) flg = true;
+                    })
+
+                    if (!flg)
+                        $(".other_" + res.fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
                 }
                 else if (res.mode == "DEL") {
                     Text = res.Text.split("#");
@@ -1091,7 +1100,7 @@ function movePoint(befPoint, afterPoint) {
         $(".ServerList thead").html(thead);
     }
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 40; i++) {
         $(".Servers").find(befClass).eq(i)
             .insertBefore($(".Servers").find(afterClass).eq(i));
     }
