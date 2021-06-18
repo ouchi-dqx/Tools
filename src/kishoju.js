@@ -198,7 +198,7 @@ function updateList(mode, fix, Text) {
                         Text = res.Text.split("#"),
                         flg;
 
-                    $(".other_" + res.fix).each(function () {
+                    $(".other_" + res.fix).find(".fix").each(function () {
                         let objText = $(this).text();
                         if (objText == Text[0]) flg = true;
                     })
