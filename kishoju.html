@@ -97,12 +97,12 @@
                 <img src="icon.png" width="25px" height="25px" style="margin-top: 5px;">
             </div>
             <div class="ouchi-msg">
-                ◆共有機能の各種処理を再作成しました。<br>
-                　それに合わせて全体的にコード微修正を行いました。<br>
-                　詳細は更新履歴まで(不具合あれば連絡下さい。。。)<br>
-                ※共有機能に不具合があった場合、<a href="https://ouchi-dqx.github.io/Tools/old/kishoju.html">旧ページ</a>で
-                更新前の共有機能をお使いください。<br>
+                ◆<a href="https://twitter.com/ouchi_dqx/status/1407926566332497927">[障害連絡]
+                    06/23(水)22時50分～23時15分の間の共有機能の不具合について
+                </a><br>
                 ◆共有表の複製時、複製した本人が複製後の共有表に入れていない不具合を修正<br>
+                ◆ツールを開いた時に前回のデータが表示される不具合を修正<br>
+                ◆[前回の続きから]ボタンを復活<br>
                 ◆要望や不具合等の連絡先にGmailを追加しました→ouchi.dqx@gmail.com
             </div>
         </div>
@@ -161,6 +161,7 @@
                 <span>調査状態の設定</span><span class="material-icons">play_arrow</span>
             </div>
             <div class="setting-btn-box">
+                <button onclick="load_Storage()">前回の続きから</button>
                 <button onclick="Cleaner('input')">表リセット</button>
                 <button onclick="Cleaner('all')">全リセット</button>
             </div>
@@ -611,6 +612,12 @@
         </div>
         <div class="slider-box">
             <ul class="box-list">
+                <li>
+                    2021/06/24 <br>
+                    (不具合修正)<br>
+                    ・ツールを開いた時に前回のデータが表示される不具合を修正<br>
+                    ・[前回の続きから]ボタンを復活<br>
+                </li>
                 <li>
                     2021/06/23 <br>
                     (不具合修正)<br>

@@ -69,7 +69,6 @@ $(function () {
         sortPoint();            //場所の並び変更
         onFixListChangeEvent()  //青黄確定リスト変更イベント設定
         setServerLists();       //サーバーリスト読込み
-        load_Storage();       //サーバーデータ読込み
         setRollbackEnable();    //【NaL】[戻す]ボタンの活性切替
         load_settings();        //オプション設定読込み
     }
