@@ -500,6 +500,7 @@ function save_Storage() {
 //[復元] ***************************見直し対象
 function load_Storage(getData) {
     let Storage, fix_blue, fix_red;
+    $("#btn-restore").prop("disabled", true);
 
     if (!get_flg) {
         Storage = JSON.parse(localStorage.getItem("Storage"));
@@ -883,7 +884,11 @@ function setInitMoveBtn() {
 function setRollbackEnable() {
     let flg = true;
 
-    if (TMP.length > 0) flg = false; //TMPの中身がないときだけ非活性
+
+    if (TMP.length > 0) {
+        $("#btn-restore").prop("disabled", true);
+        flg = false; //TMPの中身がないときだけ非活性
+    }
     $("#btn-rollback").prop("disabled", flg);
 }
 
@@ -1769,10 +1774,26 @@ function clear_input(MODE) {
         return 0;
     }
 
+    if (share_flg) {
+        const flg = confirm("共有表から切断されますがよろしいですか？");
+        if (flg) {
+            $(".message").text("接続を切断しました").show();
+            $(".connectArea").hide();
+            $(".disconnect").hide();
+            $(".copyArea").hide();
+            $(".changeShare").hide();
+            $(".other_fix_blue").find(".fix").hide();
+            $(".other_fix_red").find(".fix").hide();
+            $(".block_other_fix_red").hide();
+            $(".block_other_fix_blue").hide();
+            share_flg = false;
+        }
+        else return 0;
+    }
+
     $(".Servers").find(".template2-box").removeClass("sel");
     clearInterval(Timers);
     TMP = [];
-    share_flg = false;
 
     $(".Servers").each(function () {
         const

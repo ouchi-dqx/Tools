@@ -333,10 +333,10 @@ button {
     background-color: #fff1ef;
 }
 
-/*
-.memo2.show{ display: inline-block; }
-.memo2.hide{ display: none; }
-*/
+[color="yellow"]{ background-color: #F0F080 !important; }
+[color="red"]{ background-color: #F06060 !important; }
+[color="violet"]{ background-color: #FF69B4 !important; }
+
 /************************************************　サイドリスト　************************************************/
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
 .side-list-box.following-off{ display: table; }
