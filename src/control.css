@@ -334,8 +334,8 @@ button {
 }
 
 [color="yellow"]{ background-color: #F0F080 !important; }
-[color="red"]{ background-color: #F06060 !important; }
-[color="violet"]{ background-color: #FF69B4 !important; }
+[color="red"]{ background-color: #ff6347 !important; }
+[color="violet"]{ background-color: #dda0dd !important; }
 
 /************************************************　サイドリスト　************************************************/
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
