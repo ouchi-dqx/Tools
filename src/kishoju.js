@@ -90,8 +90,9 @@ function addShare() {
         }
 
         $(".message").text("共有表を作成中...").show();
-        Socket = io.connect(Socket_URL);
-        Socket.emit("addShare", (res) => {
+
+        const params = { mode: "addShare" };
+        xhrSend(params, (res) => {
             if (res) {
                 if (res.Err) {
                     alert("Error:" + res.Err);
@@ -99,22 +100,26 @@ function addShare() {
                     return 0;
                 }
 
-                share_ID = res;
+                share_ID = res.share_ID;
                 share_flg = true;
 
-                $(".message").text("共有表の作成に成功しました").show();
-                $(".connectArea").show();
-                $(".connectCount").text("1").show();
-                $(".changeShare").show();
-                $(".disconnect").show();
-                $(".copyArea").show();
-                $(".copyText").val(share_ID);
-                $(".other_fix_blue").find(".fix").show();
-                $(".other_fix_red").find(".fix").show();
-                $(".block_other_fix_red").show();
-                $(".block_other_fix_blue").show();
+                Socket = io.connect(Socket_URL);
+                Socket.emit("connectShare", share_ID, (resSocket) => {
+                    $(".message").text("共有表の作成に成功しました").show();
+                    $(".connectArea").show();
+                    $(".connectCount").text("1").show();
+                    $(".re_getLists").show();
+                    $(".changeShare").show();
+                    $(".disconnect").show();
+                    $(".copyArea").show();
+                    $(".copyText").val(share_ID);
+                    $(".other_fix_blue").find(".fix").show();
+                    $(".other_fix_red").find(".fix").show();
+                    $(".block_other_fix_red").show();
+                    $(".block_other_fix_blue").show();
 
-                updateList("GET");
+                    updateList("GET");
+                });
             }
             else {
                 alert("Error:Unknown Error")
@@ -144,8 +149,13 @@ function connectShare() {
         }
 
         $(".message").text("共有表に接続中...").show();
-        Socket = io.connect(Socket_URL);
-        Socket.emit("connectShare", share_ID, (res) => {
+
+        const params = {
+            mode: "connectShare",
+            share_ID: share_ID,
+        };
+
+        xhrSend(params, (res) => {
             if (res) {
                 if (res.Err) {
                     alert("Error:" + res.Err);
@@ -154,28 +164,33 @@ function connectShare() {
                 }
 
                 share_flg = true;
-                $(".message").html("接続に成功しました");
-                $(".connectArea").show();
-                $(".connectCount").text(res.connectCount).show();
-                $(".copyArea").hide();
-                $(".changeShare").show();
-                $(".disconnect").show();
-                $(".other_fix_blue").find(".fix").show();
-                $(".other_fix_red").find(".fix").show();
-                $(".block_other_fix_red").show();
-                $(".block_other_fix_blue").show();
 
-                Object.keys(res.fixs).forEach((fix) => {
-                    $(".other_" + fix + " tr").slice(1).remove();
+                Socket = io.connect(Socket_URL);
+                Socket.emit("connectShare", share_ID, (resSocket) => {
+                    $(".message").html("接続に成功しました");
+                    $(".connectArea").show();
+                    $(".connectCount").text(resSocket.connectCount).show();
+                    $(".copyArea").hide();
+                    $(".re_getLists").show();
+                    $(".changeShare").show();
+                    $(".disconnect").show();
+                    $(".other_fix_blue").find(".fix").show();
+                    $(".other_fix_red").find(".fix").show();
+                    $(".block_other_fix_red").show();
+                    $(".block_other_fix_blue").show();
 
-                    res.fixs[fix].split(",").forEach((Text) => {
-                        if (!Text) return 0;
-                        Text = Text.split("#");
-                        $(".other_" + fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
+                    Object.keys(res.fixs).forEach((fix) => {
+                        $(".other_" + fix + " tr").slice(1).remove();
+
+                        res.fixs[fix].split(",").forEach((Text) => {
+                            if (!Text) return 0;
+                            Text = Text.split("#");
+                            $(".other_" + fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
+                        })
                     })
-                })
 
-                updateList("GET");
+                    updateList("GET");
+                });
             }
             else {
                 alert("Error:Unknown Error")
@@ -212,20 +227,35 @@ function updateList(mode, fix, Text) {
             });
         }
         else if (mode == "ADD" || mode == "DEL") {
-            const query = {
+            const params = {
                 mode: mode,
                 share_ID: share_ID,
                 fix: fix,
                 Text: Text,
             };
 
-            Socket.emit("ADD/DEL", query, (res) => {
-                if (res.Err) {
-                    alert("Error:" + res.Err);
-                    $(".message").text("Error:" + res.Err);
-                    return 0;
-                }
-            });
+            let i, flg;
+            for (i = 0; i < 4; i++) {
+                xhrSend(params, (res) => {
+                    if (res) {
+                        if (res.Err) {
+                            alert("Error:" + res.Err);
+                            $(".message").text("Error:" + res.Err);
+                            return 0;
+                        }
+
+                        flg = res.flg;
+                        Socket.emit("ADD/DEL", params, (res) => { });
+                    }
+                    else {
+                        alert("Error:Unknown Error")
+                        $(".message").text("Error:Unknown Error").show();
+                        return 0;
+                    }
+                });
+
+                if (flg) break;
+            }
         }
     }
 }
@@ -234,13 +264,76 @@ function changeShare() {
     const flg = confirm("共有表を複製しますか？(パスワードが変更されます)");
     if (flg) {
         $(".message").text("共有表を作成中...").show();
-        Socket.emit("changeShare", share_ID, (res) => {
-            share_ID = res;
 
-            $(".message").text("共有表の作成に成功しました").show();
-            $(".connectCount").text("1");
-            $(".copyArea").show();
-            $(".copyText").val(share_ID);
+        const params = {
+            mode: "changeShare",
+            share_ID: share_ID,
+        };
+
+        xhrSend(params, (res) => {
+            if (res) {
+                if (res.Err) {
+                    alert("Error:" + res.Err);
+                    $(".message").text("Error:" + res.Err);
+                    return 0;
+                }
+
+                const old_ID = share_ID;
+                share_ID = res.share_ID;
+
+                Socket.emit("changeShare", { old_ID, share_ID }, (res) => {
+                    $(".message").text("共有表の作成に成功しました").show();
+                    $(".connectCount").text("1");
+                    $(".copyArea").show();
+                    $(".copyText").val(share_ID);
+                });
+            }
+            else {
+                alert("Error:Unknown Error")
+                $(".message").text("Error:Unknown Error").show();
+                return 0;
+            }
+        });
+    }
+}
+
+function re_getLists() {
+    if (share_flg) {
+        const params = {
+            mode: "connectShare",
+            share_ID: share_ID,
+        };
+
+        $(".message").text("共有表を再取得中...").show();
+        xhrSend(params, (res) => {
+            if (res) {
+                if (res.Err) {
+                    alert("Error:" + res.Err);
+                    $(".message").text("Error:" + res.Err);
+                    return 0;
+                }
+
+                Socket.disconnect();
+                Socket = io.connect(Socket_URL);
+                updateList("GET");
+
+                $(".message").text("共有表を再取得しました").show();
+
+                Object.keys(res.fixs).forEach((fix) => {
+                    $(".other_" + fix + " tr").slice(1).remove();
+
+                    res.fixs[fix].split(",").forEach((Text) => {
+                        if (!Text) return 0;
+                        Text = Text.split("#");
+                        $(".other_" + fix).append("<tr><td class='fix'>" + Text[0] + "</td></tr>");
+                    })
+                })
+            }
+            else {
+                alert("Error:Unknown Error")
+                $(".message").text("Error:Unknown Error").show();
+                return 0;
+            }
         });
     }
 }
@@ -255,6 +348,7 @@ function disconnect() {
 
             $(".message").text("接続を切断しました").show();
             $(".connectArea").hide();
+            $(".re_getLists").hide();
             $(".disconnect").hide();
             $(".copyArea").hide();
             $(".changeShare").hide();
@@ -1997,15 +2091,14 @@ $(document).on("click", ".slider-title", function () {
 
 
 /********************汎用関数********************/
-//ajax通信 **送信先調整
+//ajax通信
 function xhrSend(params, resFunc) {
     $.ajax({
-        url: "https://script.google.com/macros/s/AKfycbxAAOEdydyuV7p9sy7v4VhA_xEoHv_E3OVe3O_IuUoNI_A2XRZyv5ao9EtVCcd1dB6s/exec",
+        url: "https://script.google.com/macros/s/AKfycbwSBEU1CgHR-iV1tRzje9iLtNZS206fVCbVNwEnaTSk-qGqx_LRSUO1k9w_ly8C0HuI/exec",
         async: false,
         cache: false,
         type: "GET",
-        dataType: "json",
-        contentType: "application/json",
+        dataType: "jsonp",
         data: params,
         beforeSend: XMLHttpRequest => {
             //iPhone周りのエラー対策
