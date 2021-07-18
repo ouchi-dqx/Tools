@@ -234,33 +234,24 @@ function updateList(mode, fix, Text) {
                 Text: Text,
             };
 
-            let flg;
-            for (let i = 0; i < 4; i++) {
-                xhrSend(params, (res) => {
-                    if (res) {
-                        if (res.Err) {
-                            alert("Error:" + res.Err);
-                            $(".message").text("Error:" + res.Err);
-                            return 0;
-                        }
-
-                        flg = res.flg;
-                        if (flg) Socket.emit("ADD/DEL", params, (res) => { });
-                    }
-                    else {
-                        alert("Error:Unknown Error")
-                        $(".message").text("Error:Unknown Error").show();
+            xhrSend(params, (res) => {
+                if (res) {
+                    if (res.Err) {
+                        alert("Error:" + res.Err);
+                        $(".message").text("Error:" + res.Err);
                         return 0;
                     }
-                });
 
-                if (flg) break;
-            }
+                    flg = res.flg;
+                    if (flg) Socket.emit("ADD/DEL", params, (res) => { });
+                }
+                else {
+                    alert("Error:Unknown Error")
+                    $(".message").text("Error:Unknown Error").show();
+                    return 0;
+                }
+            });
 
-            if (!flg) {
-                alert("Error:サーバー側でエラーが発生しました");
-                $(".message").text("Error:サーバー側でエラーが発生しました");
-            }
         }
     }
 }
