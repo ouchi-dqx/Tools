@@ -201,7 +201,7 @@ function connectShare() {
     }
 }
 
-function updateList(mode, fix, Text) {
+function updateList(mode, fix, Text, cnt = 1) {
     if (share_flg) {
         if (mode == "GET") {
             Socket.on("connectEvent", (res) => $(".connectCount").text(res));
@@ -242,7 +242,19 @@ function updateList(mode, fix, Text) {
                         return 0;
                     }
 
-                    Socket.emit("ADD/DEL", params, (res) => { });
+                    const flg = res.flg;
+                    if (flg) Socket.emit("ADD/DEL", params, (res) => { });
+                    else {
+                        if (cnt > 4) {
+                            alert("Error:サーバー側でエラーが発生しました");
+                            $(".message").text("Error:サーバー側でエラーが発生しました");
+                            return 0;
+                        }
+                        else {
+                            cnt++;
+                            updateList(mode, fix, Text, cnt);
+                        }
+                    }
                 }
                 else {
                     alert("Error:Unknown Error")
@@ -250,7 +262,6 @@ function updateList(mode, fix, Text) {
                     return 0;
                 }
             });
-
         }
     }
 }
