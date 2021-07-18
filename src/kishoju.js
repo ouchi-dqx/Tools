@@ -242,8 +242,7 @@ function updateList(mode, fix, Text) {
                         return 0;
                     }
 
-                    flg = res.flg;
-                    if (flg) Socket.emit("ADD/DEL", params, (res) => { });
+                    Socket.emit("ADD/DEL", params, (res) => { });
                 }
                 else {
                     alert("Error:Unknown Error")
