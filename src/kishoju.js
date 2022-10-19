@@ -13,7 +13,7 @@ var
     Socket;
 
 //Socket.io本体
-const Socket_URL = "https://ouchi-tools.herokuapp.com/";
+const Socket_URL = "https://ouchi-tools.onrender.com/";
 
 //テスト用関数
 function debug() { }
