@@ -119,10 +119,6 @@ function addShare() {
                     $(".block_other_fix_blue").show();
 
                     updateList("GET");
-                    //スリープ対策
-                    setInterval(() => {
-                        Socket.connect();
-                    }, 1000 * 60 * 3);
                 });
             }
             else {
@@ -194,11 +190,6 @@ function connectShare() {
                     })
 
                     updateList("GET");
-
-                    //スリープ対策
-                    setInterval(() => {
-                        Socket.connect();
-                    }, 1000 * 60 * 3);
                 });
             }
             else {
@@ -2158,4 +2149,12 @@ function TextCopy(Text) {
     })
 
     alert("コピーしました");
+}
+
+//setIntervalの非アクティブ動作
+function setIntervalEx(func, interval) {
+    const code = `self.addEventListener('message', msg=>{setInterval(()=>self.postMessage(null), msg.data)})`;
+    const work = new Worker(`data:text/javascript;base64,${btoa(code)}`);
+    work.onmessage = func;
+    work.postMessage(interval);
 }
