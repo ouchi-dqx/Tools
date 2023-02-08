@@ -119,6 +119,10 @@ function addShare() {
                     $(".block_other_fix_blue").show();
 
                     updateList("GET");
+                    //スリープ対策
+                    setInterval(() => {
+                        Socket.connect();
+                    }, 1000 * 60 * 3);
                 });
             }
             else {
@@ -190,6 +194,11 @@ function connectShare() {
                     })
 
                     updateList("GET");
+
+                    //スリープ対策
+                    setInterval(() => {
+                        Socket.connect();
+                    }, 1000 * 60 * 3);
                 });
             }
             else {
