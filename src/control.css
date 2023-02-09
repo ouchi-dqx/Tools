@@ -1,47 +1,54 @@
-body{
+body {
     background-color: #fff;
     font-size: 14px;
     max-width: 650px;
     min-width: 470px;
     margin-right: auto;
-    margin-left : auto;
+    margin-left: auto;
     padding: 0px 5px;
     margin-top: 0px;
 
     /*iPhoneボタンズレ対策*/
     -webkit-text-size-adjust: none;
 }
+
 /* divの基本設定 */
-div{ box-sizing: border-box; }
+div {
+    box-sizing: border-box;
+}
+
 /* アイコンフォントの基本設定 */
-.material-icons{ position: relative; }
+.material-icons {
+    position: relative;
+}
 
 /************************************************　ヘッダ　************************************************/
-.header-function{
+.header-function {
     display: block;
     margin-bottom: 15px;
     width: 100%;
 }
 
-.title{
+.title {
     font-size: 14px;
     font-weight: bold;
     text-decoration: underline dotted;
 }
 
-.message, .copyArea{
+.message,
+.copyArea {
     display: none;
     margin-bottom: 15px;
     font-size: 15px;
 }
 
-.header-notice{
+.header-notice {
     display: table;
     width: 100%;
     margin-bottom: 20px;
 }
 
-.iconArea{
+.iconArea {
     display: table-cell;
     width: 40px;
     text-align: left;
@@ -50,7 +57,7 @@ div{ box-sizing: border-box; }
 }
 
 /* フキダシ-メッセージ部分 */
-.ouchi-msg{
+.ouchi-msg {
     position: relative;
     display: table-cell;
     width: auto;
@@ -60,6 +67,7 @@ div{ box-sizing: border-box; }
     background-color: #eee;
     font-size: 14px;
 }
+
 /* フキダシ-左上の尖ってる部分 */
 .ouchi-msg:before {
     content: "";
@@ -73,8 +81,14 @@ div{ box-sizing: border-box; }
 }
 
 /* メモ欄表示/非表示ボタン */
-.chk-tgl-span{ display: inline; }
-.chk-tgl-span label { position: relative; }
+.chk-tgl-span {
+    display: inline;
+}
+
+.chk-tgl-span label {
+    position: relative;
+}
+
 .chk-tgl-span [type=checkbox] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -85,8 +99,13 @@ div{ box-sizing: border-box; }
     position: absolute;
     cursor: pointer;
 }
-_:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden; }
-.chk-tgl-span .btn-tgl{
+
+_:-ms-lang(x)::-ms-backdrop,
+.chk-tgl-span [type=checkbox] {
+    visibility: hidden;
+}
+
+.chk-tgl-span .btn-tgl {
     z-index: 1;
     display: inline;
     padding: 0px 2px;
@@ -96,7 +115,8 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
     border: #999 solid 1px;
     margin: 0px;
 }
-.chk-tgl-span :checked + .btn-tgl{
+
+.chk-tgl-span :checked+.btn-tgl {
     color: #fff;
     background-color: #e06651;
     border-color: #facf8e;
@@ -104,48 +124,55 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
 
 /************************************************　状態設定　************************************************/
 /* 外枠デザイン（共通） */
-.setting-box{
+.setting-box {
     margin-bottom: 8px;
     font-weight: bold;
     border: dotted 2px dimgray;
 }
+
 /* 設定-タイトル部分（共通） */
-.setting-title{
+.setting-title {
     display: table-cell;
     width: 155px;
     padding-left: 10px;
     vertical-align: top;
     padding-top: 8px;
 }
+
 /* 設定-タイトル部分のアイコン（共通） */
-.setting-title .material-icons{
+.setting-title .material-icons {
     top: 7px;
     left: -15px;
     margin-top: -12px;
     margin-left: 12px;
     margin-right: -12px;
 }
+
 /* 設定-ボタンBOX＋ボタン（共通） */
-.setting-btn-box{
+.setting-btn-box {
     display: table-cell;
     vertical-align: middle;
     padding: 3px 0px;
 }
-.setting-btn-box button{
+
+.setting-btn-box button {
     font-size: 13px;
     height: 30px;
     width: auto;
     font-weight: bold;
     margin: 2px 0px;
 }
+
 /* サーバ選択-切替ボタン */
-.mode-change-box{
+.mode-change-box {
     display: inline-block;
     width: 100%;
 }
+
 .mode-change-box label {
     position: relative;
 }
+
 .mode-change-box [type=radio] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -157,9 +184,12 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-span [type=checkbox] { visibility: hidden;
     padding: 0px;
     position: absolute;
 }
-_:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
+
+_:-ms-lang(x)::-ms-backdrop,
+.mode-change-box [type=radio] {
     visibility: hidden;
 }
+
 .mode-change-box .btn-tgl {
     z-index: 1;
     display: table-cell;
@@ -176,11 +206,13 @@ _:-ms-lang(x)::-ms-backdrop, .mode-change-box [type=radio] {
     border-radius: 10px;
     text-align: center;
 }
+
 .mode-change-box .btn-tgl:hover {
     color: #fff;
     background-color: #999;
 }
-.mode-change-box :checked + .btn-tgl{
+
+.mode-change-box :checked+.btn-tgl {
     color: #fff;
     background-color: #e06651;
     border-color: #facf8e;
@@ -193,28 +225,42 @@ button {
 
 /************************************************　鯖テーブル　************************************************/
 /* テーブルの罫線 */
-.ServerLists table{
+.ServerLists table {
     border-collapse: collapse;
     margin-bottom: 10px;
     margin-right: 10px;
     float: left;
 }
 
-.ServerLists td{
+.ServerLists td {
     border: solid 1px #999;
 }
+
 /* テーブルのヘッダ行 */
-#server-list-hd #server-no-hd{
+#server-list-hd #server-no-hd {
     color: #fff;
     font-weight: bold;
-    background-color: #666; /* dimgray;*/
+    background-color: #666;
+    /* dimgray;*/
 }
-#server-list-hd .ゲル{ background-color: #505e4d;  /*#d9ead3;*/ }
-#server-list-hd .砂漠{ background-color: #696458;  /*#fff2cc;*/ }
-#server-list-hd .バル{ background-color:#695858;   /*#f4cccc;*/ }
+
+#server-list-hd .ゲル {
+    background-color: #505e4d;
+    /*#d9ead3;*/
+}
+
+#server-list-hd .砂漠 {
+    background-color: #696458;
+    /*#fff2cc;*/
+}
+
+#server-list-hd .バル {
+    background-color: #695858;
+    /*#f4cccc;*/
+}
 
 /* テーブルのヘッダ行 テキストエリア */
-#server-list-hd .server-list-hd-text{
+#server-list-hd .server-list-hd-text {
     font-size: 18px;
     line-height: 22px;
     width: 140px;
@@ -222,42 +268,49 @@ button {
     font-weight: bold;
     color: #fff;
 }
+
 /* テーブルのヘッダ行 矢印ボタン */
-#server-list-hd button{
+#server-list-hd button {
     width: 30px;
     height: 25px;
 }
+
 /* テーブルのヘッダ行 矢印ボタンのアイコン */
-#server-list-hd .arrow{
+#server-list-hd .arrow {
     font-size: 20px;
     top: 5px;
-    left:-4px;
+    left: -4px;
     line-height: 1px;
 }
+
 /* テーブル行　しましま設定 奇数trのtd */
 .ServerLists tr:nth-child(even) {
     background-color: #fff;
 }
+
 /* テーブル行　しましま設定 偶数trのtd */
 .ServerLists tr:nth-child(odd) {
     background-color: #ddd;
 }
+
 /* テーブル行　1カラム目 鯖No*/
-.Server{
+.Server {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
 }
 
 /************************************************　template2　************************************************/
-.template2-box{
+.template2-box {
     padding: 2px;
     border: solid 3px transparent;
 }
+
 /* フォーカスセル強調設定 */
-.ServerList .template2-box.sel{
+.ServerList .template2-box.sel {
     border: solid 3px #333;
 }
+
 /* 4色ボタン */
 .template2-box .btn {
     border-width: 2px;
@@ -272,44 +325,89 @@ button {
     font-size: 13px;
     padding: 0px;
 }
+
 /* 4色ボタン フォーカス時の外枠を消す */
-.template2-box .btn:focus { outline: 0; }
+.template2-box .btn:focus {
+    outline: 0;
+}
+
 /* 4色ボタン デフォルトカラー */
-.template2-box .btn[value="skyblue"]   { background-color: #cff; }
-.template2-box .btn[value="yellow"] { background-color: #fec; }
-.template2-box .btn[value="red"]    { background-color: #fcc; }
-.template2-box .btn[value="violet"]{ background-color: #fcf; }
+.template2-box .btn[value="skyblue"] {
+    background-color: #cff;
+}
+
+.template2-box .btn[value="yellow"] {
+    background-color: #fec;
+}
+
+.template2-box .btn[value="red"] {
+    background-color: #fcc;
+}
+
+.template2-box .btn[value="violet"] {
+    background-color: #fcf;
+}
+
 /* 4色ボタン オンマウスで強調 */
-.template2-box .btn:hover{ font-weight: bold; }
-.template2-box .btn[value="skyblue"]:hover   { color: #000; background-color: deepskyblue; }
-.template2-box .btn[value="yellow"]:hover { color: #000; background-color: yellow; }
-.template2-box .btn[value="red"]:hover    { color: #000; background-color: red; }
-.template2-box .btn[value="violet"]:hover{ color: #000; background-color: violet; }
+.template2-box .btn:hover {
+    font-weight: bold;
+}
+
+.template2-box .btn[value="skyblue"]:hover {
+    color: #000;
+    background-color: deepskyblue;
+}
+
+.template2-box .btn[value="yellow"]:hover {
+    color: #000;
+    background-color: yellow;
+}
+
+.template2-box .btn[value="red"]:hover {
+    color: #000;
+    background-color: red;
+}
+
+.template2-box .btn[value="violet"]:hover {
+    color: #000;
+    background-color: violet;
+}
+
 /* 4色ボタン 赤が非活性のときは灰色にしてオンマウス動作を無効化 */
-.template2-box .btn[value="red"]:disabled{
-    color: #666 ;
+.template2-box .btn[value="red"]:disabled {
+    color: #666;
     background-color: #ccc;
     font-weight: normal;
     cursor: default;
 }
+
 /* タイム表示 タイトル（前回/現在） */
-.time-title{
+.time-title {
     display: table-cell;
     font-size: 12px;
     line-height: 22px;
     padding: 0px 5px 0px 3px;
 }
+
 /* タイム表示 hh:nn:ss */
-.befTime, .nowTime{
+.befTime,
+.nowTime {
     display: table-cell;
     padding: 0px 8px;
     background-color: none;
     font-weight: bold;
 }
-.nowTime{ color: #000; }
-.befTime{ color: #333; }
+
+.nowTime {
+    color: #000;
+}
+
+.befTime {
+    color: #333;
+}
+
 /* メモ欄（o） */
-.memo{
+.memo {
     display: block;
     width: 126px;
     height: 17px;
@@ -317,31 +415,43 @@ button {
     text-align: center;
     margin-bottom: 2px;
 }
+
 /* メモ欄（i） */
-.template2-box input[type="text"]{
+.template2-box input[type="text"] {
     font-size: 13px;
     width: 120px;
     height: 18px;
     padding-left: 2px;
     border: #999 solid 1px;
 }
+
 /* メモ欄（i） フォーカス時 */
-.template2-box input[type="text"]:focus{
+.template2-box input[type="text"]:focus {
     outline: 0;
     box-shadow: none;
     border: 1px solid #e06651;
     background-color: #fff1ef;
 }
 
-[color="yellow"]{ background-color: #F0F080 !important; }
-[color="red"]{ background-color: #ff6347 !important; }
-[color="violet"]{ background-color: #dda0dd !important; }
+[color="yellow"] {
+    background-color: #F0F080 !important;
+}
+
+[color="red"] {
+    background-color: #ff6347 !important;
+}
+
+[color="violet"] {
+    background-color: #dda0dd !important;
+}
 
 /************************************************　サイドリスト　************************************************/
 /* サイドリストBOX 追随切替設定（追随する=-on/追随しない=-off） */
-.side-list-box.following-off{ display: table; }
+.side-list-box.following-off {
+    display: table;
+}
 
-.side-list-box.following-on{
+.side-list-box.following-on {
     position: fixed;
     top: 40px;
     right: 0px;
@@ -354,23 +464,41 @@ button {
     overflow-y: hidden;
 }
 
-.side-list-box.following-on .follow_ifhide{ display: none; }
+.side-list-box.following-on .follow_ifhide {
+    display: none;
+}
 
-.side-list-box.following-on [class*="block_other_fix_"]{ display: block; }
+.side-list-box.following-on [class*="block_other_fix_"] {
+    display: block;
+}
 
 /* 追随ON時のテーブルbodyスクロール設定 */
-.side-list-box.following-on tbody{
+.side-list-box.following-on tbody {
     display: block;
     background-color: dimgray;
     overflow-x: hidden;
     overflow-y: scroll;
 }
-.side-list-box.following-on .fix_blue tbody{ height: 120px; }
-.side-list-box.following-on .other_fix_blue tbody{ height: 120px; }
-.side-list-box.following-on .fix_red tbody{ height: 220px; }
-.side-list-box.following-on .other_fix_red tbody{ height: 220px; }
 
-.side-list-box.following-off tbody{ overflow-x: hidden; }
+.side-list-box.following-on .fix_blue tbody {
+    height: 120px;
+}
+
+.side-list-box.following-on .other_fix_blue tbody {
+    height: 120px;
+}
+
+.side-list-box.following-on .fix_red tbody {
+    height: 220px;
+}
+
+.side-list-box.following-on .other_fix_red tbody {
+    height: 220px;
+}
+
+.side-list-box.following-off tbody {
+    overflow-x: hidden;
+}
 
 .side-list-box tbody::-webkit-scrollbar {
     width: 5px;
@@ -378,14 +506,18 @@ button {
     border-radius: 0px;
     background-color: dimgray;
 }
+
 .side-list-box tbody::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background: #ccc;
 }
 
 /* サイドリストBOX - ハンガーボタン */
-.side-list-area.following-off{ display: none; }
-.side-list-area.following-on{
+.side-list-area.following-off {
+    display: none;
+}
+
+.side-list-area.following-on {
     position: fixed;
     top: 0px;
     right: 0px;
@@ -399,19 +531,28 @@ button {
     opacity: 0.95;
     cursor: pointer;
 }
-.hung-icon.rev{ transform: rotate(180deg); }    /*クリック時*/
-.hung-icon_other{ transform: rotate(180deg); }
+
+.hung-icon.rev {
+    transform: rotate(180deg);
+}
+
+/*クリック時*/
+.hung-icon_other {
+    transform: rotate(180deg);
+}
 
 /* サイドリストBOX - 右側固定スイッチ */
-.chk-tgl-box{
+.chk-tgl-box {
     display: inline-block;
     width: 100%;
     text-align: center;
     margin-bottom: 10px;
 }
+
 .chk-tgl-box label {
     position: relative;
 }
+
 .chk-tgl-box [type=checkbox] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -423,9 +564,12 @@ button {
     padding: 0px;
     position: absolute;
 }
-_:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
+
+_:-ms-lang(x)::-ms-backdrop,
+.chk-tgl-box [type=checkbox] {
     visibility: hidden;
 }
+
 .chk-tgl-box .btn-tgl {
     z-index: 1;
     display: table-cell;
@@ -442,73 +586,99 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
     border-radius: 10px;
     text-align: center;
 }
+
 .chk-tgl-box .btn-tgl:hover {
     color: #fff;
     background-color: #999;
 }
-.chk-tgl-box :checked + .btn-tgl{
+
+.chk-tgl-box :checked+.btn-tgl {
     color: #fff;
     background-color: #e06651;
     border-color: #facf8e;
 }
 
 /* サイドリストテーブル 罫線 */
-.side-list-box table{
+.side-list-box table {
     border-collapse: collapse;
     margin-bottom: 5px;
 }
+
 /* サイドリストテーブル ヘッダ行 */
-.side-list-box th{
+.side-list-box th {
     width: 170px;
     color: #333;
     font-weight: bold;
     background-color: dimgray;
     border: solid 1px #999;
 }
-.fix_blue th, .other_fix_blue th{ background-color: #fec; }
-.fix_red th, .other_fix_red th{ background-color: #fcc; }
+
+.fix_blue th,
+.other_fix_blue th {
+    background-color: #fec;
+}
+
+.fix_red th,
+.other_fix_red th {
+    background-color: #fcc;
+}
 
 /* サイドリストテーブル セル */
-.side-list-box td{
+.side-list-box td {
     width: 165px;
     text-align: center;
     background-color: #fff;
     border: solid 1px #999;
 }
-.fix_blue td:hover, .other_fix_blue td:hover{ background-color: yellow; cursor: pointer; }
-.fix_red td:hover, .other_fix_red td:hover{ background-color: red; cursor: pointer; }
+
+.fix_blue td:hover,
+.other_fix_blue td:hover {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.fix_red td:hover,
+.other_fix_red td:hover {
+    background-color: red;
+    cursor: pointer;
+}
 
 /* サイドリスト　確定リストの追加確定フォーム */
-.side-list-add-box{
+.side-list-add-box {
     font-size: 12px;
     line-height: 30px;
     background-color: #fcc;
     padding: 3px 5px;
     margin-bottom: 20px;
 }
-.side-list-add-box input{
+
+.side-list-add-box input {
     height: 18px;
     text-align: center;
     ime-mode: disabled;
 }
-.side-list-add-box select{
+
+.side-list-add-box select {
     height: 24px;
     width: 55px;
 }
+
 /* サイドリスト　機能ボタンBOX（大） */
-.function-btn-box{
+.function-btn-box {
     display: block;
     text-align: right;
     margin-bottom: 10px;
 }
-.function-btn-box Button{
+
+.function-btn-box Button {
     width: 78px;
     font-size: 16px;
     font-weight: bold;
     line-height: 28px;
 }
+
 /* サイドリスト　機能ボタンBOX（小） */
-.function-btn-box-mini{
+.function-btn-box-mini {
     display: block;
     text-align: right;
     font-size: 13px;
@@ -516,24 +686,30 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 
 /* 外部リスト表示設定 */
-[class*="block_other_fix_"]{ display: none; }
+[class*="block_other_fix_"] {
+    display: none;
+}
 
 /* スクロール幅変更 矢印ボタン */
-.chk-tgl-span button{
+.chk-tgl-span button {
     width: 30px;
     height: 25px;
 }
+
 /* スクロール幅変更 矢印ボタンのアイコン */
-.chk-tgl-span .arrow{
+.chk-tgl-span .arrow {
     font-size: 20px;
     top: 5px;
-    left:-3px;
+    left: -3px;
     line-height: 1px;
 }
 
 /* 機能BOX - ハンガーボタン */
-.func-list-area.following-off{ display: none; }
-.func-list-area.following-on{
+.func-list-area.following-off {
+    display: none;
+}
+
+.func-list-area.following-on {
     position: fixed;
     bottom: 0px;
     right: 0px;
@@ -549,14 +725,18 @@ _:-ms-lang(x)::-ms-backdrop, .chk-tgl-box [type=checkbox] {
 }
 
 /* テキストエリア表示幅設定 */
-textarea{ width:160px }
+textarea {
+    width: 160px
+}
 
 /* iOSクリックイベント用 */
-.fix{ cursor: pointer; }
+.fix {
+    cursor: pointer;
+}
 
 /************************************************　使い方／更新履歴　************************************************/
 /* 開閉スライダー */
-.slider-title{
+.slider-title {
     display: block;
     height: 32px;
     width: 100%;
@@ -572,36 +752,53 @@ textarea{ width:160px }
     font-weight: bold;
     background-color: #ccc;
 }
-.slider-title:hover { background-color: #999; }
+
+.slider-title:hover {
+    background-color: #999;
+}
+
 /* 開閉スライダーのアイコン */
-.slider-icon{ top: 8px; left: 5px; margin-top: -3px; }
-.slider-icon.rev{ transform: rotate(180deg); }
+.slider-icon {
+    top: 8px;
+    left: 5px;
+    margin-top: -3px;
+}
+
+.slider-icon.rev {
+    transform: rotate(180deg);
+}
 
 /* 列挙リストの設定 */
-.box-list{
+.box-list {
     border: solid 1px #ccc;
     padding: 2px;
     position: relative;
     font-size: 13px;
 }
+
 .box-list>li {
     line-height: 22px;
     padding: 6px 0px 6px 18px;
     border-bottom: dashed 1px silver;
-    list-style-type: none!important;
+    list-style-type: none !important;
 }
+
 .box-list>li:last-of-type {
     border-bottom: none;
 }
+
 /* 列挙リストのアイコン */
 .box-list>li:before {
     content: "◆";
     position: absolute;
-    left : 0.5em;        /*左端からのアイコンまで*/
-    color: dimgray;    /*アイコン色*/
+    left: 0.5em;
+    /*左端からのアイコンまで*/
+    color: dimgray;
+    /*アイコン色*/
 }
+
 /* 列挙リストの中のテキスト装飾-ボタン */
-.box-list Span.text-btn{
+.box-list Span.text-btn {
     margin: 0px 2px;
     padding: 2px 3px;
     background-color: #eee;
@@ -609,25 +806,33 @@ textarea{ width:160px }
     border-radius: 3px;
     font-size: 11px;
 }
+
 /* 列挙リストの中のテキスト装飾-リスト */
-.box-list Span.text-ylist, .box-list Span.text-rlist{
+.box-list Span.text-ylist,
+.box-list Span.text-rlist {
     margin: 0px 2px;
     padding: 0px 4px;
     border: solid 1px #ccc;
     font-size: 12px;
     font-weight: bold;
 }
-.box-list Span.text-ylist{ background-color: #fec; }
-.box-list Span.text-rlist{ background-color: #fcc; }
+
+.box-list Span.text-ylist {
+    background-color: #fec;
+}
+
+.box-list Span.text-rlist {
+    background-color: #fcc;
+}
 
 
 
 /************************************************　チェックボックス(トグル式)　************************************************/
-.toggle_switch > input {
+.toggle_switch>input {
     display: none;
 }
 
-.toggle_switch > label {
+.toggle_switch>label {
     display: inline-block;
     position: relative;
     width: 2.0em;
@@ -638,10 +843,12 @@ textarea{ width:160px }
     background-color: #2b2a2f;
     cursor: pointer;
 }
-.toggle_switch > input:checked + label {
+
+.toggle_switch>input:checked+label {
     background-color: #2dcb45;
 }
-.toggle_switch > label::before {
+
+.toggle_switch>label::before {
     position: absolute;
     top: 0.05em;
     left: 0.05em;
@@ -652,6 +859,7 @@ textarea{ width:160px }
     transition: 0.5s;
     content: "";
 }
-.toggle_switch > input:checked + label::before {
+
+.toggle_switch>input:checked+label::before {
     left: calc(100% - 1em + 0.05em);
 }
