@@ -120,6 +120,12 @@ function addShare() {
 
                     updateList("GET");
                 });
+
+                Socket.on('connect', () => {
+                    Socket.emit("connectShare", share_ID, (resSocket) => {
+                        $(".connectCount").text(resSocket.connectCount).show();
+                    });
+                });
             }
             else {
                 alert("Error:Unknown Error")
@@ -190,6 +196,12 @@ function connectShare() {
                     })
 
                     updateList("GET");
+                });
+
+                Socket.on('connect', () => {
+                    Socket.emit("connectShare", share_ID, (resSocket) => {
+                        $(".connectCount").text(resSocket.connectCount).show();
+                    });
                 });
             }
             else {
