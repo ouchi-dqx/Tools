@@ -2001,6 +2001,24 @@ function save_Fix() {
     localStorage.setItem("fix_red", JSON.stringify(fix_red));
 }
 
+//外部表ソート
+function fix_Sort(fix) {
+    $(".other_" + fix + " tr").sort((a, b) => {
+        if (a.indexOf("#") == -1 && a.indexOf("#") == 1) {
+            a = a.split("#");
+            b = b.split("#");
+            return (a[1] > b[1] ? 1 : -1);
+        }
+        else {
+            a = a.split(" ");
+            b = b.split(" ");
+            if (a.length == 3 && b.length == 3) return (a[2] > b[2] ? 1 : -1);
+            if (a.length == 3 && b.length == 4) return (a[2] > b[3] ? 1 : -1);
+            if (a.length == 4 && b.length == 4) return (a[3] > b[3] ? 1 : -1);
+            if (a.length == 4 && b.length == 3) return (a[3] > b[2] ? 1 : -1);
+        }
+    })
+}
 
 /********************オプション設定********************/
 //分割モード切替
