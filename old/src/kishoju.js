@@ -117,6 +117,7 @@ function addShare() {
 
                 $(".message").hide();
                 $(".connectArea").show();
+                $(".re_getLists").show();
                 $(".disconnect").show();
                 $(".copyText").val(share_ID);
                 $(".copyArea").show();
@@ -182,6 +183,7 @@ function connectShare() {
 
                 $(".message").html("接続に成功しました<br />リストからデータを取得しています....");
                 $(".connectArea").show();
+                $(".re_getLists").show();
                 $(".disconnect").show();
                 $(".other_fix_blue").find(".fix").show();
                 $(".other_block_fix_blue").show();
@@ -228,6 +230,7 @@ function updateList(mode, fix, Text) {
                             "接続を切断しました"
                         ).show();
                         $(".connectArea").hide();
+                        $(".re_getLists").hide();
                         $(".disconnect").hide();
 
                         return 0;
@@ -280,6 +283,35 @@ function updateList(mode, fix, Text) {
     }
 }
 
+function re_getLists() {
+    if (share_flg) {
+        const params = {
+            mode: "GET",
+            share_ID: share_ID,
+        };
+
+        $(".message").text("共有表を再取得中...").show();
+        xhrSend(params, (res) => {
+            if (res) {
+                if (res.Err) {
+                    alert("Error:" + res.Err);
+                    $(".message").text("Error:" + res.Err);
+                    return 0;
+                }
+
+                updateList("GET");
+
+                $(".message").text("共有表を再取得しました").show();
+            }
+            else {
+                alert("Error:Unknown Error")
+                $(".message").text("Error:Unknown Error").show();
+                return 0;
+            }
+        });
+    }
+}
+
 function disconnect() {
     if (share_flg) {
         const params = {
@@ -295,6 +327,7 @@ function disconnect() {
                 clearInterval(Timers.updateTime);
                 $(".message").text("接続を切断しました");
                 $(".connectArea").hide();
+                $(".re_getLists").hide();
                 $(".disconnect").hide();
             }
         })
